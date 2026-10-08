@@ -34,6 +34,10 @@ maintainers:
   email: info@apis.io
 image: https://opoint.com/wp-content/uploads/fallback-home.png
 common:
+- type: Plans
+  url: plans/opoint-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/opoint-rate-limits.yml
 - type: Support
   url: https://support.opoint.com/
 - type: AgenticAccess
