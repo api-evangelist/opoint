@@ -1,0 +1,225 @@
+openapi: 3.2.0
+info:
+  title: Opoint Reports API
+  version: 1.0.0
+  description: 'Operations tagged reports across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.opoint.com
+tags:
+- name: Reports
+paths:
+  /reports/:
+    post:
+      operationId: reports_create
+      summary: Create a report
+      tags:
+      - Reports
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Report'
+            examples:
+              ReportExample:
+                value:
+                  id: 21
+                  download: ''
+                  type: 1
+                  title: Report 1
+                  status: -1
+                  timeFinished: 31531351
+                  articles: 20
+                  timeStampFrom: 3511351
+                  timeStamTo: 3711450
+                  pdfPages: 4
+                  pdfBytes: 2000
+                summary: Report example
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Report'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Report'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'
+              examples:
+                ReportExample:
+                  value:
+                    id: 21
+                    download: ''
+                    type: 1
+                    title: Report 1
+                    status: -1
+                    timeFinished: 31531351
+                    articles: 20
+                    timeStampFrom: 3511351
+                    timeStamTo: 3711450
+                    pdfPages: 4
+                    pdfBytes: 2000
+                  summary: Report example
+          description: Report created.
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AsyncReportCreateResponse'
+              examples:
+                AsyncReportCreationResponse.TimestampIsStimestamp:
+                  value:
+                    report_id: 1
+                    new_timestamp: 453493417
+                  summary: Async report creation response. Timestamp is stimestamp
+          description: Report is being created.
+    servers:
+    - url: https://api.opoint.com
+  /reports/{id}/:
+    get:
+      operationId: reports_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this report.
+        required: true
+      tags:
+      - Reports
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Report'
+              examples:
+                ReportExample:
+                  value:
+                    id: 21
+                    download: ''
+                    type: 1
+                    title: Report 1
+                    status: -1
+                    timeFinished: 31531351
+                    articles: 20
+                    timeStampFrom: 3511351
+                    timeStamTo: 3711450
+                    pdfPages: 4
+                    pdfBytes: 2000
+                  summary: Report example
+          description: ''
+      summary: Reports retrieve
+      x-summary-source: derived
+    delete:
+      operationId: reports_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this report.
+        required: true
+      tags:
+      - Reports
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+      summary: Reports destroy
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+components:
+  schemas:
+    AsyncReportCreateResponse:
+      type: object
+      properties:
+        report_id:
+          type: integer
+        new_timestamp:
+          type: integer
+      required:
+      - report_id
+    Report:
+      type: object
+      properties:
+        id:
+          type: integer
+        download:
+          type: string
+          readOnly: true
+        title:
+          type: string
+        status:
+          type: integer
+          readOnly: true
+        timeFinished:
+          type: integer
+        type:
+          type: integer
+          readOnly: true
+        articles:
+          type: integer
+          readOnly: true
+        timestampFrom:
+          type: integer
+          readOnly: true
+        timestampTo:
+          type: integer
+          readOnly: true
+        pdfPages:
+          type: integer
+        pdfBytes:
+          type: integer
+      required:
+      - articles
+      - download
+      - id
+      - pdfBytes
+      - pdfPages
+      - status
+      - timeFinished
+      - timestampFrom
+      - timestampTo
+      - title
+      - type
+  securitySchemes:
+    JWT:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "JWT"
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: PHPSESSID
+    ephmeralId:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Ephemeral"
+    staticToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
+x-refined-from:
+- opoint-openapi-original.yml
+- opoint-openapi.yml

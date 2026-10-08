@@ -1,0 +1,1576 @@
+openapi: 3.2.0
+info:
+  title: Opoint Alerts API
+  version: 1.0.0
+  description: 'Operations tagged alerts across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.opoint.com
+tags:
+- name: Alerts
+paths:
+  /alerts/:
+    get:
+      operationId: alerts_list
+      summary: List alerts
+      tags:
+      - Alerts
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Alert'
+          description: ''
+    post:
+      operationId: alerts_create
+      summary: Create an alert
+      tags:
+      - Alerts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlertCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AlertCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AlertCreate'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertDetail'
+          description: ''
+    servers:
+    - url: https://api.opoint.com
+  /alerts/{id}/:
+    get:
+      operationId: alerts_retrieve
+      summary: Get alert by id
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this alert.
+        required: true
+      tags:
+      - Alerts
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertDetail'
+          description: ''
+    put:
+      operationId: alerts_update
+      summary: Update an alert
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this alert.
+        required: true
+      tags:
+      - Alerts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlertCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AlertCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AlertCreate'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertDetail'
+          description: ''
+    delete:
+      operationId: alerts_destroy
+      summary: Delete an alert
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this alert.
+        required: true
+      tags:
+      - Alerts
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+    servers:
+    - url: https://api.opoint.com
+  /alerts/{id}/activate/:
+    post:
+      operationId: alerts_activate_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this alert.
+        required: true
+      tags:
+      - Alerts
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+      summary: Alerts activate create
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /alerts/{id}/articles/:
+    get:
+      operationId: alerts_articles_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this alert.
+        required: true
+      tags:
+      - Alerts
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alert'
+          description: ''
+      summary: Alerts articles retrieve
+      x-summary-source: derived
+    post:
+      operationId: alerts_articles_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this alert.
+        required: true
+      tags:
+      - Alerts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Articles'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Articles'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Articles'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+      summary: Alerts articles create
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /alerts/{id}/deactivate/:
+    post:
+      operationId: alerts_deactivate_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this alert.
+        required: true
+      tags:
+      - Alerts
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+      summary: Alerts deactivate create
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /alerts/{id}/history/:
+    get:
+      operationId: alert_history_retrieve_detail
+      description: 'History is limited to 120 entries because some users receive an abnormally high
+
+        amount of alerts, and the table cannot handle it.'
+      summary: Get alert history items
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this alert.
+        required: true
+      - in: query
+        name: page
+        schema:
+          type: integer
+          default: 1
+      tags:
+      - Alerts
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedMailLog'
+          description: ''
+    servers:
+    - url: https://api.opoint.com
+  /alerts/{id}/history/{id_item}/{stimestamp}/:
+    get:
+      operationId: alerts_history_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this alert.
+        required: true
+      - in: path
+        name: id_item
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      - in: path
+        name: stimestamp
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - Alerts
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alert'
+          description: ''
+      summary: Alerts history retrieve
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /alerts/{id}/history/{id_item}/{stimestamp}/resend/:
+    post:
+      operationId: alerts_history_resend_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this alert.
+        required: true
+      - in: path
+        name: id_item
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      - in: path
+        name: stimestamp
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      - in: query
+        name: update_time
+        schema:
+          type: boolean
+          default: false
+        description: Update timestamp
+      tags:
+      - Alerts
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResendAlertRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ResendAlertRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ResendAlertRequest'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResendAlertResponse'
+          description: success
+      summary: Alerts history resend create
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /alerts/{id}/next/:
+    get:
+      operationId: alerts_next_retrieve
+      description: 'Returns a number of articles that should be sent in a next alert and when next
+
+        possible send time is.'
+      summary: Next alert metadata
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this alert.
+        required: true
+      tags:
+      - Alerts
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NextMetadata'
+          description: ''
+    servers:
+    - url: https://api.opoint.com
+  /alerts/{id}/next/preview/:
+    get:
+      operationId: alerts_next_preview_list
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this alert.
+        required: true
+      - in: query
+        name: json
+        schema:
+          type: integer
+          default: 1
+        description: Whether to send next alert preview in json format
+      tags:
+      - Alerts
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NextAlertPreview'
+          description: ''
+      summary: Alerts next preview list
+      x-summary-source: derived
+    post:
+      operationId: alerts_next_preview_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this alert.
+        required: true
+      - in: query
+        name: json
+        schema:
+          type: integer
+          default: 1
+        description: Whether to send next alert preview in json format
+      tags:
+      - Alerts
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NextAlertPreview'
+          description: ''
+      summary: Alerts next preview create
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /alerts/{id}/recipients/:
+    get:
+      operationId: alerts_recipients_list
+      summary: Get alert recipients
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this alert.
+        required: true
+      - in: query
+        name: id_maillog
+        schema:
+          type: string
+        description: Search for a specific alert sending
+      tags:
+      - Alerts
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Recipient'
+          description: ''
+    servers:
+    - url: https://api.opoint.com
+  /alerts/{id}/recipients/{id_recipient}/:
+    delete:
+      operationId: alerts_recipients_destroy
+      summary: Remove recipient from an alert
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this alert.
+        required: true
+      - in: path
+        name: id_recipient
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - Alerts
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+    servers:
+    - url: https://api.opoint.com
+  /alerts/{id}/send-now/:
+    post:
+      operationId: alerts_send_now_create
+      description: 'Immediately sends articles that was found for
+
+        the next delivery.
+
+        :param request: request object
+
+        :param pk: class id of an alert
+
+        :return:'
+      summary: Send the alert now
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this alert.
+        required: true
+      tags:
+      - Alerts
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+    servers:
+    - url: https://api.opoint.com
+  /alerts/alert-contact-details/:
+    get:
+      operationId: alerts_alert_contact_details_list
+      tags:
+      - Alerts
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AlertContactOverview'
+          description: ''
+      summary: Alerts alert contact details list
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /alerts/logo/:
+    get:
+      operationId: alerts_logo_retrieve
+      tags:
+      - Alerts
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alert'
+          description: ''
+      summary: Alerts logo retrieve
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+components:
+  schemas:
+    Alert:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        url:
+          type: string
+          readOnly: true
+        subject:
+          type: string
+          maxLength: 255
+        type:
+          allOf:
+          - $ref: '#/components/schemas/AlertType'
+          minimum: -2147483648
+          maximum: 2147483647
+        active:
+          type: integer
+        baskets:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlertBasket'
+          readOnly: true
+        isCreatedFromApp:
+          type: boolean
+          readOnly: true
+        editable:
+          type: boolean
+          readOnly: true
+        max_age:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        has_push_subscription:
+          type: boolean
+          readOnly: true
+          default: false
+        schedule:
+          allOf:
+          - $ref: '#/components/schemas/TimeSchedulerRepresentation'
+          readOnly: true
+        lastSent:
+          type: integer
+          readOnly: true
+      required:
+      - active
+      - baskets
+      - editable
+      - has_push_subscription
+      - id
+      - isCreatedFromApp
+      - lastSent
+      - schedule
+      - type
+      - url
+    ResendAlertRequest:
+      type: object
+      properties:
+        recipients:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResendAlertRecipients'
+      required:
+      - recipients
+    DirectRecipientCreate:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/DirectRecipientCreateTypeEnum'
+        value:
+          type: string
+      required:
+      - type
+      - value
+    UserRecipient:
+      type: object
+      properties:
+        id_recipient:
+          type: integer
+        user_id:
+          type: integer
+        type:
+          type: string
+          readOnly: true
+          default: user
+        name:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+        mobile:
+          type:
+          - string
+          - 'null'
+        status:
+          $ref: '#/components/schemas/MailSentStatus'
+        message:
+          type: string
+        timestamp:
+          type: integer
+        in_previous_sending:
+          type: boolean
+      required:
+      - email
+      - id_recipient
+      - in_previous_sending
+      - message
+      - mobile
+      - name
+      - status
+      - timestamp
+      - type
+      - user_id
+    SavedRecipientCreate:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/SavedRecipientCreateTypeEnum'
+        id:
+          type: integer
+      required:
+      - id
+      - type
+    PaginatedMailLog:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/MailLog'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    AlertTag:
+      type: object
+      properties:
+        id:
+          type: integer
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        name:
+          type: string
+        type:
+          type: string
+          readOnly: true
+          default: profile
+      required:
+      - id
+      - name
+      - type
+      - url
+    Article:
+      type: object
+      properties:
+        id_site:
+          type: integer
+        id_article:
+          type: integer
+        xmltext:
+          type: string
+        stimestamp:
+          type: integer
+        matchinfo:
+          type: string
+          default: ''
+      required:
+      - id_article
+      - id_site
+    CreateRecipient:
+      oneOf:
+      - $ref: '#/components/schemas/DirectRecipientCreate'
+      - $ref: '#/components/schemas/SavedRecipientCreate'
+    AlertProfile:
+      type: object
+      properties:
+        id:
+          type: integer
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        name:
+          type: string
+        type:
+          type: string
+          readOnly: true
+          default: profile
+      required:
+      - id
+      - name
+      - type
+      - url
+    TimeSchedulerRepresentation:
+      type: object
+      properties:
+        timeConfiguration:
+          $ref: '#/components/schemas/TimeScheduleDayPeriod'
+        timeZone:
+          type: string
+        country:
+          $ref: '#/components/schemas/CountryEnum'
+      required:
+      - country
+      - timeConfiguration
+      - timeZone
+    AlertContact:
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+        mobile:
+          type:
+          - string
+          - 'null'
+      required:
+      - email
+      - mobile
+      - name
+    Articles:
+      type: object
+      properties:
+        articles:
+          type: array
+          items:
+            $ref: '#/components/schemas/Article'
+      required:
+      - articles
+    AlertContactOverview:
+      type: object
+      properties:
+        id:
+          type: integer
+        subject:
+          type: string
+        recipients:
+          $ref: '#/components/schemas/AlertRecipientOverview'
+      required:
+      - id
+      - recipients
+      - subject
+    CountryEnum:
+      enum:
+      - GB_EN
+      - SE
+      - 'NO'
+      - DK
+      - FI
+      - ET
+      type: string
+      description: '* `GB_EN` - GB_EN
+
+        * `SE` - SE
+
+        * `NO` - NO
+
+        * `DK` - DK
+
+        * `FI` - FI
+
+        * `ET` - ET'
+    AlertBasket:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+      required:
+      - id
+      - name
+    SavedRecipientCreateTypeEnum:
+      enum:
+      - person
+      - group
+      - user
+      type: string
+      description: '* `person` - person
+
+        * `group` - group
+
+        * `user` - user'
+    AlertType:
+      enum:
+      - 4
+      - 6
+      - 30
+      - 7
+      - 42
+      - 50
+      type: integer
+      description: '* `4` - Email
+
+        * `6` - FTP
+
+        * `30` - Stored search
+
+        * `7` - Feed
+
+        * `42` - Update search
+
+        * `50` - Persistent'
+    NextAlertPreview:
+      type: object
+      properties:
+        id_list:
+          type: integer
+        content:
+          type: object
+          additionalProperties: {}
+      required:
+      - content
+      - id_list
+    ResendAlertRecipients:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/ResendAlertRecipientsTypeEnum'
+        value:
+          type: string
+      required:
+      - type
+      - value
+    GroupRecipient:
+      type: object
+      properties:
+        id_recipient:
+          type: integer
+        group_id:
+          type: integer
+        type:
+          type: string
+          readOnly: true
+          default: group
+        name:
+          type: string
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupRecipientChild'
+      required:
+      - contacts
+      - group_id
+      - id_recipient
+      - name
+      - type
+    Recipient:
+      oneOf:
+      - $ref: '#/components/schemas/DirectRecipient'
+      - $ref: '#/components/schemas/ContactRecipient'
+      - $ref: '#/components/schemas/UserRecipient'
+      - $ref: '#/components/schemas/GroupRecipient'
+    ResendAlertRecipientsTypeEnum:
+      enum:
+      - email
+      - mobile
+      - person
+      - group
+      - user
+      type: string
+      description: '* `email` - email
+
+        * `mobile` - mobile
+
+        * `person` - person
+
+        * `group` - group
+
+        * `user` - user'
+    TimeSchedulePeriod:
+      type: object
+      properties:
+        start:
+          type: integer
+        end:
+          type: integer
+        interval:
+          type: integer
+      required:
+      - start
+    MailLog:
+      type: object
+      properties:
+        maillog_id:
+          type: integer
+        id:
+          type: integer
+        stimestamp:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        date:
+          type: string
+          format: date-time
+          readOnly: true
+        failed:
+          type: boolean
+          readOnly: true
+        opened:
+          type: integer
+          readOnly: true
+        sent_to:
+          type: integer
+          readOnly: true
+        has_json:
+          type: boolean
+          readOnly: true
+      required:
+      - date
+      - failed
+      - has_json
+      - id
+      - maillog_id
+      - opened
+      - sent_to
+      - stimestamp
+    GroupRecipientChild:
+      type: object
+      properties:
+        id_contact:
+          type: integer
+        name:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+        mobile:
+          type:
+          - string
+          - 'null'
+        status:
+          $ref: '#/components/schemas/MailSentStatus'
+        message:
+          type: string
+        timestamp:
+          type: integer
+        in_previous_sending:
+          type: boolean
+      required:
+      - email
+      - id_contact
+      - in_previous_sending
+      - message
+      - mobile
+      - name
+      - status
+      - timestamp
+    AlertDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        url:
+          type: string
+          readOnly: true
+        subject:
+          type: string
+          maxLength: 255
+        active:
+          type: integer
+        type:
+          allOf:
+          - $ref: '#/components/schemas/AlertType'
+          minimum: -2147483648
+          maximum: 2147483647
+        locale:
+          type: string
+        schedule:
+          allOf:
+          - $ref: '#/components/schemas/TimeSchedulerRepresentation'
+          readOnly: true
+        profiles:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlertProfilesAndTags'
+          readOnly: true
+        baskets:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlertBasket'
+          readOnly: true
+        recipients:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlertRecipient'
+          readOnly: true
+        smsRecipients:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlertRecipient'
+          readOnly: true
+        pushRecipients:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlertRecipient'
+          readOnly: true
+        template:
+          allOf:
+          - $ref: '#/components/schemas/Template'
+          readOnly: true
+        isCreatedFromApp:
+          type: boolean
+          readOnly: true
+        editable:
+          type: boolean
+          readOnly: true
+        translate:
+          type: boolean
+          readOnly: true
+        max_age:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        groupidentical:
+          type: boolean
+          readOnly: true
+        resendidentical:
+          type: boolean
+          readOnly: true
+        sender:
+          type: string
+          readOnly: true
+        is_org:
+          type: boolean
+          readOnly: true
+        lastSent:
+          type: integer
+          readOnly: true
+      required:
+      - active
+      - baskets
+      - editable
+      - groupidentical
+      - id
+      - isCreatedFromApp
+      - is_org
+      - lastSent
+      - profiles
+      - pushRecipients
+      - recipients
+      - resendidentical
+      - schedule
+      - sender
+      - smsRecipients
+      - template
+      - translate
+      - type
+      - url
+    DirectRecipientCreateTypeEnum:
+      enum:
+      - email
+      - mobile
+      type: string
+      description: '* `email` - email
+
+        * `mobile` - mobile'
+    AlertRecipientOverview:
+      type: object
+      properties:
+        groups:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlertGroupContact'
+        direct:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlertContact'
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlertContact'
+        users:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlertContact'
+      required:
+      - contacts
+      - direct
+      - groups
+      - users
+    MailSentStatus:
+      enum:
+      - Delivered
+      - Processing
+      - Failed
+      - Filtered
+      - Unknown
+      type: string
+      description: '* `Delivered` - Delivered
+
+        * `Processing` - Processing
+
+        * `Failed` - Failed
+
+        * `Filtered` - Filtered
+
+        * `Unknown` - Unknown'
+    AlertProfilesAndTags:
+      oneOf:
+      - $ref: '#/components/schemas/AlertProfile'
+      - $ref: '#/components/schemas/AlertTag'
+    DirectRecipient:
+      type: object
+      properties:
+        id_recipient:
+          type: integer
+        type:
+          type: string
+        value:
+          type: string
+        status:
+          $ref: '#/components/schemas/MailSentStatus'
+        message:
+          type: string
+        timestamp:
+          type: integer
+        in_previous_sending:
+          type: boolean
+      required:
+      - id_recipient
+      - in_previous_sending
+      - message
+      - status
+      - timestamp
+      - type
+      - value
+    NextMetadata:
+      type: object
+      properties:
+        count:
+          type: integer
+        type:
+          type:
+          - integer
+          - 'null'
+        nextPossibleSend:
+          type: string
+          format: date-time
+      required:
+      - count
+      - type
+    ContactRecipient:
+      type: object
+      properties:
+        id_recipient:
+          type: integer
+        id_contact:
+          type: integer
+        type:
+          type: string
+          readOnly: true
+          default: contact
+        name:
+          type:
+          - string
+          - 'null'
+        email:
+          type:
+          - string
+          - 'null'
+        mobile:
+          type:
+          - string
+          - 'null'
+        status:
+          $ref: '#/components/schemas/MailSentStatus'
+        message:
+          type: string
+        timestamp:
+          type: integer
+        in_previous_sending:
+          type: boolean
+      required:
+      - email
+      - id_contact
+      - id_recipient
+      - in_previous_sending
+      - message
+      - mobile
+      - name
+      - status
+      - timestamp
+      - type
+    ResendAlertResponse:
+      type: object
+      properties:
+        emails:
+          type: array
+          items:
+            type: string
+      required:
+      - emails
+    AlertRecipient:
+      type: object
+      properties:
+        id_recipient:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        alert:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        type:
+          allOf:
+          - $ref: '#/components/schemas/AlertRecipientTypeEnum'
+          minimum: -2147483648
+          maximum: 2147483647
+        value:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          default: 0
+        literal:
+          type: string
+          default: ''
+          maxLength: 255
+        filter:
+          type: boolean
+      required:
+      - alert
+      - filter
+      - id_recipient
+      - type
+    AlertRecipientTypeEnum:
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      type: integer
+      description: '* `0` - Mail
+
+        * `1` - Phone
+
+        * `2` - Contact mail
+
+        * `3` - Contact phone
+
+        * `4` - Group mail
+
+        * `5` - Group phone
+
+        * `6` - User mail
+
+        * `7` - User phone
+
+        * `8` - Push iOS
+
+        * `9` - Push Android'
+    AlertCreate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        subject:
+          type: string
+          maxLength: 255
+        locale:
+          type: string
+        schedule:
+          $ref: '#/components/schemas/TimeSchedulerRepresentation'
+        profiles:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlertProfile'
+        recipients:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateRecipient'
+        smsRecipients:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateRecipient'
+        active:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        templateId:
+          type: integer
+        editable:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        nextPossibleSend:
+          type: integer
+          default: 2147483647
+        max_age:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        sender:
+          type: string
+        resendidentical:
+          type: boolean
+          default: false
+        is_org:
+          type: boolean
+          default: false
+        articleMaxTimestamp:
+          type:
+          - integer
+          - 'null'
+        includeIdentical:
+          type:
+          - boolean
+          - 'null'
+      required:
+      - id
+      - profiles
+      - recipients
+      - schedule
+      - templateId
+      - url
+    Template:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+        type:
+          type: integer
+        readonly:
+          type: boolean
+          readOnly: true
+      required:
+      - id
+      - name
+      - readonly
+      - type
+      - url
+    TimeScheduleDayPeriod:
+      type: object
+      properties:
+        monday:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeSchedulePeriod'
+        tuesday:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeSchedulePeriod'
+        wednesday:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeSchedulePeriod'
+        thursday:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeSchedulePeriod'
+        friday:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeSchedulePeriod'
+        saturday:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeSchedulePeriod'
+        sunday:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeSchedulePeriod'
+        holidays:
+          type: array
+          items:
+            $ref: '#/components/schemas/TimeSchedulePeriod'
+    AlertGroupContact:
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+        contacts:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlertContact'
+      required:
+      - contacts
+      - name
+  securitySchemes:
+    JWT:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "JWT"
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: PHPSESSID
+    ephmeralId:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Ephemeral"
+    staticToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
+x-refined-from:
+- opoint-openapi-original.yml
+- opoint-openapi.yml

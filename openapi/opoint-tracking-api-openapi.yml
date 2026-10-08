@@ -1,0 +1,328 @@
+openapi: 3.2.0
+info:
+  title: Opoint Tracking API
+  version: 1.0.0
+  description: 'Operations tagged tracking across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.opoint.com
+tags:
+- name: Tracking
+paths:
+  /tracking/:
+    post:
+      operationId: tracking_create
+      summary: Upload article for tracking
+      tags:
+      - Tracking
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartnerArticleRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PartnerArticleRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PartnerArticleRequest'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: Article uploaded successfully
+        '400':
+          description: Article already exists or invalid data
+        '403':
+          description: Permissions denied
+        '500':
+          description: Internal server error
+    servers:
+    - url: https://api.opoint.com
+  /tracking/export/:
+    post:
+      operationId: tracking_export_create
+      summary: Asynchronously generate export of tracked article matches in Excel
+      tags:
+      - Tracking
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TemplateTrackingExport'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TemplateTrackingExport'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TemplateTrackingExport'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackingExportResponse'
+          description: ''
+    servers:
+    - url: https://api.opoint.com
+  /tracking/info/:
+    get:
+      operationId: tracking_info_retrieve
+      summary: Get information about tracking setup
+      tags:
+      - Tracking
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackingInfoResponse'
+          description: ''
+    servers:
+    - url: https://api.opoint.com
+  /tracking/search/:
+    post:
+      operationId: tracking_search_create
+      description: Returns uploaded articles based on partner ids.
+      summary: Search partner articles
+      tags:
+      - Tracking
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PartnerArticlesSearchRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PartnerArticlesSearchRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PartnerArticlesSearchRequest'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  searchresult:
+                    type: object
+                    properties:
+                      document:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id_site:
+                              type: integer
+                            id_article:
+                              type: integer
+                            partner_article_id:
+                              type: string
+                            tracking:
+                              type: object
+                              properties:
+                                partner_article_id:
+                                  type: string
+          description: Success
+        '400':
+          description: Invalid request or missing articles
+        '500':
+          description: Internal server error
+    servers:
+    - url: https://api.opoint.com
+components:
+  schemas:
+    TemplateTrackingExport:
+      type: object
+      description: Serializer for tracking exports, which are always Excel types
+      properties:
+        params:
+          type: object
+          additionalProperties: {}
+          writeOnly: true
+        searchterm:
+          type: string
+        expressions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProfileItem'
+        use_raw_query:
+          type: boolean
+        default_search:
+          type: string
+        templateId:
+          type: integer
+        oldest:
+          type: integer
+        newest:
+          type: integer
+        timezone:
+          type: string
+          default: Europe/Oslo
+        title:
+          type: string
+          maxLength: 128
+      required:
+      - title
+    TrackingInfoResponse:
+      type: object
+      properties:
+        tracked_articles_basket:
+          oneOf:
+          - $ref: '#/components/schemas/TrackingInfoBasket'
+          - type: 'null'
+        matched_articles_basket:
+          oneOf:
+          - $ref: '#/components/schemas/TrackingInfoBasket'
+          - type: 'null'
+      required:
+      - matched_articles_basket
+      - tracked_articles_basket
+    SearchLine:
+      type: object
+      properties:
+        searchterm:
+          type: string
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchLineFilter'
+    PartnerArticleRequest:
+      type: object
+      properties:
+        partner_article_id:
+          type: string
+          maxLength: 128
+        title:
+          type: string
+        summary:
+          type: string
+        text:
+          type: string
+        threshold:
+          type: integer
+          maximum: 100
+          minimum: 9
+        duration:
+          type: integer
+          maximum: 30
+          minimum: 1
+        time:
+          type: string
+          format: date-time
+        url:
+          type: string
+          format: uri
+        language:
+          type: string
+      required:
+      - partner_article_id
+      - time
+      - title
+    TrackingExportResponse:
+      type: object
+      properties:
+        export_id:
+          type: integer
+      required:
+      - export_id
+    TrackingInfoBasket:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+      required:
+      - id
+      - name
+    PartnerArticlesSearchRequest:
+      type: object
+      properties:
+        partner_article_ids:
+          type: array
+          items:
+            type: string
+            maxLength: 128
+      required:
+      - partner_article_ids
+    ProfileItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        searchline:
+          $ref: '#/components/schemas/SearchLine'
+        linemode:
+          $ref: '#/components/schemas/LinemodeEnum'
+        searchmode:
+          type: string
+          writeOnly: true
+      required:
+      - linemode
+      - searchline
+      - searchmode
+    LinemodeEnum:
+      enum:
+      - R
+      - O
+      - E
+      type: string
+      description: '* `R` - Required
+
+        * `O` - Optional
+
+        * `E` - Exclude'
+    SearchLineFilter:
+      type: object
+      properties:
+        type:
+          type: string
+        id:
+          type: string
+      required:
+      - type
+  securitySchemes:
+    JWT:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "JWT"
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: PHPSESSID
+    ephmeralId:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Ephemeral"
+    staticToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
+x-refined-from:
+- opoint-openapi-original.yml
+- opoint-openapi.yml

@@ -1,0 +1,128 @@
+openapi: 3.2.0
+info:
+  title: Opoint Support API
+  version: 1.0.0
+  description: 'Operations tagged support across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.opoint.com
+tags:
+- name: Support
+paths:
+  /support/issue/:
+    post:
+      operationId: support_issue_create
+      tags:
+      - Support
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SupportIssue'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SupportIssue'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SupportIssue'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: Request succesfully sent
+        '500':
+          description: Error sending request
+      summary: Support issue create
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+components:
+  schemas:
+    SupportIssue:
+      type: object
+      properties:
+        id_site:
+          type: integer
+          minimum: 0
+        id_article:
+          type: integer
+          minimum: 0
+        description:
+          type: string
+        translated_headline:
+          type: string
+        original_headline:
+          type: string
+        publication_date:
+          type: integer
+        source:
+          type: string
+        country:
+          type: string
+        context_type:
+          type: string
+        context_name:
+          type: string
+        context_id:
+          type: integer
+          minimum: 0
+        email:
+          type: string
+          format: email
+        issue_type:
+          type: array
+          items:
+            $ref: '#/components/schemas/IssueTypeEnum'
+      required:
+      - context_id
+      - context_name
+      - context_type
+      - country
+      - description
+      - id_article
+      - id_site
+      - issue_type
+      - original_headline
+      - publication_date
+      - source
+      - translated_headline
+    IssueTypeEnum:
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+      type: integer
+      description: '* `1` - Factual mistake
+
+        * `2` - Translation error
+
+        * `3` - Metadata error
+
+        * `4` - Other issue'
+  securitySchemes:
+    JWT:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "JWT"
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: PHPSESSID
+    ephmeralId:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Ephemeral"
+    staticToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
+x-refined-from:
+- opoint-openapi-original.yml
+- opoint-openapi.yml

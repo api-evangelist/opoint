@@ -1,0 +1,507 @@
+openapi: 3.2.0
+info:
+  title: Opoint Notifications API
+  version: 1.0.0
+  description: 'Operations tagged notifications across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.opoint.com
+tags:
+- name: Notifications
+paths:
+  /notifications/:
+    get:
+      operationId: notifications_list
+      summary: List notifications
+      parameters:
+      - in: query
+        name: from_id
+        schema:
+          type: integer
+        description: Notifications with id greater than from_id
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Page size
+      tags:
+      - Notifications
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListNotifications'
+          description: List of notifications
+    post:
+      operationId: notifications_create
+      summary: Create a notification
+      tags:
+      - Notifications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Notification'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Notification'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Notification'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+          description: ''
+    servers:
+    - url: https://api.opoint.com
+  /notifications/{id}/:
+    get:
+      operationId: notifications_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this notification.
+        required: true
+      tags:
+      - Notifications
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+          description: ''
+      summary: Notifications retrieve
+      x-summary-source: derived
+    put:
+      operationId: notifications_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this notification.
+        required: true
+      tags:
+      - Notifications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Notification'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Notification'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Notification'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+          description: ''
+      summary: Notifications update
+      x-summary-source: derived
+    patch:
+      operationId: notifications_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this notification.
+        required: true
+      tags:
+      - Notifications
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedNotification'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedNotification'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedNotification'
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Notification'
+          description: ''
+      summary: Notifications partial update
+      x-summary-source: derived
+    delete:
+      operationId: notifications_destroy
+      summary: Remove a notification
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this notification.
+        required: true
+      tags:
+      - Notifications
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+    servers:
+    - url: https://api.opoint.com
+  /notifications/alert-count/:
+    get:
+      operationId: notifications_alert_count_retrieve
+      summary: Get count of unseen notifications
+      tags:
+      - Notifications
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertCountResponse'
+          description: ''
+    post:
+      operationId: notifications_alert_count_create
+      summary: Mark notifications as seen
+      tags:
+      - Notifications
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertCountResponse'
+          description: ''
+    servers:
+    - url: https://api.opoint.com
+components:
+  schemas:
+    NotificationFieldReport:
+      type: object
+      description: 'Single purpose serializer: Servers only to correctly describe a NotificationRelatedField field
+
+        where the value is ReportSerializer.'
+      properties:
+        type:
+          type: string
+        value:
+          oneOf:
+          - $ref: '#/components/schemas/Report'
+          - type: 'null'
+      required:
+      - type
+      - value
+    BaseReport:
+      type: object
+      properties:
+        id:
+          type: integer
+        download:
+          type: string
+          readOnly: true
+        title:
+          type: string
+        status:
+          type: integer
+          readOnly: true
+        timeFinished:
+          type: integer
+        type:
+          type: integer
+          readOnly: true
+        articles:
+          type: integer
+          readOnly: true
+        timestampFrom:
+          type: integer
+          readOnly: true
+        timestampTo:
+          type: integer
+          readOnly: true
+      required:
+      - articles
+      - download
+      - id
+      - status
+      - timeFinished
+      - timestampFrom
+      - timestampTo
+      - title
+      - type
+    NotificationFieldSiteExport:
+      type: object
+      description: 'Single purpose serializer: Servers only to correctly describe a NotificationRelatedField field
+
+        where the value is BaseReportSerializer.'
+      properties:
+        type:
+          type: string
+        value:
+          oneOf:
+          - $ref: '#/components/schemas/BaseReport'
+          - type: 'null'
+      required:
+      - type
+      - value
+    Export:
+      type: object
+      description: Serializer for returning statistics export data from notifications
+      properties:
+        id:
+          type: integer
+        download:
+          type: string
+          readOnly: true
+        title:
+          type: string
+        status:
+          type: integer
+          readOnly: true
+        timeFinished:
+          type: integer
+        type:
+          type: integer
+          readOnly: true
+        articles:
+          type: integer
+          readOnly: true
+        timestampFrom:
+          type: integer
+          readOnly: true
+        timestampTo:
+          type: integer
+          readOnly: true
+      required:
+      - articles
+      - download
+      - id
+      - status
+      - timeFinished
+      - timestampFrom
+      - timestampTo
+      - title
+      - type
+    NotificationFieldTrackingExport:
+      type: object
+      description: 'Single purpose serializer: Servers only to correctly describe a NotificationRelatedField field
+
+        where the value is ReportSerializer.'
+      properties:
+        type:
+          type: string
+        value:
+          oneOf:
+          - $ref: '#/components/schemas/BaseReport'
+          - type: 'null'
+      required:
+      - type
+      - value
+    NotificationFieldExport:
+      type: object
+      description: 'Single purpose serializer: Servers only to correctly describe a NotificationRelatedField field
+
+        where the value is ExportSerializer.'
+      properties:
+        type:
+          type: string
+        value:
+          oneOf:
+          - $ref: '#/components/schemas/Export'
+          - type: 'null'
+      required:
+      - type
+      - value
+    NotificationFieldValue:
+      oneOf:
+      - $ref: '#/components/schemas/NotificationFieldExport'
+      - $ref: '#/components/schemas/NotificationFieldReport'
+      - $ref: '#/components/schemas/NotificationFieldTrackingExport'
+      - $ref: '#/components/schemas/NotificationFieldSiteExport'
+    ListNotifications:
+      type: object
+      description: Serves for describing the /notifications response. forced_singular_serializer can't work with inline_serializer
+      properties:
+        count:
+          type: integer
+        next:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Notification'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    Notification:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        read:
+          type: boolean
+          default: false
+        object:
+          oneOf:
+          - $ref: '#/components/schemas/NotificationFieldValue'
+          - type: 'null'
+      required:
+      - id
+      - title
+    Report:
+      type: object
+      properties:
+        id:
+          type: integer
+        download:
+          type: string
+          readOnly: true
+        title:
+          type: string
+        status:
+          type: integer
+          readOnly: true
+        timeFinished:
+          type: integer
+        type:
+          type: integer
+          readOnly: true
+        articles:
+          type: integer
+          readOnly: true
+        timestampFrom:
+          type: integer
+          readOnly: true
+        timestampTo:
+          type: integer
+          readOnly: true
+        pdfPages:
+          type: integer
+        pdfBytes:
+          type: integer
+      required:
+      - articles
+      - download
+      - id
+      - pdfBytes
+      - pdfPages
+      - status
+      - timeFinished
+      - timestampFrom
+      - timestampTo
+      - title
+      - type
+    PatchedNotification:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        read:
+          type: boolean
+          default: false
+        object:
+          oneOf:
+          - $ref: '#/components/schemas/NotificationFieldValue'
+          - type: 'null'
+    AlertCountResponse:
+      type: object
+      properties:
+        count:
+          type: integer
+      required:
+      - count
+  securitySchemes:
+    JWT:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "JWT"
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: PHPSESSID
+    ephmeralId:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Ephemeral"
+    staticToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
+x-refined-from:
+- opoint-openapi-original.yml
+- opoint-openapi.yml

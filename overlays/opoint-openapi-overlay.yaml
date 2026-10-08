@@ -1,0 +1,41 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for the Opoint API
+  version: 1.0.0
+extends: ../openapi/_original/opoint-openapi.yml
+actions:
+- target: $.info
+  update:
+    description: The API provides a RESTful interface to the Opoint database. It returns JSON or XML-formatted responses,
+      supports token based authentication, returns standard HTTP error codes, and follows a logical URI structure. The base
+      url is https://api.opoint.com. All requests should be sent over HTTPS.
+    x-apievangelist:
+      generated: '2026-10-07'
+      method: generated
+      source: https://api.opoint.com/schema/
+      fetched: '2026-10-07'
+      ownership: info.title Opoint API, servers[] https://api.opoint.com, served from the api.opoint.com host the docs at
+        api-docs.opoint.com name as the base URL
+      docs: https://api-docs.opoint.com/references/api
+      operations: 242
+      note: Descriptions quoted from https://api-docs.opoint.com/references/api; nothing in the original contract is changed.
+- target: $
+  update:
+    externalDocs:
+      description: Opoint API reference
+      url: https://api-docs.opoint.com/references/api
+- target: $.paths['/search/'].post
+  update:
+    externalDocs:
+      description: Search request reference
+      url: https://api-docs.opoint.com/references/search-request
+- target: $.paths['/storedsearch/feed/'].get
+  update:
+    externalDocs:
+      description: StoredSearch feed in the API reference
+      url: https://api-docs.opoint.com/references/api
+- target: $.paths['/tracking/'].post
+  update:
+    externalDocs:
+      description: Tracking reference
+      url: https://api-docs.opoint.com/references/tracking

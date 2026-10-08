@@ -1,0 +1,118 @@
+generated: '2026-10-07'
+method: searched
+source: https://api-docs.opoint.com/references/api; https://api-docs.opoint.com/examples; https://api-docs.opoint.com/references/safefeed;
+  https://opoint.com/frequently-asked-questions; derived from openapi/opoint-openapi.yml (242 operations)
+description: Cross-cutting behaviour of the Opoint API as the docs state it and the OpenAPI 3.1.1 contract declares it.
+base_url: https://api.opoint.com
+api_style: REST over HTTPS, JSON request bodies, JSON or XML responses (format query parameter), trailing slash required on
+  most paths
+authentication:
+  scheme: Static token in the Authorization header with the Token prefix, or as a token query parameter; the contract also
+    declares JWT and Ephemeral prefixes and a PHPSESSID cookie
+  docs: https://api-docs.opoint.com/references/api
+  detail: authentication/opoint-authentication.yml
+idempotency:
+  coverage: none
+  supported: false
+  mechanism: null
+  note: No Idempotency-Key or replay-protection mechanism is documented, and none of the 242 operations declares one. POST
+    /search/ is a read in POST clothing; writes (storedsearch, alerts, profiles, tags, folders, sites requests) have no documented
+    de-duplication.
+  docs: https://api-docs.opoint.com/references/api
+dry_run_mode:
+  supported: false
+  note: No rehearsal mode. The SafeFeed dry_run parameter only stops Opoint tracking when each article was last pulled; alerts_next_preview_create
+    and templates_preview_create preview an alert or template rather than rehearsing a write.
+reversibility:
+  status: documented
+  surfaces:
+  - write: profiles_destroy (DELETE /profiles/{id_list}/)
+    reversal: profiles_restore_retrieve (GET /profiles/{id_list}/restore/{timestamp}/)
+    window: null
+    note: Deleted profiles are listed by profiles_deleted_retrieve and a profile is restored from a history timestamp (profiles_history_retrieve);
+      the contract states "If you have the id_list and timestamp, you can recreate. The profile will be restored with the
+      original user and folder settings." No retention window is stated.
+    docs: https://api.opoint.com/schema/
+  - write: alerts_activate_create (POST /alerts/{id}/activate/)
+    reversal: alerts_deactivate_create (POST /alerts/{id}/deactivate/)
+    window: null
+    note: Activation and deactivation are symmetric operations in the contract; no window applies.
+    docs: https://api.opoint.com/schema/
+  - write: storedsearch_create / alerts_create / tags_create / folders_create
+    reversal: the matching *_destroy operation
+    window: null
+    note: Plain deletes; no documented undo for a delete of a stored search, alert, tag or folder.
+    docs: https://api.opoint.com/schema/
+  note: Reversal paths exist for profiles (restore) and alerts (deactivate) but the docs state no window, so the grade is
+    documented, not verified.
+pagination:
+  style: mixed
+  search:
+    mechanism: context cursor
+    request_params:
+      params.requestedarticles: number of articles to return, default 10
+      params.context: empty string on the first request; echo the context value from the previous response to get the next
+        batch
+      params.oldest: Unix timestamp bounding the oldest article
+    response_fields:
+      context: non-empty when more results match the search
+    docs: https://api-docs.opoint.com/examples
+  stored_search_feed:
+    mechanism: time window cursor
+    request_params:
+      from: Unix timestamp to search from (required)
+      interval: seconds to search forward, between 120 and 1800, default 900
+      to: Unix timestamp to search until
+      num_art: max articles per stored search, default 25000
+    response_fields:
+      next_from: Unix timestamp to pass as from on the next request
+      covered: difference between from and next_from
+    docs: https://api-docs.opoint.com/references/api
+  safefeed:
+    mechanism: lastid cursor
+    request_params:
+      lastid: first id not yet received, or ? for the highest available id
+      num_art: between 1 and 5000, default 500
+    response_fields:
+      opoint_search_start: id to pass as lastid on the next request
+    docs: https://api-docs.opoint.com/references/safefeed
+  lists:
+    mechanism: limit/offset on /storedsearch/ (default 500) and page/page_size or limit/offset on list operations as declared
+      in the contract
+    docs: https://api-docs.opoint.com/references/api
+field_expansion:
+  supported: true
+  mechanism: 'Search params select response parts and enrichment: main.header/summary/text, readership, textrazor (topics
+    and entities), topics, matches, equalgroup; several are marked Requires license'
+  docs: https://api-docs.opoint.com/references/search-request
+formats:
+  response:
+  - application/json
+  - application/xml
+  selector: format=json|xml query parameter (doc_format on SafeFeed)
+request_tracing:
+  request_id_header: null
+  note: No request-id header is documented.
+versioning:
+  scheme: none in the URI
+  current: 1.0.0 (info.version in the contract)
+  detail: lifecycle/opoint-lifecycle.yml
+  note: No version segment in paths and no version header is documented.
+error_envelope:
+  media_type: application/json
+  rfc9457: false
+  shape: 'Django REST framework style {"detail": "..."} (observed on an unauthenticated GET /: {"detail":"Authentication credentials
+    were not provided."}); the docs say the API returns standard HTTP error codes and a search response reports syntax errors
+    in the body'
+  docs: https://api-docs.opoint.com/references/api
+  detail: errors/opoint-problem-types.yml
+rate_limits:
+  signal_status: null
+  headers: []
+  detail: rate-limits/opoint-rate-limits.yml
+  note: No rate limits or headers are documented. The FAQ states the Search API should not be used as a live feed and that
+    API calls should not be automated; the contract declares a 429 only on one operation (to_time is in the future).
+  docs: https://opoint.com/frequently-asked-questions
+webhooks:
+  supported: false
+  note: No webhooks. Matches are pulled from /storedsearch/feed/ or the SafeFeed, or pushed to FTP by Opoint.

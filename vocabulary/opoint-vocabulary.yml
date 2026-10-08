@@ -1,0 +1,422 @@
+generated: '2026-10-07'
+method: derived
+generator: derive-vocabulary.py
+source: openapi/opoint-openapi.yml
+vocabulary:
+  name: Opoint Domain Vocabulary
+  description: 'Terms declared by Opoint''s own API contract: its resource groups, objects and enumerations, with the contract''s definitions.
+    Derived, not authored.'
+  version: '2026-10-07'
+  terms:
+  - term: AccessGroupSchema
+    definition: 'Object declared by the contract with fields: access_groups, sites, sources.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AccessGroupSchema
+  - term: AccessInfoSchema
+    definition: 'Object declared by the contract with fields: name, enabled, value.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AccessInfoSchema
+  - term: ActionEnum
+    definition: '* `2` - Article consumed * `3` - Article viewed for 3 sec * `4` - Article viewed for 10 sec * `5` - Article clicked * `6` - PDF
+      viewed * `7` - Media clip played * `8` - Image clicked * `9` - Article added to tag * `10` - Entry fetched from Go log'
+    tags:
+    - Enumeration
+    source: openapi/opoint-openapi.yml#/components/schemas/ActionEnum
+  - term: AggregatedRange
+    definition: 'Object declared by the contract with fields: statuses.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AggregatedRange
+  - term: Agreement
+    definition: 'Object declared by the contract with fields: id_agreement, name, label, description, priority, expose, tag, licence_configuration,
+      site_count, source_count, customers, created. (2 more)'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/Agreement
+  - term: AgreementAccessGroup
+    definition: 'Object declared by the contract with fields: access_groups, name.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AgreementAccessGroup
+  - term: AgreementList
+    definition: 'Object declared by the contract with fields: id_agreement, name, label, description, priority, expose, tag, licence_configuration,
+      site_count, source_count, customers, created. (1 more)'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AgreementList
+  - term: AgreementRef
+    definition: 'An agreement mentioned by another: on the same tag, or sharing a configuration.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AgreementRef
+  - term: AgreementSite
+    definition: 'Object declared by the contract with fields: id_site, name, url.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AgreementSite
+  - term: AgreementSource
+    definition: 'Object declared by the contract with fields: id_source, name, url, id_site.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AgreementSource
+  - term: AgreementTag
+    definition: 'Object declared by the contract with fields: id_sitetag, name, access_group, agreements.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AgreementTag
+  - term: AgreementTagRef
+    definition: 'Object declared by the contract with fields: id_sitetag, name, access_group.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AgreementTagRef
+  - term: Alert
+    definition: 'Object declared by the contract with fields: id, url, subject, type, active, baskets, isCreatedFromApp, editable, max_age, has_push_subscription,
+      schedule, lastSent.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/Alert
+  - term: AlertBasket
+    definition: 'Object declared by the contract with fields: id, name.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AlertBasket
+  - term: AlertContact
+    definition: 'Object declared by the contract with fields: name, email, mobile.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AlertContact
+  - term: AlertContactOverview
+    definition: 'Object declared by the contract with fields: id, subject, recipients.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AlertContactOverview
+  - term: AlertCountResponse
+    definition: 'Object declared by the contract with fields: count.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AlertCountResponse
+  - term: AlertCreate
+    definition: 'Object declared by the contract with fields: id, url, subject, locale, schedule, profiles, recipients, smsRecipients, active,
+      templateId, editable, nextPossibleSend. (6 more)'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AlertCreate
+  - term: AlertDetail
+    definition: 'Object declared by the contract with fields: id, url, subject, active, type, locale, schedule, profiles, baskets, recipients,
+      smsRecipients, pushRecipients. (10 more)'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AlertDetail
+  - term: AlertGroupContact
+    definition: 'Object declared by the contract with fields: name, contacts.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AlertGroupContact
+  - term: AlertHistoryContent
+    definition: 'Object declared by the contract with fields: content, id_list, name.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AlertHistoryContent
+  - term: AlertHistoryItem
+    definition: 'Object declared by the contract with fields: content.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AlertHistoryItem
+  - term: AlertMails
+    definition: 'Object declared by the contract with fields: alert_name, owner_name, owner_id, mails.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AlertMails
+  - term: AlertProfile
+    definition: 'Object declared by the contract with fields: id, url, name, type.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AlertProfile
+  - term: AlertProfileDependencies
+    definition: 'Object declared by the contract with fields: id, name.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AlertProfileDependencies
+  - term: AlertRecipient
+    definition: 'Object declared by the contract with fields: id_recipient, alert, type, value, literal, filter.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AlertRecipient
+  - term: AlertRecipientOverview
+    definition: 'Object declared by the contract with fields: groups, direct, contacts, users.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AlertRecipientOverview
+  - term: AlertRecipientTypeEnum
+    definition: '* `0` - Mail * `1` - Phone * `2` - Contact mail * `3` - Contact phone * `4` - Group mail * `5` - Group phone * `6` - User mail
+      * `7` - User phone * `8` - Push iOS * `9` - Push Android'
+    tags:
+    - Enumeration
+    source: openapi/opoint-openapi.yml#/components/schemas/AlertRecipientTypeEnum
+  - term: AlertSubscription
+    definition: 'Object declared by the contract with fields: id, name, is_subscribed.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AlertSubscription
+  - term: AlertSubscriptionDetail
+    definition: 'Object declared by the contract with fields: is_mail, alert_id, subscribe.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AlertSubscriptionDetail
+  - term: AlertTag
+    definition: 'Object declared by the contract with fields: id, url, name, type.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AlertTag
+  - term: AlertType
+    definition: '* `4` - Email * `6` - FTP * `30` - Stored search * `7` - Feed * `42` - Update search * `50` - Persistent'
+    tags:
+    - Enumeration
+    source: openapi/opoint-openapi.yml#/components/schemas/AlertType
+  - term: AlmostIdenticalSchema
+    definition: 'Object declared by the contract with fields: id_site, id_article, sim.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AlmostIdenticalSchema
+  - term: AnalyticQueryDetails
+    definition: 'Object declared by the contract with fields: url, id_item, topic_name, max_age, rate, rate_last_updated, max_rate, last_set,
+      items.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AnalyticQueryDetails
+  - term: AnalyticQueryItem
+    definition: 'Object declared by the contract with fields: id, searchline, linemode, searchmode.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AnalyticQueryItem
+  - term: AnalyticsError
+    definition: 'Object declared by the contract with fields: details.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AnalyticsError
+  - term: AnalyticsQuery
+    definition: 'Object declared by the contract with fields: url, id_item, max_age, rate, rate_last_updated, max_rate, last_set.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AnalyticsQuery
+  - term: AnalyticsReport
+    definition: 'Object declared by the contract with fields: id, name, description, active, createDate, id_user, categoryId, scoringScale, scoredFields,
+      nPrinting, topicDisplayName, topicDisplayType. (3 more)'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AnalyticsReport
+  - term: Article
+    definition: 'Object declared by the contract with fields: id_site, id_article, xmltext, stimestamp, matchinfo.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/Article
+  - term: ArticleBasket
+    definition: 'Object declared by the contract with fields: weight, articles.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/ArticleBasket
+  - term: ArticleBasketDelete
+    definition: 'Object declared by the contract with fields: articles.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/ArticleBasketDelete
+  - term: ArticleFeature
+    definition: 'Object declared by the contract with fields: matches, text.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/ArticleFeature
+  - term: ArticleIdsSerializerv2
+    definition: 'Object declared by the contract with fields: id_site, id_article.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/ArticleIdsSerializerv2
+  - term: ArticleImage
+    definition: 'Object declared by the contract with fields: url.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/ArticleImage
+  - term: ArticleImageSchema
+    definition: 'Object declared by the contract with fields: url, caption.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/ArticleImageSchema
+  - term: ArticleImages
+    definition: 'Object declared by the contract with fields: count, articleimage.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/ArticleImages
+  - term: ArticleImagesSchema
+    definition: 'Object declared by the contract with fields: count, articleimage.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/ArticleImagesSchema
+  - term: ArticleMediaSchema
+    definition: 'Object declared by the contract with fields: url, localurl, thumbnail, text.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/ArticleMediaSchema
+  - term: ArticleReadershipSchema
+    definition: 'Object declared by the contract with fields: value, DeltaPValue, ExpectedPValue, StdExpectedPValue, P, DeltaP, ExpectedP, StdExpectedP.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/ArticleReadershipSchema
+  - term: ArticleReference
+    definition: 'Object declared by the contract with fields: topicId, id_site, id_article, status, wordCount, sentiment, hitHeadline, hitArticle,
+      hitPicture, swot, articleType, comment. (16 more)'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/ArticleReference
+  - term: ArticleVisited
+    definition: 'Object declared by the contract with fields: id_site, id_article, action.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/ArticleVisited
+  - term: Articles
+    definition: 'Object declared by the contract with fields: articles.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/Articles
+  - term: AsyncReportCreateResponse
+    definition: 'Object declared by the contract with fields: report_id, new_timestamp.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/AsyncReportCreateResponse
+  - term: BaseArticle
+    definition: 'Object declared by the contract with fields: id_site, id_article.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/BaseArticle
+  - term: BaseReport
+    definition: 'Object declared by the contract with fields: id, download, title, status, timeFinished, type, articles, timestampFrom, timestampTo.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/BaseReport
+  - term: BodySchema
+    definition: 'Object declared by the contract with fields: text, matches, readmore, truncated.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/BodySchema
+  - term: Caption
+    definition: 'Object declared by the contract with fields: text.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/Caption
+  - term: CodingEvent
+    definition: 'Object declared by the contract with fields: id, topicId, id_site, id_article, id_user, machineName, timestamp, actionId.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/CodingEvent
+  - term: ContactRecipient
+    definition: 'Object declared by the contract with fields: id_recipient, id_contact, type, name, email, mobile, status, message, timestamp,
+      in_previous_sending.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/ContactRecipient
+  - term: CountryEnum
+    definition: '* `GB_EN` - GB_EN * `SE` - SE * `NO` - NO * `DK` - DK * `FI` - FI * `ET` - ET'
+    tags:
+    - Enumeration
+    source: openapi/opoint-openapi.yml#/components/schemas/CountryEnum
+  - term: Currency
+    definition: 'Object declared by the contract with fields: currency, name.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/Currency
+  - term: Customer
+    definition: 'Object declared by the contract with fields: id, name, partner.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/Customer
+  - term: CustomerDetail
+    definition: 'Object declared by the contract with fields: id, name, partner, is_active, is_educational, is_opoint, max_num_users, navision_id,
+      salesforce_id, num_users.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/CustomerDetail
+  - term: CustomerUsageListEntry
+    definition: 'Object declared by the contract with fields: id_customer, name, totals, deliveries.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/CustomerUsageListEntry
+  - term: CustomerUsageListResponse
+    definition: 'Object declared by the contract with fields: delivery, customers.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/CustomerUsageListResponse
+  - term: CustomerUsageResponse
+    definition: 'Object declared by the contract with fields: delivery, totals, deliveries.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/CustomerUsageResponse
+  - term: DanishUser
+    definition: 'Object declared by the contract with fields: id_user, username, email, is_active, owner, last_login.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/DanishUser
+  - term: DebugLineSchema
+    definition: 'Object declared by the contract with fields: state, query.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/DebugLineSchema
+  - term: DebugSchema
+    definition: 'Object declared by the contract with fields: count, lines.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/DebugSchema
+  - term: DeleteProfileResponse400
+    definition: 'Object declared by the contract with fields: data, message.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/DeleteProfileResponse400
+  - term: DeleteTagResponse
+    definition: 'Object declared by the contract with fields: data, message.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/DeleteTagResponse
+  - term: DeletedProfilesItemsResponse
+    definition: 'Object declared by the contract with fields: id_list, name, make_persistent, items, timestamp, saved_by, kind, last_set.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/DeletedProfilesItemsResponse
+  - term: DeletedProfilesResponse
+    definition: 'Object declared by the contract with fields: count, results.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/DeletedProfilesResponse
+  - term: DirectRecipient
+    definition: 'Object declared by the contract with fields: id_recipient, type, value, status, message, timestamp, in_previous_sending.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/DirectRecipient
+  - term: DirectRecipientCreate
+    definition: 'Object declared by the contract with fields: type, value.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/DirectRecipientCreate
+  - term: DirectRecipientCreateTypeEnum
+    definition: '* `email` - email * `mobile` - mobile'
+    tags:
+    - Enumeration
+    source: openapi/opoint-openapi.yml#/components/schemas/DirectRecipientCreateTypeEnum
+  - term: DisplayTypeEnum
+    definition: '* `1` - ComboBox * `2` - AutoSuggestComboBox * `3` - ListBox * `4` - AutoSuggestListBox'
+    tags:
+    - Enumeration
+    source: openapi/opoint-openapi.yml#/components/schemas/DisplayTypeEnum
+  - term: DocumentSchema
+    definition: A single article/document in the search response.
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/DocumentSchema
+  - term: DocumentTopic
+    definition: 'Object declared by the contract with fields: id, linktype_max, linktype_now, metacat, metacat_level, text.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/DocumentTopic
+  - term: EntitiesSchema
+    definition: 'Object declared by the contract with fields: location, organization, person.'
+    tags:
+    - Object
+    source: openapi/opoint-openapi.yml#/components/schemas/EntitiesSchema

@@ -1,0 +1,118 @@
+openapi: 3.2.0
+info:
+  title: Opoint Watchqueries API
+  version: 1.0.0
+  description: 'Operations tagged watchqueries across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.opoint.com
+tags:
+- name: watchqueries
+paths:
+  /watchqueries/:
+    get:
+      operationId: watchqueries_list
+      tags:
+      - watchqueries
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/WatchQuery'
+          description: ''
+      summary: Watchqueries list
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /watchqueries/{id}/:
+    get:
+      operationId: watchqueries_retrieve
+      description: Get number of new hits for stored queries
+      summary: Retrieve watched counts
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        description: Comma separated list of watch ids
+        required: true
+      tags:
+      - watchqueries
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WatchQuery'
+          description: ''
+        '400':
+          description: One of the ids is not an int
+    servers:
+    - url: https://api.opoint.com
+components:
+  schemas:
+    WatchQuery:
+      type: object
+      properties:
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        id:
+          type: integer
+          readOnly: true
+        last_check:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        active:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        cnt:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        query:
+          type: string
+      required:
+      - active
+      - cnt
+      - id
+      - last_check
+      - url
+  securitySchemes:
+    JWT:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "JWT"
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: PHPSESSID
+    ephmeralId:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Ephemeral"
+    staticToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
+x-refined-from:
+- opoint-openapi-original.yml
+- opoint-openapi.yml

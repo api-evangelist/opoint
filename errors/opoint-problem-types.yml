@@ -1,0 +1,77 @@
+generated: '2026-10-07'
+method: derived
+generator: derive-problem-types.py
+source:
+- openapi/opoint-openapi.yml
+format: custom
+envelope:
+  media_type: application/json
+  schema: AnalyticsError
+coverage:
+  operations: 242
+  statuses_declared: 10
+problems:
+- status: 400
+  title: Bad Request
+  description: Invalid request body
+  operations: 30
+  media_types:
+  - application/json
+  schema: DeleteProfileResponse400
+- status: 401
+  title: Unauthorized
+  description: User is not authorized
+  operations: 10
+  media_types: []
+  schema: null
+- status: 403
+  title: Forbidden
+  description: Hit the max users invited limit (NUM_USER_INVITES attribute)
+  operations: 6
+  media_types: []
+  schema: null
+- status: 404
+  title: Not Found
+  description: Not found
+  operations: 48
+  media_types:
+  - application/json
+  schema: AnalyticsError
+- status: 406
+  title: Not Acceptable
+  description: Not successful
+  operations: 2
+  media_types: []
+  schema: null
+- status: 409
+  title: Conflict
+  description: Another save for this profile's draft is in flight
+  operations: 2
+  media_types:
+  - application/json
+  schema: Error
+- status: 412
+  title: Precondition Failed
+  description: Invitation has already been accepted
+  operations: 2
+  media_types: []
+  schema: null
+- status: 429
+  title: Too Many Requests
+  description: to_time is in the future
+  operations: 1
+  media_types: []
+  schema: null
+- status: 500
+  title: Internal Server Error
+  description: Internal server error
+  operations: 7
+  media_types:
+  - application/json
+  schema: data
+- status: 501
+  title: Not Implemented
+  description: Not Implemented
+  operations: 1
+  media_types: []
+  schema: null

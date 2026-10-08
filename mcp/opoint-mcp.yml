@@ -1,0 +1,251 @@
+generated: '2026-10-07'
+method: probed
+source:
+- https://opoint.com/.well-known/oauth-protected-resource
+- https://opoint.com/.well-known/oauth-authorization-server
+- https://opoint.com/wp-json/ (namespaces mcp, wp-abilities/v1, elementor-mcp-composer)
+- https://opoint.com/wp-json/mcp/mcp-oauth-server (POST tools/list -> 401)
+- openapi/opoint-openapi.yml (candidate tools only)
+status: gated
+name: Opoint website MCP (WordPress MCP Adapter)
+server:
+  name: mcp-oauth-server (WordPress MCP Adapter default server on opoint.com)
+  url: https://opoint.com/wp-json/mcp/mcp-oauth-server
+  surface: the marketing site's CMS abilities exposed by the WordPress MCP Adapter / wp-abilities plugins -- NOT the Opoint
+    news API on api.opoint.com, which has no MCP server
+  probe:
+    date: '2026-10-07'
+    method: POST tools/list
+    status: 401
+    body: '{"code":"mcp_unauthorized","message":"MCP authentication required.","data":{"status":401}}'
+  oauth:
+    protected_resource: https://opoint.com/wp-json/mcp/mcp-oauth-server
+    authorization_servers:
+    - https://opoint.com
+    authorization_endpoint: https://opoint.com/oauth/authorize
+    token_endpoint: https://opoint.com/oauth/token
+    scopes_supported:
+    - mcp
+    documents:
+    - well-known/opoint-oauth-protected-resource.json
+    - well-known/opoint-oauth-authorization-server.json
+  documented: false
+  docs: null
+deployment:
+  mode: remote
+  endpoint: https://opoint.com/wp-json/mcp/mcp-oauth-server
+  auth: oauth
+  verified: probed
+auth: oauth
+tools: []
+tools_note: The live tools/list is OAuth-gated (401 mcp_unauthorized) and Opoint publishes no MCP documentation or tool table,
+  so no tool is recorded as served. The WordPress REST index also lists /mcp/mcp-adapter-default-server and /elementor/v1/mcp-proxy
+  (plugin routes).
+candidate_tools_from_openapi:
+  method: derived
+  generator: derive-mcp-candidate.py
+  source: openapi/opoint-openapi.yml
+  note: 'What an MCP server over the Opoint news API WOULD expose; derived from 242 operations (40 listed) by derive-mcp-candidate.py.
+    Nobody ships such a server: the pre-flight posted tools/list to /mcp on api.opoint.com, www.opoint.com, api-docs.opoint.com
+    and app.opoint.com with verdict absent.'
+  tools:
+  - name: agreements_list
+    operationId: agreements_list
+    method: GET
+    path: /agreements/
+    description: List agreements
+  - name: agreements_retrieve
+    operationId: agreements_retrieve
+    method: GET
+    path: /agreements/{id}
+    description: Agreement's detail
+  - name: agreements_sites_list
+    operationId: agreements_sites_list
+    method: GET
+    path: /agreements/{id}/sites
+    description: Agreement's sites
+  - name: agreements_sources_list
+    operationId: agreements_sources_list
+    method: GET
+    path: /agreements/{id}/sources
+    description: Agreement's single sources
+  - name: alert_info_retrieve
+    operationId: alert_info_retrieve
+    method: GET
+    path: /alert_info/{id_maillog}/
+    description: GET /alert_info/{id_maillog}/
+  - name: alerts_list
+    operationId: alerts_list
+    method: GET
+    path: /alerts/
+    description: List alerts
+  - name: alerts_create
+    operationId: alerts_create
+    method: POST
+    path: /alerts/
+    description: Create an alert
+  - name: alerts_retrieve
+    operationId: alerts_retrieve
+    method: GET
+    path: /alerts/{id}/
+    description: Get alert by id
+  - name: alerts_update
+    operationId: alerts_update
+    method: PUT
+    path: /alerts/{id}/
+    description: Update an alert
+  - name: alerts_destroy
+    operationId: alerts_destroy
+    method: DELETE
+    path: /alerts/{id}/
+    description: Delete an alert
+  - name: alerts_activate_create
+    operationId: alerts_activate_create
+    method: POST
+    path: /alerts/{id}/activate/
+    description: POST /alerts/{id}/activate/
+  - name: alerts_articles_retrieve
+    operationId: alerts_articles_retrieve
+    method: GET
+    path: /alerts/{id}/articles/
+    description: GET /alerts/{id}/articles/
+  - name: alerts_articles_create
+    operationId: alerts_articles_create
+    method: POST
+    path: /alerts/{id}/articles/
+    description: POST /alerts/{id}/articles/
+  - name: alerts_deactivate_create
+    operationId: alerts_deactivate_create
+    method: POST
+    path: /alerts/{id}/deactivate/
+    description: POST /alerts/{id}/deactivate/
+  - name: alert_history_retrieve_detail
+    operationId: alert_history_retrieve_detail
+    method: GET
+    path: /alerts/{id}/history/
+    description: Get alert history items
+  - name: alerts_history_retrieve
+    operationId: alerts_history_retrieve
+    method: GET
+    path: /alerts/{id}/history/{id_item}/{stimestamp}/
+    description: GET /alerts/{id}/history/{id_item}/{stimestamp}/
+  - name: alerts_history_resend_create
+    operationId: alerts_history_resend_create
+    method: POST
+    path: /alerts/{id}/history/{id_item}/{stimestamp}/resend/
+    description: POST /alerts/{id}/history/{id_item}/{stimestamp}/resend/
+  - name: alerts_next_retrieve
+    operationId: alerts_next_retrieve
+    method: GET
+    path: /alerts/{id}/next/
+    description: Next alert metadata
+  - name: alerts_next_preview_list
+    operationId: alerts_next_preview_list
+    method: GET
+    path: /alerts/{id}/next/preview/
+    description: GET /alerts/{id}/next/preview/
+  - name: alerts_next_preview_create
+    operationId: alerts_next_preview_create
+    method: POST
+    path: /alerts/{id}/next/preview/
+    description: POST /alerts/{id}/next/preview/
+  - name: alerts_recipients_list
+    operationId: alerts_recipients_list
+    method: GET
+    path: /alerts/{id}/recipients/
+    description: Get alert recipients
+  - name: alerts_recipients_destroy
+    operationId: alerts_recipients_destroy
+    method: DELETE
+    path: /alerts/{id}/recipients/{id_recipient}/
+    description: Remove recipient from an alert
+  - name: alerts_send_now_create
+    operationId: alerts_send_now_create
+    method: POST
+    path: /alerts/{id}/send-now/
+    description: Send the alert now
+  - name: alerts_alert_contact_details_list
+    operationId: alerts_alert_contact_details_list
+    method: GET
+    path: /alerts/alert-contact-details/
+    description: GET /alerts/alert-contact-details/
+  - name: alerts_logo_retrieve
+    operationId: alerts_logo_retrieve
+    method: GET
+    path: /alerts/logo/
+    description: GET /alerts/logo/
+  - name: analytics_articles_retrieve
+    operationId: analytics_articles_retrieve
+    method: GET
+    path: /analytics/articles
+    description: Fetch ArticleReferences
+  - name: analytics_articles_create
+    operationId: analytics_articles_create
+    method: POST
+    path: /analytics/articles
+    description: Create ArticleReference
+  - name: analytics_articles_update
+    operationId: analytics_articles_update
+    method: PUT
+    path: /analytics/articles
+    description: Update ArticleReferences
+  - name: analytics_coding_events_list
+    operationId: analytics_coding_events_list
+    method: GET
+    path: /analytics/coding-events
+    description: GET /analytics/coding-events
+  - name: analytics_coding_events_create
+    operationId: analytics_coding_events_create
+    method: POST
+    path: /analytics/coding-events
+    description: POST /analytics/coding-events
+  - name: analytics_report_categories_list
+    operationId: analytics_report_categories_list
+    method: GET
+    path: /analytics/report-categories
+    description: Fetch report categories
+  - name: analytics_reports_list
+    operationId: analytics_reports_list
+    method: GET
+    path: /analytics/reports
+    description: Endpoint for /analytics/reports
+  - name: analytics_reports_create
+    operationId: analytics_reports_create
+    method: POST
+    path: /analytics/reports
+    description: Endpoint for /analytics/reports
+  - name: analytics_reports_retrieve
+    operationId: analytics_reports_retrieve
+    method: GET
+    path: /analytics/reports/{id}
+    description: Get scoring variable
+  - name: analytics_reports_update
+    operationId: analytics_reports_update
+    method: PUT
+    path: /analytics/reports/{id}
+    description: Update scoring variable
+  - name: analytics_reports_partial_update
+    operationId: analytics_reports_partial_update
+    method: PATCH
+    path: /analytics/reports/{id}
+    description: Partially update scoring variable
+  - name: analytics_reports_destroy
+    operationId: analytics_reports_destroy
+    method: DELETE
+    path: /analytics/reports/{id}
+    description: Deletes a report by id
+  - name: analytics_reports_topics_list
+    operationId: analytics_reports_topics_list
+    method: GET
+    path: /analytics/reports/{report_id}/topics
+    description: GET /analytics/reports/{report_id}/topics
+  - name: analytics_reports_topics_create
+    operationId: analytics_reports_topics_create
+    method: POST
+    path: /analytics/reports/{report_id}/topics
+    description: POST /analytics/reports/{report_id}/topics
+  - name: analytics_reports_statistics_retrieve
+    operationId: analytics_reports_statistics_retrieve
+    method: GET
+    path: /analytics/reports/statistics
+    description: Fetch analytics reports statistics

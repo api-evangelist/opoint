@@ -1,0 +1,24 @@
+generated: '2026-10-07'
+method: searched
+source: https://api-docs.opoint.com/info; https://status.opoint.com/; https://api-docs.opoint.com/references/api; openapi/opoint-openapi.yml
+versioning:
+  scheme: unversioned
+  current: 1.0.0
+  mechanism: The contract declares info.version 1.0.0; paths carry no version segment (except /trends/v2/) and no version
+    header is documented.
+  docs: https://api-docs.opoint.com/references/api
+deprecation:
+  policy: null
+  docs: null
+  headers: []
+  deprecated_operations: []
+  note: No deprecation policy, Sunset or Deprecation header is published, and the contract marks no operation deprecated.
+    The search syntax reference notes that the rank subjects "can be considered deprecated" in favour of the countryrank and
+    globalrank operators.
+status_page: https://status.opoint.com/
+support:
+  incident_hotline: +45 88 77 33 33 (24/7 alert service, service disruptions only)
+  docs: https://api-docs.opoint.com/info
+  note: support.opoint.com answered 200 on 2026-10-07 with a Bugzilla internal error page, so it is not recorded as a Support
+    pointer.
+sla: null

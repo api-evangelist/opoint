@@ -1,0 +1,14 @@
+generated: '2026-10-07'
+method: none
+source: https://opoint.com/products/api-solutions
+name: Opoint plans and pricing
+audience: business-product
+pricing_basis: negotiated
+published: false
+delivery:
+  delivery: managed
+plan_count: 0
+plans: []
+note: Opoint publishes no price list. The API solutions page answers "Can we test coverage before committing?" with "Yes,
+  free bespoke data sets and trial periods, no commitment required." and routes buyers to "Talk to a specialist" / "Book a
+  data walkthrough"; several search parameters are marked "Requires license" in the docs.

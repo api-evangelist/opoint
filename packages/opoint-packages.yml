@@ -1,0 +1,17 @@
+generated: '2026-10-07'
+method: none
+source: https://api-docs.opoint.com/references/safefeed (links "Opoint Python library" to https://pypi.org/project/opoint/); https://pypi.org/pypi/opoint/json
+name: Opoint client packages
+ownership_rule: 'official: true because the provider''s own documentation links the package by name; the registry metadata alone names infomedia.dk
+  (the parent group, to which app.opoint.com resolves as app.infomedia.no) rather than opoint.com, which is why harvest-packages.py --audit cannot
+  see the ownership on its own.'
+packages: []
+searched:
+- pypi
+- npm
+- github
+note: 'no first-party package: every candidate a model listed was unowned (harvest-packages.py --audit)'
+rejected:
+- name: opoint
+  registry: pypi
+  reason: 'registry metadata names neither the provider''s domain nor its GitHub org: official downgraded (harvest-packages.py --audit)'

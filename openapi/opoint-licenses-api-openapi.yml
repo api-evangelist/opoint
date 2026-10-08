@@ -1,0 +1,98 @@
+openapi: 3.2.0
+info:
+  title: Opoint Licenses API
+  version: 1.0.0
+  description: 'Operations tagged licenses across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.opoint.com
+tags:
+- name: Licenses
+paths:
+  /licenses/:
+    get:
+      operationId: licenses_list
+      description: This endpoint serves for listing all licenses
+      summary: List licenses
+      tags:
+      - Licenses
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/License'
+          description: ''
+    servers:
+    - url: https://api.opoint.com
+components:
+  schemas:
+    License:
+      type: object
+      properties:
+        name:
+          type: string
+          readOnly: true
+        value:
+          type: integer
+          readOnly: true
+        label:
+          type: string
+          readOnly: true
+        description:
+          type: string
+          readOnly: true
+        num_users:
+          type: integer
+          readOnly: true
+        category:
+          oneOf:
+          - $ref: '#/components/schemas/LicenseCategory'
+          - type: 'null'
+      required:
+      - category
+      - description
+      - label
+      - name
+      - num_users
+      - value
+    LicenseCategory:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+      required:
+      - id
+      - name
+  securitySchemes:
+    JWT:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "JWT"
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: PHPSESSID
+    ephmeralId:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Ephemeral"
+    staticToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
+x-refined-from:
+- opoint-openapi-original.yml
+- opoint-openapi.yml

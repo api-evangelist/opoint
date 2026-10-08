@@ -1,23 +1,757 @@
 aid: opoint
 name: Opoint
-description: 'Opoint is a company surfaced via the API Evangelist harvest backlog (source: monid-connectors)
-  and added to the network as a stub for full-pipeline profiling.'
+description: Opoint is a Copenhagen-based real-time global news data provider in the Infomedia group. It crawls news from
+  more than 250,000 online sources in 135 languages, and sells that data to media-monitoring, compliance (adverse media, AML/KYC,
+  due diligence), financial-services and business-intelligence buyers. Developers reach it through the Opoint REST API on
+  api.opoint.com (archive Search, StoredSearch near-real-time feeds, Alerts, Profiles, Tags, Tracking of press releases, Analytics,
+  Trends), the SafeFeed pull feed on feed.opoint.com, and a suggestion server on suggest.api.opoint.com that translates names
+  and URLs into filter ids, with enrichment such as topics and entities, readership estimates and sentiment. An OpenAPI 3.1
+  contract is served at api.opoint.com/schema/ and a Python client library is published on PyPI.
 url: https://raw.githubusercontent.com/api-evangelist/opoint/refs/heads/main/apis.yml
 x-type: company
 x-source: harvest:monid-connectors
-x-tier: stub
-x-tier-reason: harvest
+x-tier: profiled
+x-tier-reason: enrichment pass 2026-10-07 (local-v5; was harvest)
 specificationVersion: '0.20'
 created: '2026-10-07'
 modified: '2026-10-07'
 tags:
 - Company
-apis: []
+- News
+- News Data
+- Media Monitoring
+- Search
+- Feeds
+- Adverse Media
+- Compliance
+- Financial Services
+- Content Tracking
+- Denmark
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+image: https://opoint.com/wp-content/uploads/fallback-home.png
 common:
+- type: Support
+  url: https://support.opoint.com/
+- type: AgenticAccess
+  url: agentic-access/opoint-agentic-access.yml
+- type: Spectral
+  url: rules/opoint-rules.yml
+- type: JSONLD
+  url: json-ld/opoint-context.jsonld
+- type: Vocabulary
+  url: vocabulary/opoint-vocabulary.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: DataModel
+  url: data-model/opoint-data-model.yml
+- type: Conventions
+  url: conventions/opoint-conventions.yml
+- type: Lifecycle
+  url: lifecycle/opoint-lifecycle.yml
+- type: ErrorCatalog
+  url: errors/opoint-problem-types.yml
+- type: Conformance
+  url: conformance/opoint-conformance.yml
+- type: Overlay
+  url: overlays/opoint-openapi-overlay.yaml
+- type: LLMsTxt
+  url: llms/opoint-llms.txt
+- type: WellKnown
+  url: well-known/opoint-well-known.yml
+- type: Hosts
+  url: hosts/opoint-hosts.yml
+- type: Vendors
+  url: vendors/opoint-vendors.yml
+- type: StatusPage
+  url: https://status.opoint.com/
+- type: Authentication
+  url: authentication/opoint-authentication.yml
+- type: DomainSecurity
+  url: security/opoint-domain-security.yml
 - type: Website
   url: https://www.opoint.com
+- type: Documentation
+  url: https://api-docs.opoint.com/
+- type: APIReference
+  url: https://api-docs.opoint.com/references/api
+- type: GettingStarted
+  url: https://api-docs.opoint.com/guides/getting-started-with-searching
+- type: Blog
+  url: https://opoint.com/resources/articles
+- type: PrivacyPolicy
+  url: https://opoint.com/privacy-policy
+- type: Login
+  url: https://portal.opoint.com/
+apis:
+- name: Opoint Suggestion Server API
+  description: >-
+    A search engine for filters that translates site names, URLs, countries, languages and other filter
+    names in natural language into the ids the Opoint search API understands, and back again, designed
+    for interactive search UIs. Served at suggest.api.opoint.com/suggest/{language}/... with the parameters
+    documented in the suggestion server reference.
+  humanURL: https://api-docs.opoint.com/references/suggestion-server
+  baseURL: https://suggest.api.opoint.com
+  tags:
+  - Search
+  - Suggestions
+  - Autocomplete
+  - News
+  properties:
+  - type: Documentation
+    url: https://api-docs.opoint.com/references/suggestion-server
+  - type: GettingStarted
+    url: https://api-docs.opoint.com/guides/using-the-suggestion-server
+  aid: opoint:opoint-suggestion-server-api
+- name: Opoint SafeFeed API
+  description: >-
+    Pull feed of real-time global news data at feed.opoint.com/safefeed.php, advanced with a lastid cursor
+    taken from the opoint_search_start element of each response, returning XML or JSON batches of up to
+    5,000 articles with optional readership, topics and entities enrichment. The documented way to consume
+    it is the official opoint Python library (SafefeedClient), which manages the cursor, batch size and
+    request interval.
+  humanURL: https://api-docs.opoint.com/references/safefeed
+  baseURL: https://feed.opoint.com
+  tags:
+  - News
+  - Feeds
+  - Real-time
+  - Media Monitoring
+  properties:
+  - type: Documentation
+    url: https://api-docs.opoint.com/references/safefeed
+  - type: SDK
+    url: https://pypi.org/project/opoint/
+  aid: opoint:opoint-safefeed-api
+- aid: opoint:opoint-agreements-api
+  name: Opoint Agreements API
+  description: The agreements API from Opoint — 4 operation(s) for agreements.
+  humanURL: https://api-docs.opoint.com/references/api
+  baseURL: https://api.opoint.com
+  tags:
+  - agreements
+  properties:
+  - type: OpenAPI
+    url: openapi/opoint-agreements-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.opoint.com/references/api
+  - type: GettingStarted
+    url: https://api-docs.opoint.com/guides/getting-started-with-searching
+  - type: JSONSchema
+    url: json-schema/opoint-profile-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-alert-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-list-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-site-request-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-patched-site-request-schema.json
+- aid: opoint:opoint-alert-info-api
+  name: Opoint Alert Info API
+  description: The alert_info API from Opoint — 1 operation(s) for alert_info.
+  humanURL: https://api-docs.opoint.com/references/api
+  baseURL: https://api.opoint.com
+  tags:
+  - alert_info
+  properties:
+  - type: OpenAPI
+    url: openapi/opoint-alert-info-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.opoint.com/references/api
+  - type: GettingStarted
+    url: https://api-docs.opoint.com/guides/getting-started-with-searching
+  - type: JSONSchema
+    url: json-schema/opoint-profile-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-alert-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-list-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-site-request-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-patched-site-request-schema.json
+- aid: opoint:opoint-alerts-api
+  name: Opoint Alerts API
+  description: The alerts API from Opoint — 15 operation(s) for alerts.
+  humanURL: https://api-docs.opoint.com/references/api
+  baseURL: https://api.opoint.com
+  tags:
+  - alerts
+  properties:
+  - type: OpenAPI
+    url: openapi/opoint-alerts-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.opoint.com/references/api
+  - type: GettingStarted
+    url: https://api-docs.opoint.com/guides/getting-started-with-searching
+  - type: JSONSchema
+    url: json-schema/opoint-profile-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-alert-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-list-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-site-request-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-patched-site-request-schema.json
+- aid: opoint:opoint-analytics-api
+  name: Opoint Analytics API
+  description: The analytics API from Opoint — 21 operation(s) for analytics.
+  humanURL: https://api-docs.opoint.com/references/api
+  baseURL: https://api.opoint.com
+  tags:
+  - analytics
+  properties:
+  - type: OpenAPI
+    url: openapi/opoint-analytics-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.opoint.com/references/api
+  - type: GettingStarted
+    url: https://api-docs.opoint.com/guides/getting-started-with-searching
+  - type: JSONSchema
+    url: json-schema/opoint-profile-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-alert-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-list-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-site-request-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-patched-site-request-schema.json
+- aid: opoint:opoint-auth-api
+  name: Opoint Auth API
+  description: The auth API from Opoint — 5 operation(s) for auth.
+  humanURL: https://api-docs.opoint.com/references/api
+  baseURL: https://api.opoint.com
+  tags:
+  - auth
+  properties:
+  - type: OpenAPI
+    url: openapi/opoint-auth-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.opoint.com/references/api
+  - type: GettingStarted
+    url: https://api-docs.opoint.com/guides/getting-started-with-searching
+  - type: JSONSchema
+    url: json-schema/opoint-profile-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-alert-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-list-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-site-request-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-patched-site-request-schema.json
+- aid: opoint:opoint-customers-api
+  name: Opoint Customers API
+  description: The customers API from Opoint — 6 operation(s) for customers.
+  humanURL: https://api-docs.opoint.com/references/api
+  baseURL: https://api.opoint.com
+  tags:
+  - customers
+  properties:
+  - type: OpenAPI
+    url: openapi/opoint-customers-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.opoint.com/references/api
+  - type: GettingStarted
+    url: https://api-docs.opoint.com/guides/getting-started-with-searching
+  - type: JSONSchema
+    url: json-schema/opoint-profile-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-alert-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-list-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-site-request-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-patched-site-request-schema.json
+- aid: opoint:opoint-folders-api
+  name: Opoint Folders API
+  description: The folders API from Opoint — 4 operation(s) for folders.
+  humanURL: https://api-docs.opoint.com/references/api
+  baseURL: https://api.opoint.com
+  tags:
+  - folders
+  properties:
+  - type: OpenAPI
+    url: openapi/opoint-folders-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.opoint.com/references/api
+  - type: GettingStarted
+    url: https://api-docs.opoint.com/guides/getting-started-with-searching
+  - type: JSONSchema
+    url: json-schema/opoint-profile-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-alert-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-list-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-site-request-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-patched-site-request-schema.json
+- aid: opoint:opoint-invite-api
+  name: Opoint Invite API
+  description: The invite API from Opoint — 6 operation(s) for invite.
+  humanURL: https://api-docs.opoint.com/references/api
+  baseURL: https://api.opoint.com
+  tags:
+  - invite
+  properties:
+  - type: OpenAPI
+    url: openapi/opoint-invite-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.opoint.com/references/api
+  - type: GettingStarted
+    url: https://api-docs.opoint.com/guides/getting-started-with-searching
+  - type: JSONSchema
+    url: json-schema/opoint-profile-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-alert-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-list-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-site-request-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-patched-site-request-schema.json
+- aid: opoint:opoint-licenses-api
+  name: Opoint Licenses API
+  description: The licenses API from Opoint — 1 operation(s) for licenses.
+  humanURL: https://api-docs.opoint.com/references/api
+  baseURL: https://api.opoint.com
+  tags:
+  - licenses
+  properties:
+  - type: OpenAPI
+    url: openapi/opoint-licenses-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.opoint.com/references/api
+  - type: GettingStarted
+    url: https://api-docs.opoint.com/guides/getting-started-with-searching
+  - type: JSONSchema
+    url: json-schema/opoint-profile-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-alert-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-list-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-site-request-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-patched-site-request-schema.json
+- aid: opoint:opoint-mailstatus-api
+  name: Opoint Mailstatus API
+  description: The mailstatus API from Opoint — 10 operation(s) for mailstatus.
+  humanURL: https://api-docs.opoint.com/references/api
+  baseURL: https://api.opoint.com
+  tags:
+  - mailstatus
+  properties:
+  - type: OpenAPI
+    url: openapi/opoint-mailstatus-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.opoint.com/references/api
+  - type: GettingStarted
+    url: https://api-docs.opoint.com/guides/getting-started-with-searching
+  - type: JSONSchema
+    url: json-schema/opoint-profile-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-alert-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-list-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-site-request-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-patched-site-request-schema.json
+- aid: opoint:opoint-notifications-api
+  name: Opoint Notifications API
+  description: The notifications API from Opoint — 3 operation(s) for notifications.
+  humanURL: https://api-docs.opoint.com/references/api
+  baseURL: https://api.opoint.com
+  tags:
+  - notifications
+  properties:
+  - type: OpenAPI
+    url: openapi/opoint-notifications-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.opoint.com/references/api
+  - type: GettingStarted
+    url: https://api-docs.opoint.com/guides/getting-started-with-searching
+  - type: JSONSchema
+    url: json-schema/opoint-profile-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-alert-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-list-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-site-request-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-patched-site-request-schema.json
+- aid: opoint:opoint-profiles-api
+  name: Opoint Profiles API
+  description: The profiles API from Opoint — 16 operation(s) for profiles.
+  humanURL: https://api-docs.opoint.com/references/api
+  baseURL: https://api.opoint.com
+  tags:
+  - profiles
+  properties:
+  - type: OpenAPI
+    url: openapi/opoint-profiles-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.opoint.com/references/api
+  - type: GettingStarted
+    url: https://api-docs.opoint.com/guides/getting-started-with-searching
+  - type: JSONSchema
+    url: json-schema/opoint-profile-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-alert-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-list-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-site-request-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-patched-site-request-schema.json
+- aid: opoint:opoint-reports-api
+  name: Opoint Reports API
+  description: The reports API from Opoint — 2 operation(s) for reports.
+  humanURL: https://api-docs.opoint.com/references/api
+  baseURL: https://api.opoint.com
+  tags:
+  - reports
+  properties:
+  - type: OpenAPI
+    url: openapi/opoint-reports-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.opoint.com/references/api
+  - type: GettingStarted
+    url: https://api-docs.opoint.com/guides/getting-started-with-searching
+  - type: JSONSchema
+    url: json-schema/opoint-profile-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-alert-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-list-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-site-request-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-patched-site-request-schema.json
+- aid: opoint:opoint-safefeeds-api
+  name: Opoint Safefeeds API
+  description: The safefeeds API from Opoint — 6 operation(s) for safefeeds.
+  humanURL: https://api-docs.opoint.com/references/api
+  baseURL: https://api.opoint.com
+  tags:
+  - safefeeds
+  properties:
+  - type: OpenAPI
+    url: openapi/opoint-safefeeds-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.opoint.com/references/api
+  - type: GettingStarted
+    url: https://api-docs.opoint.com/guides/getting-started-with-searching
+  - type: JSONSchema
+    url: json-schema/opoint-profile-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-alert-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-list-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-site-request-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-patched-site-request-schema.json
+- aid: opoint:opoint-search-api
+  name: Opoint Search API
+  description: The search API from Opoint — 6 operation(s) for search.
+  humanURL: https://api-docs.opoint.com/references/api
+  baseURL: https://api.opoint.com
+  tags:
+  - search
+  properties:
+  - type: OpenAPI
+    url: openapi/opoint-search-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.opoint.com/references/api
+  - type: GettingStarted
+    url: https://api-docs.opoint.com/guides/getting-started-with-searching
+  - type: JSONSchema
+    url: json-schema/opoint-profile-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-alert-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-list-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-site-request-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-patched-site-request-schema.json
+- aid: opoint:opoint-sites-api
+  name: Opoint Sites API
+  description: The sites API from Opoint — 18 operation(s) for sites.
+  humanURL: https://api-docs.opoint.com/references/api
+  baseURL: https://api.opoint.com
+  tags:
+  - sites
+  properties:
+  - type: OpenAPI
+    url: openapi/opoint-sites-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.opoint.com/references/api
+  - type: GettingStarted
+    url: https://api-docs.opoint.com/guides/getting-started-with-searching
+  - type: JSONSchema
+    url: json-schema/opoint-profile-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-alert-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-list-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-site-request-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-patched-site-request-schema.json
+- aid: opoint:opoint-stored-search-api
+  name: Opoint stored search API
+  description: The stored search API from Opoint — 4 operation(s) for stored search.
+  humanURL: https://api-docs.opoint.com/references/api
+  baseURL: https://api.opoint.com
+  tags:
+  - stored search
+  properties:
+  - type: OpenAPI
+    url: openapi/opoint-stored-search-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.opoint.com/references/api
+  - type: GettingStarted
+    url: https://api-docs.opoint.com/guides/getting-started-with-searching
+  - type: JSONSchema
+    url: json-schema/opoint-profile-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-alert-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-list-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-site-request-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-patched-site-request-schema.json
+- aid: opoint:opoint-support-api
+  name: Opoint Support API
+  description: The support API from Opoint — 1 operation(s) for support.
+  humanURL: https://api-docs.opoint.com/references/api
+  baseURL: https://api.opoint.com
+  tags:
+  - support
+  properties:
+  - type: OpenAPI
+    url: openapi/opoint-support-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.opoint.com/references/api
+  - type: GettingStarted
+    url: https://api-docs.opoint.com/guides/getting-started-with-searching
+  - type: JSONSchema
+    url: json-schema/opoint-profile-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-alert-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-list-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-site-request-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-patched-site-request-schema.json
+- aid: opoint:opoint-tags-api
+  name: Opoint Tags API
+  description: The tags API from Opoint — 10 operation(s) for tags.
+  humanURL: https://api-docs.opoint.com/references/api
+  baseURL: https://api.opoint.com
+  tags:
+  - tags
+  properties:
+  - type: OpenAPI
+    url: openapi/opoint-tags-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.opoint.com/references/api
+  - type: GettingStarted
+    url: https://api-docs.opoint.com/guides/getting-started-with-searching
+  - type: JSONSchema
+    url: json-schema/opoint-profile-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-alert-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-list-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-site-request-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-patched-site-request-schema.json
+- aid: opoint:opoint-templates-api
+  name: Opoint Templates API
+  description: The templates API from Opoint — 3 operation(s) for templates.
+  humanURL: https://api-docs.opoint.com/references/api
+  baseURL: https://api.opoint.com
+  tags:
+  - templates
+  properties:
+  - type: OpenAPI
+    url: openapi/opoint-templates-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.opoint.com/references/api
+  - type: GettingStarted
+    url: https://api-docs.opoint.com/guides/getting-started-with-searching
+  - type: JSONSchema
+    url: json-schema/opoint-profile-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-alert-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-list-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-site-request-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-patched-site-request-schema.json
+- aid: opoint:opoint-tracking-api
+  name: Opoint Tracking API
+  description: The tracking API from Opoint — 4 operation(s) for tracking.
+  humanURL: https://api-docs.opoint.com/references/api
+  baseURL: https://api.opoint.com
+  tags:
+  - tracking
+  properties:
+  - type: OpenAPI
+    url: openapi/opoint-tracking-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.opoint.com/references/api
+  - type: GettingStarted
+    url: https://api-docs.opoint.com/guides/getting-started-with-searching
+  - type: JSONSchema
+    url: json-schema/opoint-profile-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-alert-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-list-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-site-request-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-patched-site-request-schema.json
+- aid: opoint:opoint-trends-api
+  name: Opoint Trends API
+  description: The trends API from Opoint — 5 operation(s) for trends.
+  humanURL: https://api-docs.opoint.com/references/api
+  baseURL: https://api.opoint.com
+  tags:
+  - trends
+  properties:
+  - type: OpenAPI
+    url: openapi/opoint-trends-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.opoint.com/references/api
+  - type: GettingStarted
+    url: https://api-docs.opoint.com/guides/getting-started-with-searching
+  - type: JSONSchema
+    url: json-schema/opoint-profile-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-alert-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-list-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-site-request-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-patched-site-request-schema.json
+- aid: opoint:opoint-users-api
+  name: Opoint Users API
+  description: The users API from Opoint — 5 operation(s) for users.
+  humanURL: https://api-docs.opoint.com/references/api
+  baseURL: https://api.opoint.com
+  tags:
+  - users
+  properties:
+  - type: OpenAPI
+    url: openapi/opoint-users-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.opoint.com/references/api
+  - type: GettingStarted
+    url: https://api-docs.opoint.com/guides/getting-started-with-searching
+  - type: JSONSchema
+    url: json-schema/opoint-profile-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-alert-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-list-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-site-request-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-patched-site-request-schema.json
+- aid: opoint:opoint-watchqueries-api
+  name: Opoint Watchqueries API
+  description: The watchqueries API from Opoint — 2 operation(s) for watchqueries.
+  humanURL: https://api-docs.opoint.com/references/api
+  baseURL: https://api.opoint.com
+  tags:
+  - watchqueries
+  properties:
+  - type: OpenAPI
+    url: openapi/opoint-watchqueries-api-openapi.yml
+  - type: Documentation
+    url: https://api-docs.opoint.com/references/api
+  - type: GettingStarted
+    url: https://api-docs.opoint.com/guides/getting-started-with-searching
+  - type: JSONSchema
+    url: json-schema/opoint-profile-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-alert-detail-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-agreement-list-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-site-request-schema.json
+  - type: JSONSchema
+    url: json-schema/opoint-patched-site-request-schema.json
+x-enrichment:
+  date: '2026-10-07'
+  status: enriched
+  artifacts_added: 38
+  pass: local-v5

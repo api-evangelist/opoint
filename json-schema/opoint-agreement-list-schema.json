@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/opoint/main/json-schema/opoint-agreement-list-schema.json",
+  "title": "AgreementList",
+  "x-generated": "2026-10-07",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/opoint-openapi.yml#/components/schemas/AgreementList",
+  "type": "object",
+  "properties": {
+    "id_agreement": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "name": {
+      "type": "string",
+      "readOnly": true,
+      "description": "The site tag's name. Agreements on one tag share it; when exposed, customers see it as the licence name of its sites."
+    },
+    "label": {
+      "type": "string",
+      "readOnly": true,
+      "description": "The name followed by the licence configuration's name, which tells same-named agreements apart."
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "priority": {
+      "type": "integer",
+      "readOnly": true,
+      "description": "1 or more: the licence configuration overrides the sites' own licences. 0: the two are combined."
+    },
+    "expose": {
+      "type": "boolean",
+      "readOnly": true,
+      "description": "Whether customers see the name as the licence name of its sites."
+    },
+    "tag": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/AgreementTagRef"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "readOnly": true
+    },
+    "licence_configuration": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/LicenseConfigurationRef"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "readOnly": true,
+      "description": "null when the agreement only grants access, and the sites' own licences apply."
+    },
+    "site_count": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "source_count": {
+      "type": "integer",
+      "readOnly": true,
+      "description": "Single sources, on top of the sites."
+    },
+    "customers": {
+      "type": "integer",
+      "readOnly": true,
+      "description": "Customers with an active, non-staff user holding the agreement, of their own or inherited. Counted hourly."
+    },
+    "created": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    },
+    "last_change": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    }
+  },
+  "required": [
+    "created",
+    "customers",
+    "description",
+    "expose",
+    "id_agreement",
+    "label",
+    "last_change",
+    "licence_configuration",
+    "name",
+    "priority",
+    "site_count",
+    "source_count",
+    "tag"
+  ],
+  "$defs": {
+    "AgreementAccessGroup": {
+      "type": "object",
+      "properties": {
+        "access_groups": {
+          "type": "integer",
+          "maximum": 2147483647,
+          "minimum": -2147483648
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 255
+        }
+      },
+      "required": [
+        "access_groups"
+      ]
+    },
+    "AgreementTagRef": {
+      "type": "object",
+      "properties": {
+        "id_sitetag": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "access_group": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/AgreementAccessGroup"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "readOnly": true,
+          "description": "The legacy access group kept in step with this tag, if any. One tag has one at most."
+        }
+      },
+      "required": [
+        "access_group",
+        "id_sitetag",
+        "name"
+      ]
+    },
+    "LicenseConfigurationRef": {
+      "type": "object",
+      "properties": {
+        "id_license_configuration": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 255
+        }
+      },
+      "required": [
+        "id_license_configuration"
+      ]
+    }
+  }
+}

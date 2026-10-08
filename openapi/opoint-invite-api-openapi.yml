@@ -1,0 +1,774 @@
+openapi: 3.2.0
+info:
+  title: Opoint Invite API
+  version: 1.0.0
+  description: 'Operations tagged invite across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.opoint.com
+tags:
+- name: Invite
+paths:
+  /invite/direct/:
+    get:
+      operationId: invite_direct_list
+      description: Get all email invitations for requesting user
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+        description: Page number
+      - in: query
+        name: q
+        schema:
+          type: string
+        description: Email filter
+      tags:
+      - Invite
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleUserInvitePaginated'
+              examples:
+                Example1:
+                  value:
+                    count: 1
+                    next: null
+                    previous: null
+                    results:
+                    - id: 1
+                      token: IkhiHxv_jQ0f4jeDbz1Nz5HxIXzKaGa9x7CZSwQaMM8
+                      email: user1@email.com
+                      owner: 920735
+                      invitation_text: null
+                      sent: 1591158985
+                      expires: 1691763785
+                      created_user: null
+                      status: 3
+                      usable: false
+                      reason: Invitation has expired
+                    - id: 2
+                      token: a9KaGxHx7CX0fSzv_jQwMM84jQaZIDbkhie5z1NzHxI
+                      email: user2@email.com
+                      owner: 920735
+                      invitation_text: WELCOME TO INFOMEDIA!
+                      sent: 1591160182
+                      expires: 1691764982
+                      created_user: null
+                      status: 1
+                      usable: false
+                      reason: Invitation has expired
+                  summary: Example 1
+          description: ''
+        '401':
+          description: User is not authorized
+      summary: Invite direct list
+      x-summary-source: derived
+    post:
+      operationId: invite_direct_create
+      description: Create a new email invitation and send it by email
+      tags:
+      - Invite
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/invite_direct_post_request'
+            examples:
+              Example1:
+                value:
+                  email:
+                  - deveh58711@touchend.com
+                  - deveh58711@infomedia.dk
+                  invitation_text: Welcome to Infomedia!
+                  owner: 220735
+                  alerts:
+                  - 123456789
+                summary: Example 1
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/invite_direct_post_request'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/invite_direct_post_request'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/invite_direct_post_response'
+          description: ''
+        '400':
+          description: Bad request, read response to see the error
+        '401':
+          description: User is not authorized
+        '403':
+          description: Hit the max users invited limit (NUM_USER_INVITES attribute)
+      summary: Invite direct create
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /invite/direct/{token}/:
+    get:
+      operationId: invite_direct_retrieve
+      description: Get a specific email invitation with a id
+      parameters:
+      - in: path
+        name: token
+        schema:
+          type: string
+        description: token
+        required: true
+      tags:
+      - Invite
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleUserInvitation'
+              examples:
+                Example1:
+                  value:
+                    id: 32
+                    token: a9KaGxHx7CX0fSzv_jQwMM84jQaZIDbkhie5z1NzHxI
+                    email: deveh58711@touchend.com
+                    owner: 220735
+                    invitation_text: WELCOME TO INFOMEDIA!
+                    sent: 1691481226
+                    expires: 1692086026
+                    created_user: null
+                    status: 3
+                    usable: false
+                    reason: Invitation has expired
+                  summary: Example 1
+          description: ''
+        '404':
+          description: Invitation not found
+        '401':
+          description: User is not authorized
+      summary: Invite direct retrieve
+      x-summary-source: derived
+    delete:
+      operationId: invite_direct_destroy
+      description: 'Deleting an pending, failed or expired email invitation. Accepted invites can''t be deleted
+
+        Don''t forget the trailing slash'
+      parameters:
+      - in: path
+        name: token
+        schema:
+          type: string
+        description: token
+        required: true
+      tags:
+      - Invite
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: Invitation has been deleted
+        '404':
+          description: Invitation not found
+        '401':
+          description: User is not authorized
+        '412':
+          description: Invitation has already been accepted
+      summary: Invite direct destroy
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /invite/direct/{token}/accept/:
+    post:
+      operationId: invite_direct_accept_create
+      description: Accept an email invite and create a new user
+      parameters:
+      - in: path
+        name: token
+        schema:
+          type: string
+        required: true
+      tags:
+      - Invite
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SingleUserInvitation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SingleUserInvitation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SingleUserInvitation'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SingleUserInvitation'
+          description: ''
+      summary: Invite direct accept create
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /invite/open/:
+    get:
+      operationId: invite_open_list
+      description: Get all link invitations for requesting user
+      tags:
+      - Invite
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MultiUserInvitePaginated'
+              examples:
+                Example1:
+                  value:
+                    count: 1
+                    next: null
+                    previous: null
+                    results:
+                    - id: 1
+                      token: MBtZ-qs_x5sr5OvnhG7aDVKvHxF4048ZZvPnZWLnuz0
+                      url: https://ahmed.api.dev.opoint.com/invite/open/MBtZ-qs_x5sr5OvnhG7aDVKvHxF4048ZZvPnZWLnuz0
+                      owner: 220735
+                      sent: 1695132733
+                      expires: 1695737533
+                      active: true
+                    - id: 2
+                      token: qbMUL2TlwOJeZXlps06Lx9-lo2JAaaV2_a4XJ64tAdQ
+                      url: https://ahmed.api.dev.opoint.com/invite/open/qbMUL2TlwOJeZXlps06Lx9-lo2JAaaV2_a4XJ64tAdQ
+                      owner: 220735
+                      sent: 1693573147
+                      expires: 1694177947
+                      active: false
+                  summary: Example 1
+          description: ''
+        '404':
+          description: Invitation not found
+        '401':
+          description: User is not authorized
+      summary: Invite open list
+      x-summary-source: derived
+    post:
+      operationId: invite_open_create
+      description: Create a new link invitation
+      tags:
+      - Invite
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MultiUserInvitation'
+            examples:
+              Example1:
+                value:
+                  owner: 220735
+                summary: Example 1
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MultiUserInvitation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MultiUserInvitation'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: Invitation created
+        '400':
+          description: Bad request, read response to see the error
+        '401':
+          description: User is not authorized
+        '403':
+          description: Hit the max users invited limit (NUM_USER_INVITES attribute)
+      summary: Invite open create
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /invite/open/{token}/:
+    get:
+      operationId: invite_open_retrieve
+      description: Get a specific link invitation with a id
+      parameters:
+      - in: path
+        name: token
+        schema:
+          type: string
+        description: token
+        required: true
+      tags:
+      - Invite
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MultiUserInvitation'
+              examples:
+                Example1:
+                  value:
+                    id: 1
+                    token: qbMUL2TlwOJeZXlps06Lx9-lo2JAaaV2_a4XJ64tAdQ
+                    url: https://ahmed.api.dev.opoint.com/invite/open/qbMUL2TlwOJeZXlps06Lx9-lo2JAaaV2_a4XJ64tAdQ
+                    owner: 220735
+                    sent: 1693573147
+                    expires: 1694177947
+                    active: true
+                  summary: Example 1
+          description: ''
+        '404':
+          description: Invitation not found
+        '401':
+          description: User is not authorized
+      summary: Invite open retrieve
+      x-summary-source: derived
+    put:
+      operationId: invite_open_update
+      parameters:
+      - in: path
+        name: token
+        schema:
+          type: string
+        required: true
+      tags:
+      - Invite
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MultiUserInvitation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MultiUserInvitation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MultiUserInvitation'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MultiUserInvitation'
+          description: ''
+      summary: Invite open update
+      x-summary-source: derived
+    patch:
+      operationId: invite_open_partial_update
+      parameters:
+      - in: path
+        name: token
+        schema:
+          type: string
+        required: true
+      tags:
+      - Invite
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedMultiUserInvitation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedMultiUserInvitation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedMultiUserInvitation'
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MultiUserInvitation'
+          description: ''
+      summary: Invite open partial update
+      x-summary-source: derived
+    delete:
+      operationId: invite_open_destroy
+      parameters:
+      - in: path
+        name: token
+        schema:
+          type: string
+        required: true
+      tags:
+      - Invite
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+      summary: Invite open destroy
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /invite/open/{token}/accept/:
+    post:
+      operationId: invite_open_accept_create
+      description: Accept a link invitation
+      parameters:
+      - in: path
+        name: token
+        schema:
+          type: string
+        required: true
+      tags:
+      - Invite
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MultiUserInvitation'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MultiUserInvitation'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MultiUserInvitation'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MultiUserInvitation'
+          description: ''
+      summary: Invite open accept create
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+components:
+  schemas:
+    SingleUserInvitePaginated:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SingleUserInvitation'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    PatchedMultiUserInvitation:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        token:
+          type: string
+          default: ''
+        url:
+          type: string
+          default: ''
+        owner:
+          type: integer
+          description: The parent user in the tree when user is created
+        sent:
+          type: integer
+          readOnly: true
+        expires:
+          type: integer
+          readOnly: true
+        active:
+          type: boolean
+        usable:
+          type: boolean
+          readOnly: true
+        reason:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+    MultiUserInvitation:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        token:
+          type: string
+          default: ''
+        url:
+          type: string
+          default: ''
+        owner:
+          type: integer
+          description: The parent user in the tree when user is created
+        sent:
+          type: integer
+          readOnly: true
+        expires:
+          type: integer
+          readOnly: true
+        active:
+          type: boolean
+        usable:
+          type: boolean
+          readOnly: true
+        reason:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+      required:
+      - expires
+      - id
+      - owner
+      - reason
+      - sent
+      - usable
+    InviteDirectPostResponseStatusEnum:
+      enum:
+      - SUCCESS
+      - PARTIAL
+      - FAILED
+      type: string
+      description: '* `SUCCESS` - SUCCESS
+
+        * `PARTIAL` - PARTIAL
+
+        * `FAILED` - FAILED'
+    invite_direct_post_response_child:
+      type: object
+      properties:
+        email:
+          type: string
+        status:
+          $ref: '#/components/schemas/InviteDirectPostResponseChildStatusEnum'
+      required:
+      - email
+      - status
+    SingleUserInvitation:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        token:
+          type: string
+          maxLength: 43
+          minLength: 43
+        email:
+          type: string
+          format: email
+          maxLength: 255
+        owner:
+          type: integer
+          description: The parent user in the tree when user is created
+        invitation_text:
+          type:
+          - string
+          - 'null'
+        sent:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        expires:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        created_user:
+          type:
+          - integer
+          - 'null'
+          description: id of newly created user.
+        status:
+          allOf:
+          - $ref: '#/components/schemas/SingleUserInvitationStatusEnum'
+          minimum: -2147483648
+          maximum: 2147483647
+        usable:
+          type: boolean
+          readOnly: true
+        reason:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        role:
+          type: string
+          readOnly: true
+      required:
+      - email
+      - id
+      - owner
+      - reason
+      - role
+      - token
+      - usable
+    SingleUserInvitationStatusEnum:
+      enum:
+      - 0
+      - 1
+      - 2
+      - 3
+      type: integer
+      description: '* `0` - Failed
+
+        * `1` - Pending
+
+        * `2` - Accepted
+
+        * `3` - Expired'
+    MultiUserInvitePaginated:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/MultiUserInvitation'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    invite_direct_post_response:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/InviteDirectPostResponseStatusEnum'
+        invites:
+          type: array
+          items:
+            $ref: '#/components/schemas/invite_direct_post_response_child'
+      required:
+      - invites
+      - status
+    invite_direct_post_request:
+      type: object
+      properties:
+        email:
+          type: array
+          items:
+            type: string
+        owner:
+          type: integer
+        invitation_text:
+          type: string
+        alerts:
+          type: array
+          items:
+            type: integer
+      required:
+      - email
+      - owner
+    InviteDirectPostResponseChildStatusEnum:
+      enum:
+      - SENT
+      - ALREADY_INVITED
+      - FAILED
+      type: string
+      description: '* `SENT` - SENT
+
+        * `ALREADY_INVITED` - ALREADY_INVITED
+
+        * `FAILED` - FAILED'
+  securitySchemes:
+    JWT:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "JWT"
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: PHPSESSID
+    ephmeralId:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Ephemeral"
+    staticToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
+x-refined-from:
+- opoint-openapi-original.yml
+- opoint-openapi.yml

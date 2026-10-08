@@ -1,0 +1,13 @@
+generated: '2026-10-07'
+method: none
+source: https://opoint.com/frequently-asked-questions; https://api-docs.opoint.com/references/api; openapi/opoint-openapi.yml
+name: Opoint rate limits
+limit_count: 0
+limits: []
+headers: []
+exhaustion_status: null
+note: 'No request rate limits or rate-limit headers are documented. Usage policy from the FAQ: "The Opoint Search API should
+  not be used as a live feed" and "API calls should not be automated". Documented batch bounds instead of rates: /storedsearch/feed/
+  interval between 120 and 1800 seconds and num_art default 25000; SafeFeed num_art between 1 and 5000, default 500; search
+  requestedarticles default 10. The contract declares a 429 response on a single operation with the description "to_time is
+  in the future".'

@@ -1,0 +1,1223 @@
+openapi: 3.2.0
+info:
+  title: Opoint Tags API
+  version: 1.0.0
+  description: 'Operations tagged tags across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.opoint.com
+tags:
+- name: Tags
+paths:
+  /tags/:
+    get:
+      operationId: tags_list
+      description: Get a list of tags.
+      summary: List
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      tags:
+      - Tags
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TagDetail'
+              examples:
+                Example1:
+                  value:
+                  - id: 792148
+                    url: http://api.opoint.com/tags/792148/
+                    combo: null
+                    name: Robotics
+                    type: 1
+                    visibility: 2
+                    last_set: '2023-06-27T16:03:02'
+                    color: pink
+                    statistics: ''
+                    score: 0
+                    lastSort: '2023-06-27T16:03:02'
+                    folder: 8127721
+                    category: 0
+                    owner: 906386
+                    access:
+                      edit: true
+                      tag_articles: true
+                  summary: Example 1
+          description: ''
+    post:
+      operationId: tags_create
+      description: Create a new tag.
+      summary: Add
+      tags:
+      - Tags
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TagDetail'
+            examples:
+              Example1:
+                value:
+                  color: pink
+                  type: '1'
+                  visibility: 2
+                  folder: 2127721
+                  name: Robotics
+                summary: Example 1
+                description: Only name, color and folder is required.
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TagDetail'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TagDetail'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagDetail'
+          description: ''
+    servers:
+    - url: https://api.opoint.com
+  /tags/{id_basket}/articles/tag/:
+    post:
+      operationId: tags_articles_tag_create
+      description: Add an article to the tag.
+      summary: Tag article
+      parameters:
+      - in: path
+        name: id_basket
+        schema:
+          type: integer
+        description: Basket id.
+        required: true
+      tags:
+      - Tags
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticleBasket'
+            examples:
+              Example1:
+                value:
+                  weight: 1
+                  articles:
+                  - id_site: 112602
+                    id_article: 27191
+                    stimestamp: 459701697
+                    matchinfo: '(otb++) 18433:268537857:268873729:539199489:537022465:539467777:537569281:539633665:539858945:537853953:540145665:537966593:540078081:538112001:538281985:540375041:538568705:538484737:538935297: (otb--)'
+                summary: Example 1
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ArticleBasket'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ArticleBasket'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaggedArticle'
+          description: ''
+        '400':
+          description: Wrong request body.
+        '404':
+          description: Tag not found or is not owned by the authorized user.
+    servers:
+    - url: https://api.opoint.com
+  /tags/{id_basket}/articles/untag/:
+    post:
+      operationId: tags_articles_untag_create
+      description: Remove an article from the tag.
+      summary: Untag article
+      parameters:
+      - in: path
+        name: id_basket
+        schema:
+          type: integer
+        description: Basket id.
+        required: true
+      tags:
+      - Tags
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticleBasketDelete'
+            examples:
+              Example1:
+                value:
+                  articles:
+                  - id_site: 3744
+                    id_article: 926100
+                summary: Example 1
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ArticleBasketDelete'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ArticleBasketDelete'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaggedArticle'
+          description: ''
+        '400':
+          description: Wrong request body.
+        '404':
+          description: Tag not found or is not owned by the authorized user.
+    servers:
+    - url: https://api.opoint.com
+  /tags/{id_basket}/reports/:
+    get:
+      operationId: tags_reports_list
+      description: List reports that can be made based on tag.
+      summary: List reports
+      parameters:
+      - in: path
+        name: id_basket
+        schema:
+          type: integer
+        description: Basket id.
+        required: true
+      - in: query
+        name: limit
+        schema:
+          type: integer
+          minimum: 1
+        description: Limit.
+      - in: query
+        name: offset
+        schema:
+          type: integer
+          minimum: 0
+        description: Offset.
+      tags:
+      - Tags
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TagReport'
+              examples:
+                Example1:
+                  value:
+                  - selection:
+                      type: tagged
+                    count: 6
+                    timestamp: 0
+                    stimestampUsed: 0
+                    timestampLastArt: 1687948089
+                  summary: Example 1
+          description: ''
+    servers:
+    - url: https://api.opoint.com
+  /tags/{id_basket}/sort/:
+    post:
+      operationId: sort_create_id
+      description: Sort articles based on parameters.
+      summary: Sort articles
+      parameters:
+      - in: path
+        name: id_basket
+        schema:
+          type: integer
+        description: Basket id.
+        required: true
+      tags:
+      - Tags
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SortTagContent'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SortTagContent'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SortTagContent'
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: Successful
+        '404':
+          description: Tag not found or is not owned by the authorizerd user.
+        '406':
+          description: Not successful
+    servers:
+    - url: https://api.opoint.com
+  /tags/{id_basket}/sort/custom/:
+    post:
+      operationId: tags_sort_custom_create
+      description: Called when a tagged article is moved to a different position (e.g. using drag & drop in a portal for instance)
+      summary: Change order of articles
+      parameters:
+      - in: path
+        name: id_basket
+        schema:
+          type: integer
+        description: Basket id.
+        required: true
+      tags:
+      - Tags
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Articles'
+            examples:
+              Example1:
+                value:
+                  articles:
+                  - id_article: 2171229
+                    id_site: 198097
+                  - id_article: 161095
+                    id_site: 4400
+                  - id_article: 37982
+                    id_site: 13922
+                summary: Example 1
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Articles'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Articles'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/updated'
+          description: Update succesful.
+        '404':
+          description: Tag not found or is not owned by the authorizerd user.
+        '406':
+          description: Update not successful
+    servers:
+    - url: https://api.opoint.com
+  /tags/{id_list}/:
+    get:
+      operationId: tags_retrieve
+      description: Get a tag by id_list.
+      summary: Retrieve
+      parameters:
+      - in: path
+        name: id_list
+        schema:
+          type: integer
+        description: A unique integer value identifying this tag.
+        required: true
+      tags:
+      - Tags
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagDetail'
+              examples:
+                Example1:
+                  value:
+                    id: 792148
+                    url: http://api.opoint.com/tags/792148/
+                    combo: null
+                    name: Robotics
+                    type: 1
+                    visibility: 2
+                    last_set: '2023-06-27T16:03:02'
+                    color: pink
+                    statistics: ''
+                    score: 0
+                    lastSort: '2023-06-27T16:03:02'
+                    folder: 8127721
+                    category: 0
+                    owner: 906386
+                    access:
+                      edit: true
+                      tag_articles: true
+                  summary: Example 1
+          description: ''
+        '404':
+          description: Tag not found or is not owned by the authorized user.
+    put:
+      operationId: tags_update
+      description: Update a tag.
+      summary: Update
+      parameters:
+      - in: path
+        name: id_list
+        schema:
+          type: integer
+        description: A unique integer value identifying this tag.
+        required: true
+      tags:
+      - Tags
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TagDetail'
+            examples:
+              Example1:
+                value:
+                  id: 792148
+                  url: http://api.opoint.com/tags/792148/
+                  combo: null
+                  name: Robotics
+                  type: 1
+                  visibility: 2
+                  last_set: '2023-06-27T16:03:02'
+                  color: pink
+                  statistics: ''
+                  score: 0
+                  lastSort: '2023-06-27T16:03:02'
+                  folder: 8127721
+                  category: 0
+                  owner: 906386
+                  access:
+                    edit: true
+                    tag_articles: true
+                summary: Example 1
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TagDetail'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TagDetail'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagDetail'
+              examples:
+                Example1:
+                  value:
+                    id: 792148
+                    url: http://api.opoint.com/tags/792148/
+                    combo: null
+                    name: Robotics
+                    type: 1
+                    visibility: 2
+                    last_set: '2023-06-27T16:03:02'
+                    color: pink
+                    statistics: ''
+                    score: 0
+                    lastSort: '2023-06-27T16:03:02'
+                    folder: 8127721
+                    category: 0
+                    owner: 906386
+                    access:
+                      edit: true
+                      tag_articles: true
+                  summary: Example 1
+          description: ''
+        '400':
+          description: Bad request
+        '404':
+          description: Tag not found or is not owned by the authorizerd user.
+    patch:
+      operationId: tags_partial_update
+      description: Partially update a tag.
+      summary: Partial update
+      parameters:
+      - in: path
+        name: id_list
+        schema:
+          type: integer
+        description: A unique integer value identifying this tag.
+        required: true
+      tags:
+      - Tags
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTagDetail'
+            examples:
+              Example1:
+                value:
+                  id: 792148
+                  url: http://api.opoint.com/tags/792148/
+                  combo: null
+                  name: Robotics
+                  type: 1
+                  visibility: 2
+                  last_set: '2023-06-27T16:03:02'
+                  color: pink
+                  statistics: ''
+                  score: 0
+                  lastSort: '2023-06-27T16:03:02'
+                  folder: 8127721
+                  category: 0
+                  owner: 906386
+                  access:
+                    edit: true
+                    tag_articles: true
+                summary: Example 1
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTagDetail'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTagDetail'
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TagDetail'
+              examples:
+                Example1:
+                  value:
+                    id: 792148
+                    url: http://api.opoint.com/tags/792148/
+                    combo: null
+                    name: Robotics
+                    type: 1
+                    visibility: 2
+                    last_set: '2023-06-27T16:03:02'
+                    color: pink
+                    statistics: ''
+                    score: 0
+                    lastSort: '2023-06-27T16:03:02'
+                    folder: 8127721
+                    category: 0
+                    owner: 906386
+                    access:
+                      edit: true
+                      tag_articles: true
+                  summary: Example 1
+          description: ''
+        '400':
+          description: Bad request
+        '404':
+          description: Tag not found or is not owned by the authorized user.
+    delete:
+      operationId: tags_destroy
+      description: Delete a tag.
+      summary: Delete
+      parameters:
+      - in: path
+        name: id_list
+        schema:
+          type: integer
+        description: A unique integer value identifying this tag.
+        required: true
+      tags:
+      - Tags
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: Tag deleted.
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteTagResponse'
+          description: ''
+        '404':
+          description: Tag not found or is not owned by the authorizerd user.
+    servers:
+    - url: https://api.opoint.com
+  /tags/{id_list}/last-sorted/:
+    get:
+      operationId: tags_last_sorted_retrieve
+      description: Get when tag was last sorted
+      summary: Tag last sorted at
+      parameters:
+      - in: path
+        name: id_list
+        schema:
+          type: integer
+        description: A unique integer value identifying this tag.
+        required: true
+      tags:
+      - Tags
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LastSortedResponse'
+          description: Success
+        '404':
+          description: Not found
+    servers:
+    - url: https://api.opoint.com
+  /tags/detect_tagged/:
+    post:
+      operationId: tags_detect_tagged_create
+      summary: Detect tagged articles
+      tags:
+      - Tags
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaggedArticleDetection'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TaggedArticleDetection'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TaggedArticleDetection'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TaggedArticleDetectionResponse'
+          description: ''
+        '500':
+          description: Probably wrong request body.
+    servers:
+    - url: https://api.opoint.com
+  /tags/sort/:
+    post:
+      operationId: tags_sort_create
+      summary: Sort tags
+      tags:
+      - Tags
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TagSort'
+            examples:
+              Example1:
+                value:
+                  tagId: 492138
+                  position: 2
+                summary: Example 1
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TagSort'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TagSort'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: Tag sorted.
+        '400':
+          description: Wrong request data.
+        '404':
+          description: Tag not found.
+    servers:
+    - url: https://api.opoint.com
+components:
+  schemas:
+    VisibilityEnum:
+      enum:
+      - 1
+      - 2
+      type: integer
+      description: '* `1` - Visible when set
+
+        * `2` - Always visible'
+    TagSort:
+      type: object
+      properties:
+        tagId:
+          type: integer
+        position:
+          type: integer
+      required:
+      - position
+      - tagId
+    TaggedArticleDetectionResponse:
+      type: object
+      properties:
+        id_basket:
+          type: integer
+        articles:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaggedArticleDetectionResponseArticles'
+      required:
+      - articles
+      - id_basket
+    TagsArticle:
+      type: object
+      properties:
+        id_site:
+          type: integer
+        id_article:
+          type: integer
+        stimestamp:
+          type: integer
+        matchinfo:
+          type: string
+      required:
+      - id_article
+      - id_site
+      - stimestamp
+    BaseArticle:
+      type: object
+      properties:
+        id_site:
+          type: integer
+        id_article:
+          type: integer
+      required:
+      - id_article
+      - id_site
+    ArticleBasket:
+      type: object
+      properties:
+        weight:
+          type: integer
+        articles:
+          type: array
+          items:
+            $ref: '#/components/schemas/TagsArticle'
+      required:
+      - articles
+      - weight
+    ActionEnum:
+      enum:
+      - 2
+      - 3
+      - 4
+      - 5
+      - 6
+      - 7
+      - 8
+      - 9
+      - 10
+      type: integer
+      description: '* `2` - Article consumed
+
+        * `3` - Article viewed for 3 sec
+
+        * `4` - Article viewed for 10 sec
+
+        * `5` - Article clicked
+
+        * `6` - PDF viewed
+
+        * `7` - Media clip played
+
+        * `8` - Image clicked
+
+        * `9` - Article added to tag
+
+        * `10` - Entry fetched from Go log'
+    Article:
+      type: object
+      properties:
+        id_site:
+          type: integer
+        id_article:
+          type: integer
+        xmltext:
+          type: string
+        stimestamp:
+          type: integer
+        matchinfo:
+          type: string
+          default: ''
+      required:
+      - id_article
+      - id_site
+    TagDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        combo:
+          type:
+          - string
+          - 'null'
+          maxLength: 2
+        name:
+          type: string
+          description: Name of tag
+          maxLength: 255
+        type:
+          $ref: '#/components/schemas/OneTwoEnum'
+        visibility:
+          allOf:
+          - $ref: '#/components/schemas/VisibilityEnum'
+          minimum: -2147483648
+          maximum: 2147483647
+        last_set:
+          type: string
+          format: date-time
+          readOnly: true
+        color:
+          type:
+          - string
+          - 'null'
+        statistics:
+          type:
+          - string
+          - 'null'
+        feeds:
+          allOf:
+          - $ref: '#/components/schemas/UUIDCommaSeparatedList'
+          readOnly: true
+        score:
+          type: integer
+          readOnly: true
+        lastSort:
+          type: string
+          format: date-time
+          readOnly: true
+        folder:
+          type: integer
+        category:
+          type: integer
+          readOnly: true
+        owner:
+          type: integer
+          readOnly: true
+        access:
+          type: object
+          properties:
+            edit:
+              type: boolean
+            tag_articles:
+              type: boolean
+          required:
+          - edit
+          - tag_articles
+          readOnly: true
+        stored_search:
+          oneOf:
+          - $ref: '#/components/schemas/StoredSearchField'
+          - type: 'null'
+        new_position:
+          type: integer
+          readOnly: true
+      required:
+      - access
+      - category
+      - color
+      - feeds
+      - id
+      - lastSort
+      - last_set
+      - name
+      - new_position
+      - owner
+      - score
+      - url
+    ArticleVisited:
+      type: object
+      properties:
+        id_site:
+          type: integer
+        id_article:
+          type: integer
+        action:
+          type: array
+          items:
+            $ref: '#/components/schemas/ActionEnum'
+          default:
+          - 2
+      required:
+      - id_article
+      - id_site
+    TaggedArticleDetection:
+      type: object
+      properties:
+        baskets:
+          type: array
+          items:
+            type: integer
+            minimum: 0
+        articles:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArticleVisited'
+      required:
+      - articles
+      - baskets
+    updated:
+      type: object
+      properties:
+        updated:
+          type: integer
+      required:
+      - updated
+    Articles:
+      type: object
+      properties:
+        articles:
+          type: array
+          items:
+            $ref: '#/components/schemas/Article'
+      required:
+      - articles
+    StoredSearchField:
+      type: object
+      properties:
+        id:
+          type: integer
+        art_limit:
+          type: integer
+        active:
+          type: integer
+      required:
+      - active
+      - art_limit
+      - id
+    SortTypeEnum:
+      enum:
+      - priority
+      - date
+      type: string
+      description: '* `priority` - priority
+
+        * `date` - date'
+    DeleteTagResponse:
+      type: object
+      properties:
+        data:
+          type: string
+        message:
+          type: string
+      required:
+      - data
+      - message
+    SortTagContent:
+      type: object
+      properties:
+        stimestampUsed:
+          type: array
+          items:
+            type: integer
+        fromTimestamp:
+          type: integer
+          default: 1
+        toTimestamp:
+          type: integer
+          default: 1791413995
+        sortType:
+          allOf:
+          - $ref: '#/components/schemas/SortTypeEnum'
+          default: priority
+        sortOrder:
+          allOf:
+          - $ref: '#/components/schemas/SortOrderEnum'
+          default: desc
+    UUIDCommaSeparatedList:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+      required:
+      - id
+      - name
+    PatchedTagDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        combo:
+          type:
+          - string
+          - 'null'
+          maxLength: 2
+        name:
+          type: string
+          description: Name of tag
+          maxLength: 255
+        type:
+          $ref: '#/components/schemas/OneTwoEnum'
+        visibility:
+          allOf:
+          - $ref: '#/components/schemas/VisibilityEnum'
+          minimum: -2147483648
+          maximum: 2147483647
+        last_set:
+          type: string
+          format: date-time
+          readOnly: true
+        color:
+          type:
+          - string
+          - 'null'
+        statistics:
+          type:
+          - string
+          - 'null'
+        feeds:
+          allOf:
+          - $ref: '#/components/schemas/UUIDCommaSeparatedList'
+          readOnly: true
+        score:
+          type: integer
+          readOnly: true
+        lastSort:
+          type: string
+          format: date-time
+          readOnly: true
+        folder:
+          type: integer
+        category:
+          type: integer
+          readOnly: true
+        owner:
+          type: integer
+          readOnly: true
+        access:
+          type: object
+          properties:
+            edit:
+              type: boolean
+            tag_articles:
+              type: boolean
+          required:
+          - edit
+          - tag_articles
+          readOnly: true
+        stored_search:
+          oneOf:
+          - $ref: '#/components/schemas/StoredSearchField'
+          - type: 'null'
+        new_position:
+          type: integer
+          readOnly: true
+    LastSortedResponse:
+      type: object
+      properties:
+        unixTimestamp:
+          type:
+          - integer
+          - 'null'
+        timestamp:
+          type: string
+      required:
+      - timestamp
+      - unixTimestamp
+    ArticleBasketDelete:
+      type: object
+      properties:
+        articles:
+          type: array
+          items:
+            $ref: '#/components/schemas/BaseArticle'
+      required:
+      - articles
+    TaggedArticle:
+      type: object
+      properties:
+        has_articles:
+          type: boolean
+      required:
+      - has_articles
+    TagReport:
+      type: object
+      properties:
+        selection:
+          $ref: '#/components/schemas/TagReportSelection'
+        count:
+          type: integer
+        timestamp:
+          oneOf:
+          - type: integer
+          - type: string
+            format: date-time
+          readOnly: true
+        stimestampUsed:
+          type: integer
+        timestampLastArt:
+          type: integer
+          readOnly: true
+      required:
+      - count
+      - selection
+      - stimestampUsed
+      - timestamp
+      - timestampLastArt
+    SortOrderEnum:
+      enum:
+      - desc
+      - asc
+      type: string
+      description: '* `desc` - desc
+
+        * `asc` - asc'
+    TaggedArticleDetectionResponseArticles:
+      type: object
+      properties:
+        id_site:
+          type: integer
+        id_article:
+          type: integer
+        weight:
+          type: integer
+          maximum: 255
+          minimum: 0
+      required:
+      - id_article
+      - id_site
+      - weight
+    OneTwoEnum:
+      enum:
+      - 1
+      - 2
+      type: integer
+      description: '* `1` - 1
+
+        * `2` - 2'
+    TagReportSelectionTypeEnum:
+      enum:
+      - tagged
+      - used
+      type: string
+      description: '* `tagged` - tagged
+
+        * `used` - used'
+    TagReportSelection:
+      type: object
+      description: 'Ways of selecting content from tags for reports.
+
+
+        Represented by a tagged union choosing between ways of selecting content,
+
+        either from an old report or all the unused content, or only some of the
+
+        unused articles.'
+      properties:
+        type:
+          $ref: '#/components/schemas/TagReportSelectionTypeEnum'
+        timestamp:
+          type: integer
+        from_timestamp:
+          type: integer
+        to_timestamp:
+          type: integer
+      required:
+      - type
+  securitySchemes:
+    JWT:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "JWT"
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: PHPSESSID
+    ephmeralId:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Ephemeral"
+    staticToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
+x-refined-from:
+- opoint-openapi-original.yml
+- opoint-openapi.yml

@@ -1,0 +1,2497 @@
+openapi: 3.2.0
+info:
+  title: Opoint Analytics API
+  version: 1.0.0
+  description: 'Operations tagged analytics across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.opoint.com
+tags:
+- name: Analytics
+paths:
+  /analytics/articles:
+    get:
+      operationId: analytics_articles_retrieve
+      description: Gets the article reference based on the request
+      summary: Fetch ArticleReferences
+      parameters:
+      - in: query
+        name: articleDateEnd
+        schema:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      - in: query
+        name: articleDateStart
+        schema:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      - in: query
+        name: state
+        schema:
+          enum:
+          - '-'
+          - A
+          - R
+          type: string
+          minLength: 1
+        description: '* `-` - -
+
+          * `A` - A
+
+          * `R` - R'
+        required: true
+      - in: query
+        name: topicIds
+        schema:
+          type: array
+          items:
+            type: integer
+        required: true
+      tags:
+      - Analytics
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ArticleReference'
+          description: ''
+    post:
+      operationId: analytics_articles_create
+      summary: Create ArticleReference
+      tags:
+      - Analytics
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '501':
+          description: Not Implemented
+    put:
+      operationId: analytics_articles_update
+      summary: Update ArticleReferences
+      parameters:
+      - in: query
+        name: articleDateEnd
+        schema:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      - in: query
+        name: articleDateStart
+        schema:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      - in: query
+        name: state
+        schema:
+          enum:
+          - '-'
+          - A
+          - R
+          type: string
+          minLength: 1
+        description: '* `-` - -
+
+          * `A` - A
+
+          * `R` - R'
+        required: true
+      - in: query
+        name: topicIds
+        schema:
+          type: array
+          items:
+            type: integer
+        required: true
+      tags:
+      - Analytics
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '201':
+          description: Created
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/data'
+          description: Server Error
+    servers:
+    - url: https://api.opoint.com
+  /analytics/coding-events:
+    get:
+      operationId: analytics_coding_events_list
+      tags:
+      - Analytics
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CodingEvent'
+          description: ''
+      summary: Analytics coding events list
+      x-summary-source: derived
+    post:
+      operationId: analytics_coding_events_create
+      tags:
+      - Analytics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CodingEvent'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CodingEvent'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CodingEvent'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CodingEvent'
+          description: ''
+      summary: Analytics coding events create
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /analytics/report-categories:
+    get:
+      operationId: analytics_report_categories_list
+      summary: Fetch report categories
+      tags:
+      - Analytics
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ReportCatgeory'
+          description: ''
+    servers:
+    - url: https://api.opoint.com
+  /analytics/reports:
+    get:
+      operationId: analytics_reports_list
+      description: Endpoint for /analytics/reports
+      parameters:
+      - in: query
+        name: active
+        schema:
+          type: boolean
+      - in: query
+        name: id_user
+        schema:
+          type: integer
+      tags:
+      - Analytics
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AnalyticsReport'
+          description: ''
+      summary: Analytics reports list
+      x-summary-source: derived
+    post:
+      operationId: analytics_reports_create
+      description: Endpoint for /analytics/reports
+      tags:
+      - Analytics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnalyticsReport'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AnalyticsReport'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AnalyticsReport'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsReport'
+          description: ''
+      summary: Analytics reports create
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /analytics/reports/{id}:
+    get:
+      operationId: analytics_reports_retrieve
+      summary: Get scoring variable
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Analytics
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: Success
+        '404':
+          description: Not found
+    put:
+      operationId: analytics_reports_update
+      summary: Update scoring variable
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Analytics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReportUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ReportUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ReportUpdate'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: Success
+        '404':
+          description: Not found
+    patch:
+      operationId: analytics_reports_partial_update
+      summary: Partially update scoring variable
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Analytics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedReportUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedReportUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedReportUpdate'
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: Success
+        '404':
+          description: Not found
+    delete:
+      operationId: analytics_reports_destroy
+      description: Deletes the report by setting the active property to false
+      summary: Deletes a report by id
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Analytics
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: Success
+        '204':
+          description: Report is not active
+        '404':
+          description: Report not found
+    servers:
+    - url: https://api.opoint.com
+  /analytics/reports/{report_id}/topics:
+    get:
+      operationId: analytics_reports_topics_list
+      parameters:
+      - in: query
+        name: isActive
+        schema:
+          type: boolean
+      - in: query
+        name: reportId
+        schema:
+          type: integer
+      - in: path
+        name: report_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Analytics
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Topic'
+          description: ''
+      summary: Analytics reports topics list
+      x-summary-source: derived
+    post:
+      operationId: analytics_reports_topics_create
+      parameters:
+      - in: path
+        name: report_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Analytics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Topic'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Topic'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Topic'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Topic'
+          description: ''
+      summary: Analytics reports topics create
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /analytics/reports/statistics:
+    get:
+      operationId: analytics_reports_statistics_retrieve
+      description: Fetches how many unprocessed and uncalculated articles there are for each report
+      summary: Fetch analytics reports statistics
+      parameters:
+      - in: query
+        name: endDate
+        schema:
+          type: string
+          format: date-time
+        required: true
+      - in: query
+        name: startDate
+        schema:
+          type: string
+          format: date-time
+        required: true
+      tags:
+      - Analytics
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReportStatistics'
+          description: Success
+        '204':
+          description: Response contained not result
+        '400':
+          description: Missing parameters or wrong order
+    servers:
+    - url: https://api.opoint.com
+  /analytics/scoring-variables:
+    get:
+      operationId: analytics_scoring_variables_list
+      parameters:
+      - in: query
+        name: reportId
+        schema:
+          type: integer
+      tags:
+      - Analytics
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ScoringVariables'
+          description: ''
+      summary: Analytics scoring variables list
+      x-summary-source: derived
+    post:
+      operationId: analytics_scoring_variables_create
+      tags:
+      - Analytics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScoringVariables'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ScoringVariables'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ScoringVariables'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScoringVariables'
+          description: ''
+      summary: Analytics scoring variables create
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /analytics/scoring-variables/{id}:
+    get:
+      operationId: analytics_scoring_variables_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Analytics
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScoringVariableDetails'
+          description: ''
+      summary: Analytics scoring variables retrieve
+      x-summary-source: derived
+    put:
+      operationId: analytics_scoring_variables_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Analytics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScoringVariableDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ScoringVariableDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ScoringVariableDetails'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScoringVariableDetails'
+          description: ''
+      summary: Analytics scoring variables update
+      x-summary-source: derived
+    patch:
+      operationId: analytics_scoring_variables_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Analytics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedScoringVariableDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedScoringVariableDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedScoringVariableDetails'
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScoringVariableDetails'
+          description: ''
+      summary: Analytics scoring variables partial update
+      x-summary-source: derived
+    delete:
+      operationId: analytics_scoring_variables_destroy
+      description: Deletes a Scoring variable by setting the isActive property to false
+      summary: Delete scoring variable
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Analytics
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: Success
+        '204':
+          description: Not active
+        '404':
+          description: Not found
+    servers:
+    - url: https://api.opoint.com
+  /analytics/topic-scoring-variable:
+    post:
+      operationId: analytics_topic_scoring_variable_create
+      tags:
+      - Analytics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TopicScoringVariables'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TopicScoringVariables'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TopicScoringVariables'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TopicScoringVariables'
+          description: ''
+      summary: Analytics topic scoring variable create
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /analytics/topics:
+    get:
+      operationId: analytics_topics_list
+      parameters:
+      - in: query
+        name: isActive
+        schema:
+          type: boolean
+      - in: query
+        name: reportId
+        schema:
+          type: integer
+      tags:
+      - Analytics
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Topic'
+          description: ''
+      summary: Analytics topics list
+      x-summary-source: derived
+    post:
+      operationId: analytics_topics_create
+      tags:
+      - Analytics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Topic'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Topic'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Topic'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Topic'
+          description: ''
+      summary: Analytics topics create
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /analytics/topics/{id}:
+    get:
+      operationId: analytics_topics_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Analytics
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TopicUpdate'
+          description: ''
+      summary: Analytics topics retrieve
+      x-summary-source: derived
+    put:
+      operationId: analytics_topics_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Analytics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TopicUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TopicUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TopicUpdate'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TopicUpdate'
+          description: ''
+      summary: Analytics topics update
+      x-summary-source: derived
+    patch:
+      operationId: analytics_topics_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Analytics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedTopicUpdate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedTopicUpdate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedTopicUpdate'
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TopicUpdate'
+          description: ''
+      summary: Analytics topics partial update
+      x-summary-source: derived
+    delete:
+      operationId: analytics_topics_destroy
+      description: Deletes a topic by setting the deleted to a datetime
+      summary: Delete a topic by id
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Analytics
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: string
+          description: ''
+    servers:
+    - url: https://api.opoint.com
+  /analytics/topics/{id}/queries/:
+    get:
+      operationId: analytics_topics_queries_list
+      summary: List Topic queries
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Analytics
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AnalyticsQuery'
+          description: Success
+        '404':
+          description: Topic not found
+    post:
+      operationId: analytics_topics_queries_create
+      description: Creates a Topic query
+      summary: Create a Topic query
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Analytics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnalyticQueryDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AnalyticQueryDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AnalyticQueryDetails'
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticQueryDetails'
+          description: Topic query created
+        '400':
+          description: Invalid request body
+        '404':
+          description: Topic not found
+    servers:
+    - url: https://api.opoint.com
+  /analytics/topics/{id}/queries/{id_item}/:
+    get:
+      operationId: analytics_topics_queries_retrieve
+      description: Retrieves a Topic query based on id_item
+      summary: Retrieve a Topic query
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: id_item
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: with_query
+        schema:
+          type: boolean
+        description: Convert searchline string to filters
+      tags:
+      - Analytics
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticQueryDetails'
+          description: Topic query retrieved
+        '400':
+          description: id_item is in invalid format
+        '404':
+          description: Topic or query not found
+    put:
+      operationId: analytics_topics_queries_update
+      summary: Update Topic query
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: id_item
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Analytics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnalyticQueryDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AnalyticQueryDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AnalyticQueryDetails'
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticQueryDetails'
+          description: Topic query updated
+        '400':
+          description: Topic or query not found
+        '404':
+          description: Bad request
+    delete:
+      operationId: analytics_topics_queries_destroy
+      summary: Remove a Topic query
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: id_item
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Analytics
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: Topic query was removed
+        '404':
+          description: Topic or query not found
+    servers:
+    - url: https://api.opoint.com
+  /analytics/topics/{id}/scoring-variable/{variable_id}:
+    put:
+      operationId: analytics_topics_scoring_variable_update
+      summary: Update topic scoring variable
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: variable_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Analytics
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TopicScoringVariables'
+          description: Created
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsError'
+          description: Not found
+    delete:
+      operationId: analytics_topics_scoring_variable_destroy
+      summary: Update topic scoring variable
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: variable_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Analytics
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TopicScoringVariables'
+          description: Created
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsError'
+          description: Not found
+        '204':
+          description: Not found
+    servers:
+    - url: https://api.opoint.com
+  /analytics/variable-values:
+    get:
+      operationId: analytics_variable_values_list
+      parameters:
+      - in: query
+        name: variableId
+        schema:
+          type: integer
+      tags:
+      - Analytics
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VariableValues'
+          description: ''
+      summary: Analytics variable values list
+      x-summary-source: derived
+    post:
+      operationId: analytics_variable_values_create
+      tags:
+      - Analytics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VariableValues'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VariableValues'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VariableValues'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VariableValues'
+          description: ''
+      summary: Analytics variable values create
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /analytics/variable-values-chains:
+    get:
+      operationId: analytics_variable_values_chains_list
+      summary: Get all variablevalue chains
+      tags:
+      - Analytics
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VariableValuesChains'
+          description: Success
+    post:
+      operationId: analytics_variable_values_chains_create
+      summary: Create variablevalue chain
+      tags:
+      - Analytics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VariableValuesChains'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VariableValuesChains'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VariableValuesChains'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CodingEvent'
+          description: Created
+    servers:
+    - url: https://api.opoint.com
+  /analytics/variable-values-chains/{parentId}/{childId}:
+    put:
+      operationId: analytics_variable_values_chains_update
+      summary: Update variablevalue chain
+      parameters:
+      - in: path
+        name: childId
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: parentId
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Analytics
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '201':
+          description: Updated
+        '204':
+          description: Chain does not exist
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsError'
+          description: Not found
+    delete:
+      operationId: analytics_variable_values_chains_destroy
+      description: Deletes a variable value chain by checking first if the parent and child variable values exist
+      summary: Delete a variable value chain
+      parameters:
+      - in: path
+        name: childId
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: parentId
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Analytics
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticsError'
+          description: Not found
+        '204':
+          description: Chain not found
+        '200':
+          description: Success
+    servers:
+    - url: https://api.opoint.com
+  /analytics/variable-values/{id}:
+    get:
+      operationId: analytics_variable_values_retrieve
+      summary: Get variablevalue by id
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Analytics
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VariableValues'
+          description: Success
+    put:
+      operationId: analytics_variable_values_update
+      summary: update variablevalue by id
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Analytics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VariableValues'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VariableValues'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/VariableValues'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VariableValues'
+          description: Success
+    patch:
+      operationId: analytics_variable_values_partial_update
+      summary: Partially update variablevalue by id
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Analytics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedVariableValues'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedVariableValues'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedVariableValues'
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VariableValues'
+          description: Success
+    delete:
+      operationId: analytics_variable_values_destroy
+      description: Delete a Variable Value by setting the isActive to false
+      summary: Delete variablevalue
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Analytics
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: Success
+        '204':
+          description: Not active
+        '404':
+          description: Not Found
+    servers:
+    - url: https://api.opoint.com
+  /analytics/variable-values/{id}/queries/{id_item}/:
+    get:
+      operationId: analytics_variable_values_queries_retrieve
+      description: Retrieves a Variable Value query based on id_item
+      summary: Retrieve a Variable Value query
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: id_item
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: with_query
+        schema:
+          type: boolean
+        description: Convert searchline string to filters
+      tags:
+      - Analytics
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticQueryDetails'
+          description: Variable Value query retrieved
+        '400':
+          description: id_item is in invalid format
+        '404':
+          description: Variable Value not found
+    put:
+      operationId: analytics_variable_values_queries_update
+      summary: Update Variable Value query
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: id_item
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Analytics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnalyticQueryDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AnalyticQueryDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AnalyticQueryDetails'
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticQueryDetails'
+          description: Variable Value query updated
+        '400':
+          description: Invalid request body
+        '404':
+          description: Variable Value or query not found
+    delete:
+      operationId: analytics_variable_values_queries_destroy
+      summary: Remove a Topic query
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: id_item
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Analytics
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: Topic query was removed
+        '404':
+          description: Topic or query not found
+    servers:
+    - url: https://api.opoint.com
+  /analytics/variable-values/{value_id}/queries/:
+    get:
+      operationId: analytics_variable_values_queries_list
+      summary: List Variable value queries
+      parameters:
+      - in: path
+        name: value_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Analytics
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AnalyticsQuery'
+          description: Success
+        '404':
+          description: Variable Value not found
+    post:
+      operationId: analytics_variable_values_queries_create
+      description: Creates a Variable Value query
+      summary: Create a Variable Value query
+      parameters:
+      - in: path
+        name: value_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Analytics
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnalyticQueryDetails'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/AnalyticQueryDetails'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/AnalyticQueryDetails'
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnalyticQueryDetails'
+          description: Variable Value query created
+        '400':
+          description: Invalid request body
+        '404':
+          description: Variable Value not found
+    servers:
+    - url: https://api.opoint.com
+components:
+  schemas:
+    AnalyticQueryDetails:
+      type: object
+      properties:
+        url:
+          type: string
+          readOnly: true
+        id_item:
+          type: integer
+          readOnly: true
+        topic_name:
+          type: string
+          readOnly: true
+        max_age:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        rate:
+          type: number
+          format: double
+        rate_last_updated:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        max_rate:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        last_set:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/AnalyticQueryItem'
+      required:
+      - id_item
+      - topic_name
+      - url
+    SearchLine:
+      type: object
+      properties:
+        searchterm:
+          type: string
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchLineFilter'
+    TopicScoringVariables:
+      type: object
+      properties:
+        topicId:
+          type: integer
+        variableId:
+          type: integer
+      required:
+      - topicId
+      - variableId
+    ScoringScaleEnum:
+      enum:
+      - 3
+      - 5
+      type: integer
+      description: '* `3` - ThreeLevel
+
+        * `5` - FiveLevel'
+    TopicUpdate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        reportId:
+          type: integer
+        name:
+          type: string
+          maxLength: 255
+        isActive:
+          type: boolean
+          default: true
+        autoApprove:
+          type: boolean
+        articlesCanBeApproved:
+          type: boolean
+        parentTopicId:
+          type:
+          - integer
+          - 'null'
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        displayOrder:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        defaultTopicId:
+          type:
+          - integer
+          - 'null'
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        deleted:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        scoringVariables:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScoringVariables'
+      required:
+      - articlesCanBeApproved
+      - autoApprove
+      - displayOrder
+      - id
+      - name
+    AnalyticsQuery:
+      type: object
+      properties:
+        url:
+          type: string
+          readOnly: true
+        id_item:
+          type: integer
+          readOnly: true
+        max_age:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        rate:
+          type: number
+          format: double
+        rate_last_updated:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        max_rate:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        last_set:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+      required:
+      - id_item
+      - url
+    ReportStatistics:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        category:
+          type: string
+        unprocessed:
+          type: integer
+        uncalculated:
+          type: integer
+      required:
+      - category
+      - id
+      - name
+      - uncalculated
+      - unprocessed
+    ArticleReference:
+      type: object
+      properties:
+        topicId:
+          type: integer
+        id_site:
+          type: integer
+        id_article:
+          type: integer
+        status:
+          type: string
+        wordCount:
+          type: integer
+        sentiment:
+          type: integer
+        hitHeadline:
+          type: integer
+        hitArticle:
+          type: integer
+        hitPicture:
+          type: integer
+        swot:
+          type: string
+        articleType:
+          type: string
+        comment:
+          type: string
+        insertDate:
+          type: string
+          format: date-time
+        dominance:
+          type: integer
+        scoredBy:
+          type: integer
+        scoredAt:
+          type: string
+          format: date-time
+        headline:
+          type:
+          - string
+          - 'null'
+        timestamp:
+          type: string
+          format: date-time
+        mediatype:
+          type: string
+        author:
+          type: string
+        summary:
+          type: string
+        header:
+          type: string
+        siteName:
+          type: string
+        sourceName:
+          type: string
+        sourceLang:
+          type: string
+        sourceUrl:
+          type: string
+        estimatedReadership:
+          type: integer
+        scoredValues:
+          type: array
+          items:
+            type: integer
+      required:
+      - articleType
+      - author
+      - comment
+      - dominance
+      - estimatedReadership
+      - header
+      - headline
+      - hitArticle
+      - hitHeadline
+      - hitPicture
+      - id_article
+      - id_site
+      - insertDate
+      - mediatype
+      - scoredAt
+      - scoredBy
+      - scoredValues
+      - sentiment
+      - siteName
+      - sourceLang
+      - sourceName
+      - sourceUrl
+      - status
+      - summary
+      - swot
+      - timestamp
+      - topicId
+      - wordCount
+    ReportCatgeory:
+      type: object
+      properties:
+        id:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+      required:
+      - id
+      - name
+    DisplayTypeEnum:
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+      type: integer
+      description: '* `1` - ComboBox
+
+        * `2` - AutoSuggestComboBox
+
+        * `3` - ListBox
+
+        * `4` - AutoSuggestListBox'
+    AnalyticsReport:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+        active:
+          type: boolean
+          default: true
+        createDate:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          default: '2026-10-08T00:59:56.598502+02:00'
+        id_user:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        categoryId:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        scoringScale:
+          allOf:
+          - $ref: '#/components/schemas/ScoringScaleEnum'
+          minimum: 0
+          maximum: 4294967295
+        scoredFields:
+          type:
+          - integer
+          - 'null'
+          maximum: 65535
+          minimum: 0
+        nPrinting:
+          type: boolean
+        topicDisplayName:
+          type: string
+          default: Topic
+          maxLength: 255
+        topicDisplayType:
+          allOf:
+          - $ref: '#/components/schemas/DisplayTypeEnum'
+          default: 1
+          minimum: 0
+          maximum: 4294967295
+        topicMinSelectedValues:
+          type: integer
+          maximum: 254
+          minimum: 0
+          default: 1
+        topicMaxSelectedValues:
+          type: integer
+          maximum: 254
+          minimum: 1
+          default: 1
+        topics:
+          type: array
+          items:
+            $ref: '#/components/schemas/Topic'
+          readOnly: true
+      required:
+      - categoryId
+      - id
+      - id_user
+      - nPrinting
+      - name
+      - scoringScale
+      - topics
+    PatchedTopicUpdate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        reportId:
+          type: integer
+        name:
+          type: string
+          maxLength: 255
+        isActive:
+          type: boolean
+          default: true
+        autoApprove:
+          type: boolean
+        articlesCanBeApproved:
+          type: boolean
+        parentTopicId:
+          type:
+          - integer
+          - 'null'
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        displayOrder:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        defaultTopicId:
+          type:
+          - integer
+          - 'null'
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        deleted:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        scoringVariables:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScoringVariables'
+    LinemodeEnum:
+      enum:
+      - R
+      - O
+      - E
+      type: string
+      description: '* `R` - Required
+
+        * `O` - Optional
+
+        * `E` - Exclude'
+    AnalyticsError:
+      type: object
+      properties:
+        details:
+          type: string
+      required:
+      - details
+    VariableValuesChains:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        parentvalueid:
+          type: integer
+        childvalueid:
+          type: integer
+      required:
+      - childvalueid
+      - id
+      - parentvalueid
+    AnalyticQueryItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        searchline:
+          $ref: '#/components/schemas/SearchLine'
+        linemode:
+          $ref: '#/components/schemas/LinemodeEnum'
+        searchmode:
+          type: string
+          writeOnly: true
+      required:
+      - linemode
+      - searchline
+      - searchmode
+    ScoringVariableDetails:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        reportId:
+          type: integer
+        name:
+          type: string
+          maxLength: 255
+        minSelectedValues:
+          type: integer
+          maximum: 254
+          minimum: 0
+        maxSelectedValues:
+          type: integer
+          maximum: 254
+          minimum: 1
+        isActive:
+          type: boolean
+        displayType:
+          allOf:
+          - $ref: '#/components/schemas/DisplayTypeEnum'
+          minimum: 0
+          maximum: 4294967295
+        displayOrder:
+          type: integer
+          maximum: 254
+          minimum: 0
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/VariableValues'
+      required:
+      - displayOrder
+      - id
+      - isActive
+      - maxSelectedValues
+      - minSelectedValues
+      - name
+      - reportId
+    PatchedVariableValues:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        value:
+          type: string
+          maxLength: 511
+        isActive:
+          type: boolean
+          default: true
+        displayGroup:
+          type: integer
+          maximum: 254
+          minimum: 0
+        variableId:
+          type: integer
+    VariableValues:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        value:
+          type: string
+          maxLength: 511
+        isActive:
+          type: boolean
+          default: true
+        displayGroup:
+          type: integer
+          maximum: 254
+          minimum: 0
+        variableId:
+          type: integer
+      required:
+      - displayGroup
+      - id
+      - value
+      - variableId
+    PatchedScoringVariableDetails:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        reportId:
+          type: integer
+        name:
+          type: string
+          maxLength: 255
+        minSelectedValues:
+          type: integer
+          maximum: 254
+          minimum: 0
+        maxSelectedValues:
+          type: integer
+          maximum: 254
+          minimum: 1
+        isActive:
+          type: boolean
+        displayType:
+          allOf:
+          - $ref: '#/components/schemas/DisplayTypeEnum'
+          minimum: 0
+          maximum: 4294967295
+        displayOrder:
+          type: integer
+          maximum: 254
+          minimum: 0
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/VariableValues'
+    PatchedReportUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+        active:
+          type: boolean
+          default: true
+        id_user:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        scoringScale:
+          allOf:
+          - $ref: '#/components/schemas/ScoringScaleEnum'
+          minimum: 0
+          maximum: 4294967295
+        scoredFields:
+          type:
+          - integer
+          - 'null'
+          maximum: 65535
+          minimum: 0
+        nPrinting:
+          type: boolean
+        topicDisplayName:
+          type: string
+          maxLength: 255
+        topicDisplayType:
+          allOf:
+          - $ref: '#/components/schemas/DisplayTypeEnum'
+          minimum: 0
+          maximum: 4294967295
+        topicMinSelectedValues:
+          type: integer
+          maximum: 254
+          minimum: 0
+        topicMaxSelectedValues:
+          type: integer
+          maximum: 254
+          minimum: 1
+        categoryId:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+    data:
+      type: object
+      properties:
+        data:
+          type: string
+      required:
+      - data
+    CodingEvent:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        topicId:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        id_site:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        id_article:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        id_user:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        machineName:
+          type: string
+          maxLength: 255
+        timestamp:
+          type: string
+          format: date-time
+        actionId:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+      required:
+      - actionId
+      - id
+      - id_article
+      - id_site
+      - id_user
+      - machineName
+      - timestamp
+      - topicId
+    ReportUpdate:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+        active:
+          type: boolean
+          default: true
+        id_user:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        scoringScale:
+          allOf:
+          - $ref: '#/components/schemas/ScoringScaleEnum'
+          minimum: 0
+          maximum: 4294967295
+        scoredFields:
+          type:
+          - integer
+          - 'null'
+          maximum: 65535
+          minimum: 0
+        nPrinting:
+          type: boolean
+        topicDisplayName:
+          type: string
+          maxLength: 255
+        topicDisplayType:
+          allOf:
+          - $ref: '#/components/schemas/DisplayTypeEnum'
+          minimum: 0
+          maximum: 4294967295
+        topicMinSelectedValues:
+          type: integer
+          maximum: 254
+          minimum: 0
+        topicMaxSelectedValues:
+          type: integer
+          maximum: 254
+          minimum: 1
+        categoryId:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+      required:
+      - categoryId
+      - id_user
+      - nPrinting
+      - name
+      - scoringScale
+      - topicMaxSelectedValues
+      - topicMinSelectedValues
+    Topic:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        startDate:
+          type: string
+          format: date-time
+          default: '2026-10-08T00:59:56.598307+02:00'
+        autoApprove:
+          type: boolean
+        articlesCanBeApproved:
+          type: boolean
+        isActive:
+          type: boolean
+          default: true
+        parentTopicId:
+          type:
+          - integer
+          - 'null'
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        displayOrder:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        defaultTopicId:
+          type:
+          - integer
+          - 'null'
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        deleted:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        reportId:
+          type: integer
+      required:
+      - articlesCanBeApproved
+      - autoApprove
+      - displayOrder
+      - id
+      - name
+    ScoringVariables:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        reportId:
+          type: integer
+        name:
+          type: string
+          maxLength: 255
+        minSelectedValues:
+          type: integer
+          maximum: 254
+          minimum: 0
+        maxSelectedValues:
+          type: integer
+          maximum: 254
+          minimum: 1
+        isActive:
+          type: boolean
+          default: true
+        displayType:
+          allOf:
+          - $ref: '#/components/schemas/DisplayTypeEnum'
+          minimum: 0
+          maximum: 4294967295
+        displayOrder:
+          type: integer
+          maximum: 254
+          minimum: 0
+      required:
+      - displayOrder
+      - id
+      - maxSelectedValues
+      - minSelectedValues
+      - name
+      - reportId
+    SearchLineFilter:
+      type: object
+      properties:
+        type:
+          type: string
+        id:
+          type: string
+      required:
+      - type
+  securitySchemes:
+    JWT:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "JWT"
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: PHPSESSID
+    ephmeralId:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Ephemeral"
+    staticToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
+x-refined-from:
+- opoint-openapi-original.yml
+- opoint-openapi.yml

@@ -1,0 +1,398 @@
+openapi: 3.2.0
+info:
+  title: Opoint Auth API
+  version: 1.0.0
+  description: 'Operations tagged auth across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.opoint.com
+tags:
+- name: Auth
+paths:
+  /auth/get-token-infomedia/:
+    post:
+      operationId: auth_get_token_infomedia_create
+      description: 'Authenticates Infomedia users, creating them if missing.
+
+
+        This endpoint is here temporarily, as part of the integration.
+
+
+        The user logs into Infomedias portal, and upon successful authentication,
+
+        Infomedia passes user data to Opoint. If the user is already in the system,
+
+        we pass them a token. If the user is not in the system, we create the user.
+
+
+        It also create the necessary customer and customer users.'
+      tags:
+      - Auth
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IFMLogin'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IFMLogin'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/IFMLogin'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+          description: ''
+      summary: Auth get token infomedia create
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /auth/invite/remaining-invites/:
+    get:
+      operationId: auth_invite_remaining_invites_retrieve
+      description: Returns the amount of remining invites for authenticated user
+      tags:
+      - Auth
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Remaining_invites_response_old'
+              examples:
+                Example1:
+                  value:
+                    remaining_invites: 10
+                  summary: Example 1
+          description: ''
+        '401':
+          description: User is not authorized
+      summary: Auth invite remaining invites retrieve
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /auth/invite/remaining-invites-new/:
+    get:
+      operationId: auth_invite_remaining_invites_new_retrieve
+      description: Returns the amount of remining invites for authenticated user
+      tags:
+      - Auth
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Remaining_invites_response'
+              examples:
+                Example1:
+                  value:
+                  - - target_id: 43421
+                      remaining_invites: 7
+                    - target_id: 74289
+                      remaining_invites: 18
+                  summary: Example 1
+          description: ''
+        '401':
+          description: User is not authorized
+      summary: Auth invite remaining invites new retrieve
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /auth/invite/resend-email/:
+    post:
+      operationId: auth_invite_resend_email_create
+      description: 'Resend an email to the email address associated with the given token.
+
+        This also resets sent and expired timestamps.'
+      parameters:
+      - in: query
+        name: token
+        schema:
+          type: string
+        description: token
+      tags:
+      - Auth
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Resend_email_response'
+              examples:
+                Example1:
+                  value:
+                    email_delivered: true
+                  summary: Example 1
+          description: True if email was delivered, false otherwise
+        '400':
+          description: Invitation not found
+        '401':
+          description: User is not authorized
+        '412':
+          description: Invitation has already been accepted
+      summary: Auth invite resend email create
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /auth/invite/search/:
+    get:
+      operationId: auth_invite_search_retrieve
+      parameters:
+      - in: query
+        name: page
+        schema:
+          type: integer
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+      - in: query
+        name: q
+        schema:
+          type: string
+      tags:
+      - Auth
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInvitationSearch'
+              examples:
+                InvitationSearchWithIdAsInteger:
+                  value:
+                    id: 123
+                    name: string
+                    is_user: true
+                    email: user@infomedia.dk
+                    is_active: true
+                    role: Admin
+                  summary: Invitation search with id as integer
+                InvitationSearchWithIdAsString:
+                  value:
+                    id: '123'
+                    name: string
+                    is_user: true
+                    email: user@infomedia.dk
+                    is_active: true
+                    role: Admin
+                  summary: Invitation search with id as string
+          description: ''
+      summary: Auth invite search retrieve
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+components:
+  schemas:
+    InvitationSearch:
+      type: object
+      properties:
+        id:
+          oneOf:
+          - type: integer
+          - type: string
+          - type: 'null'
+          readOnly: true
+        name:
+          type: string
+        is_user:
+          type: boolean
+        email:
+          type: string
+        is_active:
+          type: boolean
+        role:
+          type: string
+        last_login:
+          type: string
+          format: date-time
+      required:
+      - id
+      - is_user
+      - name
+    Remaining_invites_response_old:
+      type: object
+      properties:
+        remaining_invites:
+          type: integer
+      required:
+      - remaining_invites
+    Remaining_invites_response:
+      type: object
+      properties:
+        target_id:
+          type: integer
+        remaining_invites:
+          type: integer
+      required:
+      - remaining_invites
+      - target_id
+    IFMLogin:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/IFMLoginUser'
+        organization:
+          $ref: '#/components/schemas/IFMLoginOrganization'
+        rights:
+          $ref: '#/components/schemas/IFMLoginRights'
+        remember_me:
+          type: boolean
+          default: true
+      required:
+      - organization
+      - rights
+      - user
+    IFMLoginUser:
+      type: object
+      properties:
+        uuid:
+          type: string
+          maxLength: 36
+          minLength: 36
+        login:
+          type: string
+          format: email
+        name:
+          type: string
+        create_date:
+          type: integer
+        archive_length:
+          type: integer
+        profiles:
+          type: array
+          items:
+            type: integer
+            minimum: 0
+      required:
+      - archive_length
+      - create_date
+      - login
+      - profiles
+      - uuid
+    Resend_email_response:
+      type: object
+      properties:
+        email_delivered:
+          type: boolean
+      required:
+      - email_delivered
+    UserInvitationSearch:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+        previous:
+          type: string
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvitationSearch'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    Response:
+      type: object
+      properties:
+        token:
+          type: string
+      required:
+      - token
+    IFMLoginRights:
+      type: object
+      properties:
+        is_organization_admin:
+          type: boolean
+        media_report:
+          type: boolean
+        alerts:
+          type: boolean
+        multimedia:
+          type: boolean
+        statistics:
+          type: boolean
+        print:
+          type: boolean
+        share:
+          type: boolean
+      required:
+      - alerts
+      - is_organization_admin
+      - media_report
+      - multimedia
+      - print
+      - share
+      - statistics
+    IFMLoginOrganization:
+      type: object
+      properties:
+        uuid:
+          type: string
+          maxLength: 36
+          minLength: 36
+        debitor_id:
+          type: integer
+          minimum: 0
+        name:
+          type: string
+      required:
+      - debitor_id
+      - name
+      - uuid
+  securitySchemes:
+    JWT:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "JWT"
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: PHPSESSID
+    ephmeralId:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Ephemeral"
+    staticToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
+x-refined-from:
+- opoint-openapi-original.yml
+- opoint-openapi.yml

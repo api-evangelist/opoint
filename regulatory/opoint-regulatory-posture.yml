@@ -1,0 +1,38 @@
+generated: '2026-10-07'
+method: none
+source: https://opoint.com/privacy-policy; https://opoint.com/page-sitemap.xml; conventional paths probed live
+signals: {}
+checked:
+- url: https://opoint.com/accessibility
+  status: 404
+  resolved: https://opoint.com/accessibility
+- url: https://opoint.com/accessibility/vpat
+  status: 404
+  resolved: https://opoint.com/accessibility/vpat
+- url: https://opoint.com/legal/subprocessors
+  status: 404
+  resolved: https://opoint.com/legal/subprocessors
+- url: https://opoint.com/legal/dpa
+  status: 404
+  resolved: https://opoint.com/legal/dpa
+- url: https://opoint.com/privacy/requests
+  status: 404
+  resolved: https://opoint.com/privacy/requests
+- url: https://opoint.com/transparency
+  status: 404
+  resolved: https://opoint.com/transparency
+- url: https://opoint.com/security/sbom
+  status: 404
+  resolved: https://opoint.com/security/sbom
+- url: https://opoint.com/security
+  status: 404
+  resolved: https://opoint.com/security
+- url: https://opoint.com/trust
+  status: 404
+  resolved: https://opoint.com/trust
+note: No SBOM, support-lifetime, accessibility conformance, AI transparency, GPC, data-subject-request, subprocessor list,
+  data-residency, incident-notification, age-assurance, notice-and-action, transparency report or exit-assistance page was
+  found on opoint.com, api-docs.opoint.com or in the page sitemap. The privacy policy names Opoint as data controller (Pilestræde
+  58, Copenhagen, CVR 11171133), states transfers outside the EU rest on a data processor agreement and the European Commission
+  Standard Contractual Clauses, and lists locations in Denmark, Norway, the United Kingdom and India; that is a policy statement,
+  not a subprocessor table or DPA page, so no signal is recorded.

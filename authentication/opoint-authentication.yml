@@ -1,0 +1,23 @@
+generated: '2026-10-07'
+method: derived
+source: openapi/opoint-openapi.yml
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - cookie
+  - header
+schemes:
+- name: JWT
+  type: apiKey
+  in: header
+  parameter: Authorization
+  description: Token-based authentication with required prefix "JWT"
+  sources:
+  - openapi/opoint-openapi.yml
+- name: cookieAuth
+  type: apiKey
+  in: cookie
+  parameter: PHPSESSID
+  sources:
+  - openapi/opoint-openapi.yml

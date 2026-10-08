@@ -1,0 +1,1284 @@
+{
+  "@context": {
+    "@vocab": "https://opoint.com/schema#",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+    "opoint": "https://opoint.com/schema#",
+    "AccessGroupSchema": "opoint:AccessGroupSchema",
+    "access_groups": {
+      "@id": "opoint:access_groups",
+      "@container": "@list"
+    },
+    "sites": {
+      "@id": "opoint:sites",
+      "@container": "@list"
+    },
+    "sources": {
+      "@id": "opoint:sources",
+      "@container": "@list"
+    },
+    "AccessInfoSchema": "opoint:AccessInfoSchema",
+    "name": {
+      "@id": "opoint:name",
+      "@type": "xsd:string"
+    },
+    "enabled": {
+      "@id": "opoint:enabled",
+      "@type": "xsd:boolean"
+    },
+    "value": {
+      "@id": "opoint:value",
+      "@type": "xsd:integer"
+    },
+    "ActionEnum": "opoint:ActionEnum",
+    "AggregatedRange": "opoint:AggregatedRange",
+    "statuses": {
+      "@id": "opoint:statuses",
+      "@container": "@list"
+    },
+    "Agreement": "opoint:Agreement",
+    "id_agreement": {
+      "@id": "opoint:id_agreement",
+      "@type": "xsd:integer"
+    },
+    "label": {
+      "@id": "opoint:label",
+      "@type": "xsd:string"
+    },
+    "description": {
+      "@id": "opoint:description",
+      "@type": "xsd:string"
+    },
+    "priority": {
+      "@id": "opoint:priority",
+      "@type": "xsd:integer"
+    },
+    "expose": {
+      "@id": "opoint:expose",
+      "@type": "xsd:boolean"
+    },
+    "tag": {
+      "@id": "opoint:tag"
+    },
+    "licence_configuration": {
+      "@id": "opoint:licence_configuration"
+    },
+    "site_count": {
+      "@id": "opoint:site_count",
+      "@type": "xsd:integer"
+    },
+    "source_count": {
+      "@id": "opoint:source_count",
+      "@type": "xsd:integer"
+    },
+    "customers": {
+      "@id": "opoint:customers",
+      "@type": "xsd:integer"
+    },
+    "created": {
+      "@id": "opoint:created",
+      "@type": "xsd:dateTime"
+    },
+    "last_change": {
+      "@id": "opoint:last_change",
+      "@type": "xsd:dateTime"
+    },
+    "scoped_licence_configurations": {
+      "@id": "opoint:scoped_licence_configurations",
+      "@container": "@list"
+    },
+    "AgreementAccessGroup": "opoint:AgreementAccessGroup",
+    "AgreementList": "opoint:AgreementList",
+    "AgreementRef": "opoint:AgreementRef",
+    "AgreementSite": "opoint:AgreementSite",
+    "id_site": {
+      "@id": "opoint:id_site",
+      "@type": "xsd:integer"
+    },
+    "url": {
+      "@id": "opoint:url",
+      "@type": "xsd:string"
+    },
+    "AgreementSource": "opoint:AgreementSource",
+    "id_source": {
+      "@id": "opoint:id_source",
+      "@type": "xsd:integer"
+    },
+    "AgreementTag": "opoint:AgreementTag",
+    "id_sitetag": {
+      "@id": "opoint:id_sitetag",
+      "@type": "xsd:integer"
+    },
+    "access_group": {
+      "@id": "opoint:access_group"
+    },
+    "agreements": {
+      "@id": "opoint:agreements",
+      "@container": "@list"
+    },
+    "AgreementTagRef": "opoint:AgreementTagRef",
+    "Alert": "opoint:Alert",
+    "id": {
+      "@id": "opoint:id",
+      "@type": "xsd:integer"
+    },
+    "subject": {
+      "@id": "opoint:subject",
+      "@type": "xsd:string"
+    },
+    "type": {
+      "@id": "opoint:type"
+    },
+    "active": {
+      "@id": "opoint:active",
+      "@type": "xsd:integer"
+    },
+    "baskets": {
+      "@id": "opoint:baskets",
+      "@container": "@list"
+    },
+    "isCreatedFromApp": {
+      "@id": "opoint:isCreatedFromApp",
+      "@type": "xsd:boolean"
+    },
+    "editable": {
+      "@id": "opoint:editable",
+      "@type": "xsd:boolean"
+    },
+    "max_age": {
+      "@id": "opoint:max_age",
+      "@type": "xsd:integer"
+    },
+    "has_push_subscription": {
+      "@id": "opoint:has_push_subscription",
+      "@type": "xsd:boolean"
+    },
+    "schedule": {
+      "@id": "opoint:schedule"
+    },
+    "lastSent": {
+      "@id": "opoint:lastSent",
+      "@type": "xsd:integer"
+    },
+    "AlertBasket": "opoint:AlertBasket",
+    "AlertContact": "opoint:AlertContact",
+    "email": {
+      "@id": "opoint:email",
+      "@type": "xsd:string"
+    },
+    "mobile": {
+      "@id": "opoint:mobile",
+      "@type": "xsd:string"
+    },
+    "AlertContactOverview": "opoint:AlertContactOverview",
+    "recipients": {
+      "@id": "opoint:recipients",
+      "@type": "@id"
+    },
+    "AlertCountResponse": "opoint:AlertCountResponse",
+    "count": {
+      "@id": "opoint:count",
+      "@type": "xsd:integer"
+    },
+    "AlertCreate": "opoint:AlertCreate",
+    "locale": {
+      "@id": "opoint:locale",
+      "@type": "xsd:string"
+    },
+    "profiles": {
+      "@id": "opoint:profiles",
+      "@container": "@list"
+    },
+    "smsRecipients": {
+      "@id": "opoint:smsRecipients",
+      "@container": "@list"
+    },
+    "templateId": {
+      "@id": "opoint:templateId",
+      "@type": "xsd:integer"
+    },
+    "nextPossibleSend": {
+      "@id": "opoint:nextPossibleSend",
+      "@type": "xsd:integer"
+    },
+    "sender": {
+      "@id": "opoint:sender",
+      "@type": "xsd:string"
+    },
+    "resendidentical": {
+      "@id": "opoint:resendidentical",
+      "@type": "xsd:boolean"
+    },
+    "is_org": {
+      "@id": "opoint:is_org",
+      "@type": "xsd:boolean"
+    },
+    "articleMaxTimestamp": {
+      "@id": "opoint:articleMaxTimestamp",
+      "@type": "xsd:integer"
+    },
+    "includeIdentical": {
+      "@id": "opoint:includeIdentical",
+      "@type": "xsd:boolean"
+    },
+    "AlertDetail": "opoint:AlertDetail",
+    "pushRecipients": {
+      "@id": "opoint:pushRecipients",
+      "@container": "@list"
+    },
+    "template": {
+      "@id": "opoint:template"
+    },
+    "translate": {
+      "@id": "opoint:translate",
+      "@type": "xsd:boolean"
+    },
+    "groupidentical": {
+      "@id": "opoint:groupidentical",
+      "@type": "xsd:boolean"
+    },
+    "AlertGroupContact": "opoint:AlertGroupContact",
+    "contacts": {
+      "@id": "opoint:contacts",
+      "@container": "@list"
+    },
+    "AlertHistoryContent": "opoint:AlertHistoryContent",
+    "content": {
+      "@id": "opoint:content"
+    },
+    "id_list": {
+      "@id": "opoint:id_list",
+      "@type": "xsd:integer"
+    },
+    "AlertHistoryItem": "opoint:AlertHistoryItem",
+    "AlertMails": "opoint:AlertMails",
+    "alert_name": {
+      "@id": "opoint:alert_name",
+      "@type": "xsd:string"
+    },
+    "owner_name": {
+      "@id": "opoint:owner_name",
+      "@type": "xsd:string"
+    },
+    "owner_id": {
+      "@id": "opoint:owner_id",
+      "@type": "xsd:integer"
+    },
+    "mails": {
+      "@id": "opoint:mails",
+      "@container": "@list"
+    },
+    "AlertProfile": "opoint:AlertProfile",
+    "AlertProfileDependencies": "opoint:AlertProfileDependencies",
+    "AlertRecipient": "opoint:AlertRecipient",
+    "id_recipient": {
+      "@id": "opoint:id_recipient",
+      "@type": "xsd:integer"
+    },
+    "alert": {
+      "@id": "opoint:alert",
+      "@type": "xsd:integer"
+    },
+    "literal": {
+      "@id": "opoint:literal",
+      "@type": "xsd:string"
+    },
+    "filter": {
+      "@id": "opoint:filter",
+      "@type": "xsd:boolean"
+    },
+    "AlertRecipientOverview": "opoint:AlertRecipientOverview",
+    "groups": {
+      "@id": "opoint:groups",
+      "@container": "@list"
+    },
+    "direct": {
+      "@id": "opoint:direct",
+      "@container": "@list"
+    },
+    "users": {
+      "@id": "opoint:users",
+      "@container": "@list"
+    },
+    "AlertRecipientTypeEnum": "opoint:AlertRecipientTypeEnum",
+    "AlertSubscription": "opoint:AlertSubscription",
+    "is_subscribed": {
+      "@id": "opoint:is_subscribed",
+      "@type": "xsd:boolean"
+    },
+    "AlertSubscriptionDetail": "opoint:AlertSubscriptionDetail",
+    "is_mail": {
+      "@id": "opoint:is_mail",
+      "@type": "xsd:boolean"
+    },
+    "alert_id": {
+      "@id": "opoint:alert_id",
+      "@type": "xsd:integer"
+    },
+    "subscribe": {
+      "@id": "opoint:subscribe",
+      "@type": "xsd:boolean"
+    },
+    "AlertTag": "opoint:AlertTag",
+    "AlertType": "opoint:AlertType",
+    "AlmostIdenticalSchema": "opoint:AlmostIdenticalSchema",
+    "id_article": {
+      "@id": "opoint:id_article",
+      "@type": "xsd:integer"
+    },
+    "sim": {
+      "@id": "opoint:sim",
+      "@type": "xsd:integer"
+    },
+    "AnalyticQueryDetails": "opoint:AnalyticQueryDetails",
+    "id_item": {
+      "@id": "opoint:id_item",
+      "@type": "xsd:integer"
+    },
+    "topic_name": {
+      "@id": "opoint:topic_name",
+      "@type": "xsd:string"
+    },
+    "rate": {
+      "@id": "opoint:rate",
+      "@type": "xsd:decimal"
+    },
+    "rate_last_updated": {
+      "@id": "opoint:rate_last_updated",
+      "@type": "xsd:integer"
+    },
+    "max_rate": {
+      "@id": "opoint:max_rate",
+      "@type": "xsd:integer"
+    },
+    "last_set": {
+      "@id": "opoint:last_set",
+      "@type": "xsd:integer"
+    },
+    "items": {
+      "@id": "opoint:items",
+      "@container": "@list"
+    },
+    "AnalyticQueryItem": "opoint:AnalyticQueryItem",
+    "searchline": {
+      "@id": "opoint:searchline",
+      "@type": "@id"
+    },
+    "linemode": {
+      "@id": "opoint:linemode",
+      "@type": "@id"
+    },
+    "searchmode": {
+      "@id": "opoint:searchmode",
+      "@type": "xsd:string"
+    },
+    "AnalyticsError": "opoint:AnalyticsError",
+    "details": {
+      "@id": "opoint:details",
+      "@type": "xsd:string"
+    },
+    "AnalyticsQuery": "opoint:AnalyticsQuery",
+    "AnalyticsReport": "opoint:AnalyticsReport",
+    "createDate": {
+      "@id": "opoint:createDate",
+      "@type": "xsd:dateTime"
+    },
+    "id_user": {
+      "@id": "opoint:id_user",
+      "@type": "xsd:integer"
+    },
+    "categoryId": {
+      "@id": "opoint:categoryId",
+      "@type": "xsd:integer"
+    },
+    "scoringScale": {
+      "@id": "opoint:scoringScale"
+    },
+    "scoredFields": {
+      "@id": "opoint:scoredFields",
+      "@type": "xsd:integer"
+    },
+    "nPrinting": {
+      "@id": "opoint:nPrinting",
+      "@type": "xsd:boolean"
+    },
+    "topicDisplayName": {
+      "@id": "opoint:topicDisplayName",
+      "@type": "xsd:string"
+    },
+    "topicDisplayType": {
+      "@id": "opoint:topicDisplayType"
+    },
+    "topicMinSelectedValues": {
+      "@id": "opoint:topicMinSelectedValues",
+      "@type": "xsd:integer"
+    },
+    "topicMaxSelectedValues": {
+      "@id": "opoint:topicMaxSelectedValues",
+      "@type": "xsd:integer"
+    },
+    "topics": {
+      "@id": "opoint:topics",
+      "@container": "@list"
+    },
+    "Article": "opoint:Article",
+    "xmltext": {
+      "@id": "opoint:xmltext",
+      "@type": "xsd:string"
+    },
+    "stimestamp": {
+      "@id": "opoint:stimestamp",
+      "@type": "xsd:integer"
+    },
+    "matchinfo": {
+      "@id": "opoint:matchinfo",
+      "@type": "xsd:string"
+    },
+    "ArticleBasket": "opoint:ArticleBasket",
+    "weight": {
+      "@id": "opoint:weight",
+      "@type": "xsd:integer"
+    },
+    "articles": {
+      "@id": "opoint:articles",
+      "@container": "@list"
+    },
+    "ArticleBasketDelete": "opoint:ArticleBasketDelete",
+    "ArticleFeature": "opoint:ArticleFeature",
+    "matches": {
+      "@id": "opoint:matches",
+      "@type": "xsd:boolean"
+    },
+    "text": {
+      "@id": "opoint:text",
+      "@type": "xsd:string"
+    },
+    "ArticleIdsSerializerv2": "opoint:ArticleIdsSerializerv2",
+    "ArticleImage": "opoint:ArticleImage",
+    "ArticleImageSchema": "opoint:ArticleImageSchema",
+    "caption": {
+      "@id": "opoint:caption",
+      "@type": "@id"
+    },
+    "ArticleImages": "opoint:ArticleImages",
+    "articleimage": {
+      "@id": "opoint:articleimage",
+      "@container": "@list"
+    },
+    "ArticleImagesSchema": "opoint:ArticleImagesSchema",
+    "ArticleMediaSchema": "opoint:ArticleMediaSchema",
+    "localurl": {
+      "@id": "opoint:localurl",
+      "@type": "xsd:string"
+    },
+    "thumbnail": {
+      "@id": "opoint:thumbnail",
+      "@type": "xsd:string"
+    },
+    "ArticleReadershipSchema": "opoint:ArticleReadershipSchema",
+    "DeltaPValue": {
+      "@id": "opoint:DeltaPValue",
+      "@type": "xsd:integer"
+    },
+    "ExpectedPValue": {
+      "@id": "opoint:ExpectedPValue",
+      "@type": "xsd:integer"
+    },
+    "StdExpectedPValue": {
+      "@id": "opoint:StdExpectedPValue",
+      "@type": "xsd:integer"
+    },
+    "P": {
+      "@id": "opoint:P",
+      "@type": "xsd:decimal"
+    },
+    "DeltaP": {
+      "@id": "opoint:DeltaP",
+      "@type": "xsd:decimal"
+    },
+    "ExpectedP": {
+      "@id": "opoint:ExpectedP",
+      "@type": "xsd:decimal"
+    },
+    "StdExpectedP": {
+      "@id": "opoint:StdExpectedP",
+      "@type": "xsd:decimal"
+    },
+    "ArticleReference": "opoint:ArticleReference",
+    "topicId": {
+      "@id": "opoint:topicId",
+      "@type": "xsd:integer"
+    },
+    "status": {
+      "@id": "opoint:status",
+      "@type": "xsd:string"
+    },
+    "wordCount": {
+      "@id": "opoint:wordCount",
+      "@type": "xsd:integer"
+    },
+    "sentiment": {
+      "@id": "opoint:sentiment",
+      "@type": "xsd:integer"
+    },
+    "hitHeadline": {
+      "@id": "opoint:hitHeadline",
+      "@type": "xsd:integer"
+    },
+    "hitArticle": {
+      "@id": "opoint:hitArticle",
+      "@type": "xsd:integer"
+    },
+    "hitPicture": {
+      "@id": "opoint:hitPicture",
+      "@type": "xsd:integer"
+    },
+    "swot": {
+      "@id": "opoint:swot",
+      "@type": "xsd:string"
+    },
+    "articleType": {
+      "@id": "opoint:articleType",
+      "@type": "xsd:string"
+    },
+    "comment": {
+      "@id": "opoint:comment",
+      "@type": "xsd:string"
+    },
+    "insertDate": {
+      "@id": "opoint:insertDate",
+      "@type": "xsd:dateTime"
+    },
+    "dominance": {
+      "@id": "opoint:dominance",
+      "@type": "xsd:integer"
+    },
+    "scoredBy": {
+      "@id": "opoint:scoredBy",
+      "@type": "xsd:integer"
+    },
+    "scoredAt": {
+      "@id": "opoint:scoredAt",
+      "@type": "xsd:dateTime"
+    },
+    "headline": {
+      "@id": "opoint:headline",
+      "@type": "xsd:string"
+    },
+    "timestamp": {
+      "@id": "opoint:timestamp",
+      "@type": "xsd:dateTime"
+    },
+    "mediatype": {
+      "@id": "opoint:mediatype",
+      "@type": "xsd:string"
+    },
+    "author": {
+      "@id": "opoint:author",
+      "@type": "xsd:string"
+    },
+    "summary": {
+      "@id": "opoint:summary",
+      "@type": "xsd:string"
+    },
+    "header": {
+      "@id": "opoint:header",
+      "@type": "xsd:string"
+    },
+    "siteName": {
+      "@id": "opoint:siteName",
+      "@type": "xsd:string"
+    },
+    "sourceName": {
+      "@id": "opoint:sourceName",
+      "@type": "xsd:string"
+    },
+    "sourceLang": {
+      "@id": "opoint:sourceLang",
+      "@type": "xsd:string"
+    },
+    "sourceUrl": {
+      "@id": "opoint:sourceUrl",
+      "@type": "xsd:string"
+    },
+    "estimatedReadership": {
+      "@id": "opoint:estimatedReadership",
+      "@type": "xsd:integer"
+    },
+    "scoredValues": {
+      "@id": "opoint:scoredValues",
+      "@container": "@list"
+    },
+    "ArticleVisited": "opoint:ArticleVisited",
+    "action": {
+      "@id": "opoint:action",
+      "@container": "@list"
+    },
+    "Articles": "opoint:Articles",
+    "AsyncReportCreateResponse": "opoint:AsyncReportCreateResponse",
+    "report_id": {
+      "@id": "opoint:report_id",
+      "@type": "xsd:integer"
+    },
+    "new_timestamp": {
+      "@id": "opoint:new_timestamp",
+      "@type": "xsd:integer"
+    },
+    "BaseArticle": "opoint:BaseArticle",
+    "BaseReport": "opoint:BaseReport",
+    "download": {
+      "@id": "opoint:download",
+      "@type": "xsd:string"
+    },
+    "title": {
+      "@id": "opoint:title",
+      "@type": "xsd:string"
+    },
+    "timeFinished": {
+      "@id": "opoint:timeFinished",
+      "@type": "xsd:integer"
+    },
+    "timestampFrom": {
+      "@id": "opoint:timestampFrom",
+      "@type": "xsd:integer"
+    },
+    "timestampTo": {
+      "@id": "opoint:timestampTo",
+      "@type": "xsd:integer"
+    },
+    "BodySchema": "opoint:BodySchema",
+    "readmore": {
+      "@id": "opoint:readmore",
+      "@type": "xsd:boolean"
+    },
+    "truncated": {
+      "@id": "opoint:truncated",
+      "@type": "xsd:boolean"
+    },
+    "Caption": "opoint:Caption",
+    "CodingEvent": "opoint:CodingEvent",
+    "machineName": {
+      "@id": "opoint:machineName",
+      "@type": "xsd:string"
+    },
+    "actionId": {
+      "@id": "opoint:actionId",
+      "@type": "xsd:integer"
+    },
+    "ContactRecipient": "opoint:ContactRecipient",
+    "id_contact": {
+      "@id": "opoint:id_contact",
+      "@type": "xsd:integer"
+    },
+    "message": {
+      "@id": "opoint:message",
+      "@type": "xsd:string"
+    },
+    "in_previous_sending": {
+      "@id": "opoint:in_previous_sending",
+      "@type": "xsd:boolean"
+    },
+    "CountryEnum": "opoint:CountryEnum",
+    "Currency": "opoint:Currency",
+    "currency": {
+      "@id": "opoint:currency",
+      "@type": "xsd:string"
+    },
+    "Customer": "opoint:Customer",
+    "partner": {
+      "@id": "opoint:partner",
+      "@type": "xsd:integer"
+    },
+    "CustomerDetail": "opoint:CustomerDetail",
+    "is_active": {
+      "@id": "opoint:is_active",
+      "@type": "xsd:boolean"
+    },
+    "is_educational": {
+      "@id": "opoint:is_educational",
+      "@type": "xsd:boolean"
+    },
+    "is_opoint": {
+      "@id": "opoint:is_opoint",
+      "@type": "xsd:boolean"
+    },
+    "max_num_users": {
+      "@id": "opoint:max_num_users",
+      "@type": "xsd:integer"
+    },
+    "navision_id": {
+      "@id": "opoint:navision_id",
+      "@type": "xsd:string"
+    },
+    "salesforce_id": {
+      "@id": "opoint:salesforce_id",
+      "@type": "xsd:string"
+    },
+    "num_users": {
+      "@id": "opoint:num_users",
+      "@type": "xsd:integer"
+    },
+    "CustomerUsageListEntry": "opoint:CustomerUsageListEntry",
+    "id_customer": {
+      "@id": "opoint:id_customer",
+      "@type": "xsd:integer"
+    },
+    "totals": {
+      "@id": "opoint:totals",
+      "@type": "@id"
+    },
+    "deliveries": {
+      "@id": "opoint:deliveries",
+      "@container": "@list"
+    },
+    "CustomerUsageListResponse": "opoint:CustomerUsageListResponse",
+    "delivery": {
+      "@id": "opoint:delivery",
+      "@type": "xsd:string"
+    },
+    "CustomerUsageResponse": "opoint:CustomerUsageResponse",
+    "DanishUser": "opoint:DanishUser",
+    "username": {
+      "@id": "opoint:username",
+      "@type": "xsd:string"
+    },
+    "owner": {
+      "@id": "opoint:owner",
+      "@type": "xsd:integer"
+    },
+    "last_login": {
+      "@id": "opoint:last_login",
+      "@type": "xsd:dateTime"
+    },
+    "DebugLineSchema": "opoint:DebugLineSchema",
+    "state": {
+      "@id": "opoint:state",
+      "@type": "xsd:integer"
+    },
+    "query": {
+      "@id": "opoint:query",
+      "@type": "xsd:string"
+    },
+    "DebugSchema": "opoint:DebugSchema",
+    "lines": {
+      "@id": "opoint:lines",
+      "@container": "@list"
+    },
+    "DeleteProfileResponse400": "opoint:DeleteProfileResponse400",
+    "data": {
+      "@id": "opoint:data",
+      "@type": "xsd:string"
+    },
+    "DeleteTagResponse": "opoint:DeleteTagResponse",
+    "DeletedProfilesItemsResponse": "opoint:DeletedProfilesItemsResponse",
+    "make_persistent": {
+      "@id": "opoint:make_persistent",
+      "@type": "xsd:boolean"
+    },
+    "saved_by": {
+      "@id": "opoint:saved_by"
+    },
+    "kind": {
+      "@id": "opoint:kind",
+      "@type": "@id"
+    },
+    "DeletedProfilesResponse": "opoint:DeletedProfilesResponse",
+    "results": {
+      "@id": "opoint:results",
+      "@container": "@list"
+    },
+    "DirectRecipient": "opoint:DirectRecipient",
+    "DirectRecipientCreate": "opoint:DirectRecipientCreate",
+    "DirectRecipientCreateTypeEnum": "opoint:DirectRecipientCreateTypeEnum",
+    "DisplayTypeEnum": "opoint:DisplayTypeEnum",
+    "DocumentSchema": "opoint:DocumentSchema",
+    "position": {
+      "@id": "opoint:position",
+      "@type": "xsd:integer"
+    },
+    "unix_timestamp": {
+      "@id": "opoint:unix_timestamp",
+      "@type": "xsd:integer"
+    },
+    "stimestamp_index": {
+      "@id": "opoint:stimestamp_index",
+      "@type": "xsd:integer"
+    },
+    "body": {
+      "@id": "opoint:body",
+      "@type": "@id"
+    },
+    "word_count": {
+      "@id": "opoint:word_count",
+      "@type": "xsd:integer"
+    },
+    "short_header": {
+      "@id": "opoint:short_header",
+      "@type": "@id"
+    },
+    "short_summary": {
+      "@id": "opoint:short_summary",
+      "@type": "@id"
+    },
+    "short_body": {
+      "@id": "opoint:short_body",
+      "@type": "@id"
+    },
+    "translated_header": {
+      "@id": "opoint:translated_header",
+      "@type": "@id"
+    },
+    "manual_summary": {
+      "@id": "opoint:manual_summary",
+      "@type": "@id"
+    },
+    "extract": {
+      "@id": "opoint:extract",
+      "@type": "xsd:boolean"
+    },
+    "quotes": {
+      "@id": "opoint:quotes",
+      "@type": "@id"
+    },
+    "first_source": {
+      "@id": "opoint:first_source",
+      "@type": "@id"
+    },
+    "topics_and_entities": {
+      "@id": "opoint:topics_and_entities",
+      "@type": "@id"
+    },
+    "language": {
+      "@id": "opoint:language",
+      "@type": "@id"
+    },
+    "countryname": {
+      "@id": "opoint:countryname",
+      "@type": "xsd:string"
+    },
+    "countrycode": {
+      "@id": "opoint:countrycode",
+      "@type": "xsd:string"
+    },
+    "local_time": {
+      "@id": "opoint:local_time",
+      "@type": "@id"
+    },
+    "local_rcf822_time": {
+      "@id": "opoint:local_rcf822_time",
+      "@type": "@id"
+    },
+    "orig_url": {
+      "@id": "opoint:orig_url",
+      "@type": "xsd:string"
+    },
+    "url_common": {
+      "@id": "opoint:url_common",
+      "@type": "xsd:string"
+    },
+    "articleimages": {
+      "@id": "opoint:articleimages",
+      "@type": "@id"
+    },
+    "screenshots": {
+      "@id": "opoint:screenshots",
+      "@container": "@list"
+    },
+    "articlemedia": {
+      "@id": "opoint:articlemedia",
+      "@container": "@list"
+    },
+    "playlength": {
+      "@id": "opoint:playlength",
+      "@type": "xsd:integer"
+    },
+    "mediafile": {
+      "@id": "opoint:mediafile",
+      "@type": "xsd:integer"
+    },
+    "pdf_file": {
+      "@id": "opoint:pdf_file",
+      "@type": "@id"
+    },
+    "similarweb": {
+      "@id": "opoint:similarweb",
+      "@type": "@id"
+    },
+    "site_rank": {
+      "@id": "opoint:site_rank",
+      "@type": "@id"
+    },
+    "meta_data": {
+      "@id": "opoint:meta_data"
+    },
+    "identical_documents": {
+      "@id": "opoint:identical_documents",
+      "@type": "@id"
+    },
+    "almost_identical": {
+      "@id": "opoint:almost_identical",
+      "@type": "@id"
+    },
+    "equalgroup": {
+      "@id": "opoint:equalgroup",
+      "@type": "xsd:integer"
+    },
+    "sort_group_ref": {
+      "@id": "opoint:sort_group_ref",
+      "@type": "xsd:integer"
+    },
+    "list_states": {
+      "@id": "opoint:list_states",
+      "@container": "@list"
+    },
+    "tags": {
+      "@id": "opoint:tags",
+      "@container": "@list"
+    },
+    "linkobs": {
+      "@id": "opoint:linkobs",
+      "@type": "@id"
+    },
+    "internal_search_reply": {
+      "@id": "opoint:internal_search_reply",
+      "@type": "@id"
+    },
+    "usercomments": {
+      "@id": "opoint:usercomments",
+      "@type": "@id"
+    },
+    "hidden": {
+      "@id": "opoint:hidden",
+      "@type": "xsd:boolean"
+    },
+    "existinbasket": {
+      "@id": "opoint:existinbasket",
+      "@type": "xsd:string"
+    },
+    "compare": {
+      "@id": "opoint:compare",
+      "@type": "xsd:integer"
+    },
+    "content_protected": {
+      "@id": "opoint:content_protected",
+      "@type": "xsd:integer"
+    },
+    "distribute_conditions": {
+      "@id": "opoint:distribute_conditions",
+      "@type": "xsd:string"
+    },
+    "circulation": {
+      "@id": "opoint:circulation",
+      "@type": "xsd:integer"
+    },
+    "adprice": {
+      "@id": "opoint:adprice",
+      "@type": "xsd:integer"
+    },
+    "reach": {
+      "@id": "opoint:reach",
+      "@type": "xsd:integer"
+    },
+    "stored_search_id": {
+      "@id": "opoint:stored_search_id",
+      "@type": "xsd:integer"
+    },
+    "profile_id": {
+      "@id": "opoint:profile_id",
+      "@type": "xsd:integer"
+    },
+    "profile_name": {
+      "@id": "opoint:profile_name",
+      "@type": "xsd:string"
+    },
+    "DocumentTopic": "opoint:DocumentTopic",
+    "linktype_max": {
+      "@id": "opoint:linktype_max",
+      "@type": "xsd:integer"
+    },
+    "linktype_now": {
+      "@id": "opoint:linktype_now",
+      "@type": "xsd:integer"
+    },
+    "metacat": {
+      "@id": "opoint:metacat",
+      "@type": "xsd:integer"
+    },
+    "metacat_level": {
+      "@id": "opoint:metacat_level",
+      "@type": "xsd:integer"
+    },
+    "EntitiesSchema": "opoint:EntitiesSchema",
+    "location": {
+      "@id": "opoint:location",
+      "@container": "@list"
+    },
+    "organization": {
+      "@id": "opoint:organization",
+      "@container": "@list"
+    },
+    "person": {
+      "@id": "opoint:person",
+      "@container": "@list"
+    },
+    "EntitySchema": "opoint:EntitySchema",
+    "entity": {
+      "@id": "opoint:entity",
+      "@type": "xsd:string"
+    },
+    "wikidata_id": {
+      "@id": "opoint:wikidata_id",
+      "@type": "xsd:string"
+    },
+    "crunchbase": {
+      "@id": "opoint:crunchbase",
+      "@type": "xsd:string"
+    },
+    "permid": {
+      "@id": "opoint:permid",
+      "@type": "xsd:string"
+    },
+    "lei": {
+      "@id": "opoint:lei",
+      "@type": "xsd:string"
+    },
+    "figi": {
+      "@id": "opoint:figi",
+      "@type": "xsd:string"
+    },
+    "Error": "opoint:Error",
+    "EventMessage": "opoint:EventMessage",
+    "Export": "opoint:Export",
+    "FeedProfileDependencies": "opoint:FeedProfileDependencies",
+    "FindArticle": "opoint:FindArticle",
+    "FirstSource": "opoint:FirstSource",
+    "sitename": {
+      "@id": "opoint:sitename",
+      "@type": "xsd:string"
+    },
+    "siteurl": {
+      "@id": "opoint:siteurl",
+      "@type": "xsd:string"
+    },
+    "FirstSourceSchema": "opoint:FirstSourceSchema",
+    "FolderShareConfig": "opoint:FolderShareConfig",
+    "user": {
+      "@id": "opoint:user",
+      "@type": "@id"
+    },
+    "inherit": {
+      "@id": "opoint:inherit",
+      "@type": "xsd:boolean"
+    },
+    "access": {
+      "@id": "opoint:access",
+      "@type": "@id"
+    },
+    "FolderShareConfigAccess": "opoint:FolderShareConfigAccess",
+    "edit_folder": {
+      "@id": "opoint:edit_folder",
+      "@type": "xsd:boolean"
+    },
+    "delete_folder": {
+      "@id": "opoint:delete_folder",
+      "@type": "xsd:boolean"
+    },
+    "tag_articles": {
+      "@id": "opoint:tag_articles",
+      "@type": "xsd:boolean"
+    },
+    "add_items": {
+      "@id": "opoint:add_items",
+      "@type": "xsd:boolean"
+    },
+    "FolderShareConfigFilter": "opoint:FolderShareConfigFilter",
+    "FolderShareConfigFilterId": "opoint:FolderShareConfigFilterId",
+    "FolderShareConfigFilterTypeEnum": "opoint:FolderShareConfigFilterTypeEnum",
+    "FolderSortRequestBody": "opoint:FolderSortRequestBody",
+    "FolderView": "opoint:FolderView",
+    "icon": {
+      "@id": "opoint:icon",
+      "@type": "xsd:string"
+    },
+    "category": {
+      "@id": "opoint:category",
+      "@type": "xsd:integer"
+    },
+    "traits": {
+      "@id": "opoint:traits",
+      "@type": "xsd:integer"
+    },
+    "FolderViewCreate": "opoint:FolderViewCreate",
+    "shares": {
+      "@id": "opoint:shares",
+      "@container": "@list"
+    },
+    "FolderViewCreateTypeEnum": "opoint:FolderViewCreateTypeEnum",
+    "FolderViewDetail": "opoint:FolderViewDetail",
+    "GlueItem": "opoint:GlueItem",
+    "list_one": {
+      "@id": "opoint:list_one",
+      "@type": "@id"
+    },
+    "list_two": {
+      "@id": "opoint:list_two",
+      "@type": "@id"
+    },
+    "glue_start": {
+      "@id": "opoint:glue_start",
+      "@type": "xsd:string"
+    },
+    "glue_middle": {
+      "@id": "opoint:glue_middle",
+      "@type": "xsd:string"
+    },
+    "glue_end": {
+      "@id": "opoint:glue_end",
+      "@type": "xsd:string"
+    },
+    "GlueSearch": "opoint:GlueSearch",
+    "params": {
+      "@id": "opoint:params"
+    },
+    "expand_persistent": {
+      "@id": "opoint:expand_persistent",
+      "@type": "xsd:boolean"
+    },
+    "GroupRecipient": "opoint:GroupRecipient",
+    "group_id": {
+      "@id": "opoint:group_id",
+      "@type": "xsd:integer"
+    },
+    "GroupRecipientChild": "opoint:GroupRecipientChild",
+    "GroupedEventMessage": "opoint:GroupedEventMessage",
+    "messages": {
+      "@id": "opoint:messages",
+      "@container": "@list"
+    },
+    "HeaderSchema": "opoint:HeaderSchema",
+    "IFMLogin": "opoint:IFMLogin",
+    "rights": {
+      "@id": "opoint:rights",
+      "@type": "@id"
+    },
+    "remember_me": {
+      "@id": "opoint:remember_me",
+      "@type": "xsd:boolean"
+    },
+    "IFMLoginOrganization": "opoint:IFMLoginOrganization",
+    "uuid": {
+      "@id": "opoint:uuid",
+      "@type": "xsd:string"
+    },
+    "debitor_id": {
+      "@id": "opoint:debitor_id",
+      "@type": "xsd:integer"
+    },
+    "IFMLoginRights": "opoint:IFMLoginRights",
+    "is_organization_admin": {
+      "@id": "opoint:is_organization_admin",
+      "@type": "xsd:boolean"
+    },
+    "media_report": {
+      "@id": "opoint:media_report",
+      "@type": "xsd:boolean"
+    },
+    "alerts": {
+      "@id": "opoint:alerts",
+      "@type": "xsd:boolean"
+    },
+    "multimedia": {
+      "@id": "opoint:multimedia",
+      "@type": "xsd:boolean"
+    },
+    "statistics": {
+      "@id": "opoint:statistics",
+      "@type": "xsd:boolean"
+    },
+    "print": {
+      "@id": "opoint:print",
+      "@type": "xsd:boolean"
+    },
+    "share": {
+      "@id": "opoint:share",
+      "@type": "xsd:boolean"
+    },
+    "IFMLoginUser": "opoint:IFMLoginUser",
+    "login": {
+      "@id": "opoint:login",
+      "@type": "xsd:string"
+    },
+    "create_date": {
+      "@id": "opoint:create_date",
+      "@type": "xsd:integer"
+    },
+    "archive_length": {
+      "@id": "opoint:archive_length",
+      "@type": "xsd:integer"
+    },
+    "IFMOrganizationProfileNumbers": "opoint:IFMOrganizationProfileNumbers",
+    "IdSiteList": "opoint:IdSiteList",
+    "id_sites": {
+      "@id": "opoint:id_sites",
+      "@container": "@list"
+    },
+    "IdenticalDocumentsSchema": "opoint:IdenticalDocumentsSchema",
+    "cnt": {
+      "@id": "opoint:cnt",
+      "@type": "xsd:integer"
+    },
+    "document": {
+      "@id": "opoint:document",
+      "@container": "@list"
+    },
+    "ImpersonationTarget": "opoint:ImpersonationTarget",
+    "self": {
+      "@id": "opoint:self",
+      "@type": "xsd:boolean"
+    },
+    "customer": {
+      "@id": "opoint:customer",
+      "@type": "@id"
+    },
+    "InternalSearchReply": "opoint:InternalSearchReply",
+    "InternalSearchReplySchema": "opoint:InternalSearchReplySchema",
+    "Interval": "opoint:Interval",
+    "start": {
+      "@id": "opoint:start",
+      "@type": "xsd:integer"
+    },
+    "end": {
+      "@id": "opoint:end",
+      "@type": "xsd:integer"
+    },
+    "InvitationSearch": "opoint:InvitationSearch",
+    "is_user": {
+      "@id": "opoint:is_user",
+      "@type": "xsd:boolean"
+    },
+    "role": {
+      "@id": "opoint:role",
+      "@type": "xsd:string"
+    },
+    "InviteDirectPostResponseChildStatusEnum": "opoint:InviteDirectPostResponseChildStatusEnum",
+    "InviteDirectPostResponseStatusEnum": "opoint:InviteDirectPostResponseStatusEnum",
+    "IptcTopicSchema": "opoint:IptcTopicSchema",
+    "mediatopic_id": {
+      "@id": "opoint:mediatopic_id",
+      "@type": "xsd:string"
+    },
+    "score": {
+      "@id": "opoint:score",
+      "@type": "xsd:decimal"
+    },
+    "IssueTypeEnum": "opoint:IssueTypeEnum"
+  },
+  "@type": "schema:Dataset",
+  "schema:name": "Opoint API JSON-LD context",
+  "schema:description": "A JSON-LD @context for the objects Opoint's own API contract declares: one class per component schema, one property per declared field, typed from the contract. Derived by script (derive-json-ld.py, 2026-10-07) from openapi/opoint-openapi.yml.",
+  "dcterms:created": "2026-10-07",
+  "dcterms:source": [
+    "openapi/opoint-openapi.yml"
+  ]
+}

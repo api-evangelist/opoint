@@ -1,0 +1,395 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/opoint/main/json-schema/opoint-agreement-schema.json",
+  "title": "Agreement",
+  "x-generated": "2026-10-07",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/opoint-openapi.yml#/components/schemas/Agreement",
+  "type": "object",
+  "properties": {
+    "id_agreement": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "name": {
+      "type": "string",
+      "readOnly": true,
+      "description": "The site tag's name. Agreements on one tag share it; when exposed, customers see it as the licence name of its sites."
+    },
+    "label": {
+      "type": "string",
+      "readOnly": true,
+      "description": "The name followed by the licence configuration's name, which tells same-named agreements apart."
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "priority": {
+      "type": "integer",
+      "readOnly": true,
+      "description": "1 or more: the licence configuration overrides the sites' own licences. 0: the two are combined."
+    },
+    "expose": {
+      "type": "boolean",
+      "readOnly": true,
+      "description": "Whether customers see the name as the licence name of its sites."
+    },
+    "tag": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/AgreementTag"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "readOnly": true
+    },
+    "licence_configuration": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/LicenseConfiguration"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "readOnly": true,
+      "description": "null when the agreement only grants access, and the sites' own licences apply."
+    },
+    "site_count": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "source_count": {
+      "type": "integer",
+      "readOnly": true,
+      "description": "Single sources, on top of the sites."
+    },
+    "customers": {
+      "type": "integer",
+      "readOnly": true,
+      "description": "Customers with an active, non-staff user holding the agreement, of their own or inherited. Counted hourly."
+    },
+    "created": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    },
+    "last_change": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    },
+    "scoped_licence_configurations": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ScopedLicenseConfiguration"
+      },
+      "readOnly": true,
+      "description": "Configurations linked with a scope. Not evaluated anywhere yet."
+    }
+  },
+  "required": [
+    "created",
+    "customers",
+    "description",
+    "expose",
+    "id_agreement",
+    "label",
+    "last_change",
+    "licence_configuration",
+    "name",
+    "priority",
+    "scoped_licence_configurations",
+    "site_count",
+    "source_count",
+    "tag"
+  ],
+  "$defs": {
+    "AgreementAccessGroup": {
+      "type": "object",
+      "properties": {
+        "access_groups": {
+          "type": "integer",
+          "maximum": 2147483647,
+          "minimum": -2147483648
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 255
+        }
+      },
+      "required": [
+        "access_groups"
+      ]
+    },
+    "AgreementRef": {
+      "type": "object",
+      "description": "An agreement mentioned by another: on the same tag, or sharing a configuration.",
+      "properties": {
+        "id_agreement": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string",
+          "readOnly": true,
+          "description": "The agreement's site tag's name."
+        },
+        "label": {
+          "type": "string",
+          "readOnly": true,
+          "description": "The name followed by the licence configuration's name, which tells same-named agreements apart."
+        }
+      },
+      "required": [
+        "id_agreement",
+        "label",
+        "name"
+      ]
+    },
+    "AgreementTag": {
+      "type": "object",
+      "properties": {
+        "id_sitetag": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "access_group": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/AgreementAccessGroup"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "readOnly": true,
+          "description": "The legacy access group kept in step with this tag, if any. One tag has one at most."
+        },
+        "agreements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AgreementRef"
+          },
+          "readOnly": true,
+          "description": "Every agreement on this tag. Its sites and sources are theirs too."
+        }
+      },
+      "required": [
+        "access_group",
+        "agreements",
+        "id_sitetag",
+        "name"
+      ]
+    },
+    "LicenseConfiguration": {
+      "type": "object",
+      "properties": {
+        "id_license_configuration": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string",
+          "readOnly": true
+        },
+        "description": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "readOnly": true
+        },
+        "summarizer_param": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/SummarizerParam"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "readOnly": true
+        },
+        "max_archive_age": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "readOnly": true
+        },
+        "max_free_search_age": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "readOnly": true
+        },
+        "licence": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "licence_share": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "licence_mail": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "licence_report": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "licence_enforce": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "licence_enforce_share": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "licence_enforce_mail": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "licence_enforce_report": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "created": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "last_change": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "agreements": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AgreementRef"
+          },
+          "readOnly": true,
+          "description": "Every agreement using this configuration. Editing it changes them all."
+        }
+      },
+      "required": [
+        "agreements",
+        "created",
+        "description",
+        "id_license_configuration",
+        "last_change",
+        "licence",
+        "licence_enforce",
+        "licence_enforce_mail",
+        "licence_enforce_report",
+        "licence_enforce_share",
+        "licence_mail",
+        "licence_report",
+        "licence_share",
+        "max_archive_age",
+        "max_free_search_age",
+        "name",
+        "summarizer_param"
+      ]
+    },
+    "LicenseConfigurationRef": {
+      "type": "object",
+      "properties": {
+        "id_license_configuration": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 255
+        }
+      },
+      "required": [
+        "id_license_configuration"
+      ]
+    },
+    "ScopedLicenseConfiguration": {
+      "type": "object",
+      "properties": {
+        "scope": {
+          "type": "string",
+          "readOnly": true
+        },
+        "licence_configuration": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/LicenseConfigurationRef"
+            }
+          ],
+          "readOnly": true
+        }
+      },
+      "required": [
+        "licence_configuration",
+        "scope"
+      ]
+    },
+    "SummarizerParam": {
+      "type": "object",
+      "properties": {
+        "license": {
+          "$ref": "#/$defs/SummarizerParamField"
+        },
+        "report_license": {
+          "$ref": "#/$defs/SummarizerParamField"
+        },
+        "mail_license": {
+          "$ref": "#/$defs/SummarizerParamField"
+        },
+        "share_license": {
+          "$ref": "#/$defs/SummarizerParamField"
+        }
+      },
+      "required": [
+        "license",
+        "mail_license",
+        "report_license",
+        "share_license"
+      ]
+    },
+    "SummarizerParamField": {
+      "type": "object",
+      "description": "Serializer describing the SummarizerParamField",
+      "properties": {
+        "type": {
+          "type": "integer"
+        },
+        "number_of_sentences": {
+          "type": "integer"
+        },
+        "max_percentage_of_characters_to_show": {
+          "type": "integer"
+        },
+        "max_number_of_words_to_show": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "max_number_of_words_to_show",
+        "max_percentage_of_characters_to_show",
+        "number_of_sentences",
+        "type"
+      ]
+    }
+  }
+}

@@ -1,0 +1,93 @@
+openapi: 3.2.0
+info:
+  title: Opoint Alert Info API
+  version: 1.0.0
+  description: 'Operations tagged alert_info across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.opoint.com
+tags:
+- name: alert_info
+paths:
+  /alert_info/{id_maillog}/:
+    get:
+      operationId: alert_info_retrieve
+      parameters:
+      - in: path
+        name: id_maillog
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: json
+        schema:
+          type: boolean
+          default: true
+        description: Whether specified maillog has content in json format
+      tags:
+      - alert_info
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlertHistoryItem'
+          description: ''
+      summary: Alert info retrieve
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+components:
+  schemas:
+    AlertHistoryItem:
+      type: object
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlertHistoryContent'
+      required:
+      - content
+    AlertHistoryContent:
+      type: object
+      properties:
+        content:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+        id_list:
+          type: integer
+        name:
+          type: string
+      required:
+      - content
+      - id_list
+      - name
+  securitySchemes:
+    JWT:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "JWT"
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: PHPSESSID
+    ephmeralId:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Ephemeral"
+    staticToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
+x-refined-from:
+- opoint-openapi-original.yml
+- opoint-openapi.yml

@@ -1,0 +1,435 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/opoint/main/json-schema/opoint-alert-detail-schema.json",
+  "title": "AlertDetail",
+  "x-generated": "2026-10-07",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/opoint-openapi.yml#/components/schemas/AlertDetail",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "url": {
+      "type": "string",
+      "readOnly": true
+    },
+    "subject": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "active": {
+      "type": "integer"
+    },
+    "type": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/AlertType"
+        }
+      ],
+      "minimum": -2147483648,
+      "maximum": 2147483647
+    },
+    "locale": {
+      "type": "string"
+    },
+    "schedule": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/TimeSchedulerRepresentation"
+        }
+      ],
+      "readOnly": true
+    },
+    "profiles": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/AlertProfilesAndTags"
+      },
+      "readOnly": true
+    },
+    "baskets": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/AlertBasket"
+      },
+      "readOnly": true
+    },
+    "recipients": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/AlertRecipient"
+      },
+      "readOnly": true
+    },
+    "smsRecipients": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/AlertRecipient"
+      },
+      "readOnly": true
+    },
+    "pushRecipients": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/AlertRecipient"
+      },
+      "readOnly": true
+    },
+    "template": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/Template"
+        }
+      ],
+      "readOnly": true
+    },
+    "isCreatedFromApp": {
+      "type": "boolean",
+      "readOnly": true
+    },
+    "editable": {
+      "type": "boolean",
+      "readOnly": true
+    },
+    "translate": {
+      "type": "boolean",
+      "readOnly": true
+    },
+    "max_age": {
+      "type": "integer",
+      "maximum": 2147483647,
+      "minimum": -2147483648
+    },
+    "groupidentical": {
+      "type": "boolean",
+      "readOnly": true
+    },
+    "resendidentical": {
+      "type": "boolean",
+      "readOnly": true
+    },
+    "sender": {
+      "type": "string",
+      "readOnly": true
+    },
+    "is_org": {
+      "type": "boolean",
+      "readOnly": true
+    },
+    "lastSent": {
+      "type": "integer",
+      "readOnly": true
+    }
+  },
+  "required": [
+    "active",
+    "baskets",
+    "editable",
+    "groupidentical",
+    "id",
+    "isCreatedFromApp",
+    "is_org",
+    "lastSent",
+    "profiles",
+    "pushRecipients",
+    "recipients",
+    "resendidentical",
+    "schedule",
+    "sender",
+    "smsRecipients",
+    "template",
+    "translate",
+    "type",
+    "url"
+  ],
+  "$defs": {
+    "AlertBasket": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "id",
+        "name"
+      ]
+    },
+    "AlertProfile": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "readOnly": true,
+          "default": "profile"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "type",
+        "url"
+      ]
+    },
+    "AlertProfilesAndTags": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/AlertProfile"
+        },
+        {
+          "$ref": "#/$defs/AlertTag"
+        }
+      ]
+    },
+    "AlertRecipient": {
+      "type": "object",
+      "properties": {
+        "id_recipient": {
+          "type": "integer",
+          "maximum": 2147483647,
+          "minimum": -2147483648
+        },
+        "alert": {
+          "type": "integer",
+          "maximum": 2147483647,
+          "minimum": -2147483648
+        },
+        "type": {
+          "allOf": [
+            {
+              "$ref": "#/$defs/AlertRecipientTypeEnum"
+            }
+          ],
+          "minimum": -2147483648,
+          "maximum": 2147483647
+        },
+        "value": {
+          "type": "integer",
+          "maximum": 2147483647,
+          "minimum": -2147483648,
+          "default": 0
+        },
+        "literal": {
+          "type": "string",
+          "default": "",
+          "maxLength": 255
+        },
+        "filter": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "alert",
+        "filter",
+        "id_recipient",
+        "type"
+      ]
+    },
+    "AlertRecipientTypeEnum": {
+      "enum": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "type": "integer",
+      "description": "* `0` - Mail\n* `1` - Phone\n* `2` - Contact mail\n* `3` - Contact phone\n* `4` - Group mail\n* `5` - Group phone\n* `6` - User mail\n* `7` - User phone\n* `8` - Push iOS\n* `9` - Push Android"
+    },
+    "AlertTag": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "readOnly": true,
+          "default": "profile"
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "type",
+        "url"
+      ]
+    },
+    "AlertType": {
+      "enum": [
+        4,
+        6,
+        30,
+        7,
+        42,
+        50
+      ],
+      "type": "integer",
+      "description": "* `4` - Email\n* `6` - FTP\n* `30` - Stored search\n* `7` - Feed\n* `42` - Update search\n* `50` - Persistent"
+    },
+    "CountryEnum": {
+      "enum": [
+        "GB_EN",
+        "SE",
+        "NO",
+        "DK",
+        "FI",
+        "ET"
+      ],
+      "type": "string",
+      "description": "* `GB_EN` - GB_EN\n* `SE` - SE\n* `NO` - NO\n* `DK` - DK\n* `FI` - FI\n* `ET` - ET"
+    },
+    "Template": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "readOnly": true
+        },
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "integer"
+        },
+        "readonly": {
+          "type": "boolean",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "readonly",
+        "type",
+        "url"
+      ]
+    },
+    "TimeScheduleDayPeriod": {
+      "type": "object",
+      "properties": {
+        "monday": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TimeSchedulePeriod"
+          }
+        },
+        "tuesday": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TimeSchedulePeriod"
+          }
+        },
+        "wednesday": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TimeSchedulePeriod"
+          }
+        },
+        "thursday": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TimeSchedulePeriod"
+          }
+        },
+        "friday": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TimeSchedulePeriod"
+          }
+        },
+        "saturday": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TimeSchedulePeriod"
+          }
+        },
+        "sunday": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TimeSchedulePeriod"
+          }
+        },
+        "holidays": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TimeSchedulePeriod"
+          }
+        }
+      }
+    },
+    "TimeSchedulePeriod": {
+      "type": "object",
+      "properties": {
+        "start": {
+          "type": "integer"
+        },
+        "end": {
+          "type": "integer"
+        },
+        "interval": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "start"
+      ]
+    },
+    "TimeSchedulerRepresentation": {
+      "type": "object",
+      "properties": {
+        "timeConfiguration": {
+          "$ref": "#/$defs/TimeScheduleDayPeriod"
+        },
+        "timeZone": {
+          "type": "string"
+        },
+        "country": {
+          "$ref": "#/$defs/CountryEnum"
+        }
+      },
+      "required": [
+        "country",
+        "timeConfiguration",
+        "timeZone"
+      ]
+    }
+  }
+}

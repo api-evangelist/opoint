@@ -1,0 +1,35 @@
+generated: '2026-10-07'
+method: generated
+source: Packaged Agent Skills generated from openapi/opoint-openapi.yml (api.opoint.com/schema/) and the Opoint docs at api-docs.opoint.com;
+  every operationId verified verbatim in the contract.
+skills:
+- file: opoint-search-the-archive.md
+  name: Search the Opoint news archive
+  api: openapi/opoint-openapi.yml
+  operations:
+  - search_create
+- file: opoint-poll-a-stored-search-feed.md
+  name: Register a stored search and poll its feed
+  api: openapi/opoint-openapi.yml
+  operations:
+  - storedsearch_create
+  - storedsearch_list
+  - storedsearch_feed_retrieve
+- file: opoint-consume-safefeed.md
+  name: Consume a SafeFeed through the API
+  api: openapi/opoint-openapi.yml
+  operations:
+  - safefeeds_list
+  - safefeeds_retrieve
+  - safefeeds_feed_retrieve
+  - safefeeds_lastids_list
+  - safefeeds_stats_retrieve
+- file: opoint-set-up-an-alert.md
+  name: Create, preview and activate an alert
+  api: openapi/opoint-openapi.yml
+  operations:
+  - alerts_create
+  - alerts_next_preview_create
+  - alerts_activate_create
+  - alerts_send_now_create
+  - alerts_deactivate_create

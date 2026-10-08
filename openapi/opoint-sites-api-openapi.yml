@@ -1,0 +1,1954 @@
+openapi: 3.2.0
+info:
+  title: Opoint Sites API
+  version: 1.0.0
+  description: 'Operations tagged sites across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.opoint.com
+tags:
+- name: Sites
+paths:
+  /sites/:
+    get:
+      operationId: sites_list
+      description: This endpoint serves for returning all sites with their sources.
+      summary: List sites
+      parameters:
+      - in: query
+        name: country
+        schema:
+          type: string
+        description: Search sites by country
+      - in: query
+        name: cursor
+        schema:
+          type: string
+        description: Url of the next page
+      - in: query
+        name: id_agreement
+        schema:
+          type: integer
+        description: Agreement id (-1 means all Sites without an agreement)
+      - in: query
+        name: name
+        schema:
+          type: string
+        description: Search by site's name
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+        description: Page size
+      tags:
+      - Sites
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SitesListPaginated'
+          description: ''
+    servers:
+    - url: https://api.opoint.com
+  /sites/{id_site}:
+    get:
+      operationId: sites_retrieve
+      summary: Site detail
+      parameters:
+      - in: path
+        name: id_site
+        schema:
+          type: integer
+        description: A unique integer value identifying this site.
+        required: true
+      tags:
+      - Sites
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteDetail'
+              examples:
+                SiteDetailExample:
+                  value:
+                    id_site: 4214
+                    id_agreement: 123
+                    name: Site Name
+                    summarizer_param:
+                      license:
+                        type: 1
+                        number_of_sentences: 10
+                        max_percentage_of_characters_to_show: 30
+                        max_number_of_words_to_show: 123
+                      report_license:
+                        type: 1
+                        number_of_sentences: 10
+                        max_percentage_of_characters_to_show: 30
+                        max_number_of_words_to_show: 123
+                      mail_license:
+                        type: 1
+                        number_of_sentences: 10
+                        max_percentage_of_characters_to_show: 30
+                        max_number_of_words_to_show: 123
+                      share_license:
+                        type: 1
+                        number_of_sentences: 10
+                        max_percentage_of_characters_to_show: 30
+                        max_number_of_words_to_show: 123
+                    max_archive_age: 80000
+                    max_free_search_age: 80000
+                    sources:
+                    - id_source: 123
+                      name: Source Name
+                      licence: 64
+                      licence_share: 64
+                      licence_mail: 64
+                      licence_report: 64
+                      licence_enforce: 64
+                      licence_enforce_share: 64
+                      licence_enforce_mail: 64
+                      licence_enforce_report: 64
+                  summary: Site detail example
+          description: ''
+    patch:
+      operationId: sites_partial_update
+      description: This endpoint serves for updating site and source options in the Site view.
+      summary: Update site's and sources' settings
+      parameters:
+      - in: path
+        name: id_site
+        schema:
+          type: integer
+        description: A unique integer value identifying this site.
+        required: true
+      tags:
+      - Sites
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSiteAndSourceDetailRequest'
+            examples:
+              SiteAndSourcePATCHRequestExample:
+                value:
+                  site_options:
+                    summarizer_param:
+                      license:
+                        type: 1
+                        number_of_sentences: 10
+                        max_percentage_of_characters_to_show: 30
+                        max_number_of_words_to_show: 123
+                      report_license:
+                        type: 1
+                        number_of_sentences: 10
+                        max_percentage_of_characters_to_show: 30
+                        max_number_of_words_to_show: 123
+                      mail_license:
+                        type: 1
+                        number_of_sentences: 10
+                        max_percentage_of_characters_to_show: 30
+                        max_number_of_words_to_show: 123
+                      share_license:
+                        type: 1
+                        number_of_sentences: 10
+                        max_percentage_of_characters_to_show: 30
+                        max_number_of_words_to_show: 123
+                    max_archive_age: 80000
+                    max_free_search_age: 80000
+                  source_options:
+                    licence: 64
+                    licence_share: 64
+                    licence_mail: 64
+                    licence_report: 64
+                    licence_enforce: 64
+                    licence_enforce_share: 64
+                    licence_enforce_mail: 64
+                    licence_enforce_report: 64
+                summary: Site and source PATCH request example
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSiteAndSourceDetailRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSiteAndSourceDetailRequest'
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteAndSourceDetailResponse'
+              examples:
+                SiteAndSourceDetailPATCHResponseExample:
+                  value:
+                    site_options:
+                      id_site: 4214
+                      name: SiteName
+                      summarizer_param:
+                        license:
+                          type: 1
+                          number_of_sentences: 10
+                          max_percentage_of_characters_to_show: 30
+                          max_number_of_words_to_show: 123
+                        report_license:
+                          type: 1
+                          number_of_sentences: 10
+                          max_percentage_of_characters_to_show: 30
+                          max_number_of_words_to_show: 123
+                        mail_license:
+                          type: 1
+                          number_of_sentences: 10
+                          max_percentage_of_characters_to_show: 30
+                          max_number_of_words_to_show: 123
+                        share_license:
+                          type: 1
+                          number_of_sentences: 10
+                          max_percentage_of_characters_to_show: 30
+                          max_number_of_words_to_show: 123
+                      max_archive_age: 80000
+                      max_free_search_age: 80000
+                    source_options:
+                      licence: 64
+                      licence_share: 64
+                      licence_mail: 64
+                      licence_report: 64
+                      licence_enforce: 64
+                      licence_enforce_share: 64
+                      licence_enforce_mail: 64
+                      licence_enforce_report: 64
+                  summary: Site and source detail PATCH response example
+          description: Site's settings changed
+    servers:
+    - url: https://api.opoint.com
+  /sites/get-multiple:
+    post:
+      operationId: sites_get_multiple_create
+      description: Retrieve details of multiple sites given a list of site IDs.
+      tags:
+      - Sites
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdSiteList'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/IdSiteList'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/IdSiteList'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SiteList'
+          description: ''
+      summary: Sites get multiple create
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /sites/reports/:
+    post:
+      operationId: sites_reports_create
+      description: 'Runs a site search (same request shape as a normal search: searchterm/expressions + params) and returns the results as an .xlsx file, either synchronously or asynchronously.'
+      summary: Create a site search report
+      parameters:
+      - in: query
+        name: task
+        schema:
+          type: string
+          enum:
+          - async
+          - sync
+          default: sync
+        description: '`sync` (default) generates the report inline and returns it directly. `async` creates a SiteSearchReport row and a notification, generates the file via Celery, and it is later fetched through the generic report download endpoint.'
+      tags:
+      - Sites
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SiteSearchReport'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SiteSearchReport'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SiteSearchReport'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/*:
+              schema:
+                type: string
+                format: binary
+          description: XLSX file containing the site search report.
+        '202':
+          content:
+            application/*:
+              schema:
+                $ref: '#/components/schemas/SiteSearchReportAsyncResponse'
+          description: Report generation has been queued.
+    servers:
+    - url: https://api.opoint.com
+  /sites/requests/:
+    get:
+      operationId: sites_requests_list
+      description: Returns a paginated list of site requests.
+      summary: List site requests
+      parameters:
+      - in: query
+        name: billable
+        schema:
+          type: boolean
+      - in: query
+        name: comment
+        schema:
+          type: string
+      - in: query
+        name: conclusion
+        schema:
+          type: integer
+      - in: query
+        name: conclusion__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: country
+        schema:
+          type: string
+      - in: query
+        name: deadline_after
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: deadline_before
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: express
+        schema:
+          type: boolean
+      - in: query
+        name: id
+        schema:
+          type: integer
+      - in: query
+        name: id__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: id_customer
+        schema:
+          type: integer
+      - in: query
+        name: id_customer__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: id_site
+        schema:
+          type: integer
+      - in: query
+        name: id_site__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: id_site_max
+        schema:
+          type: integer
+      - in: query
+        name: id_site_min
+        schema:
+          type: integer
+      - in: query
+        name: limit
+        schema:
+          type: integer
+        description: Maximum number of site requests to return.
+      - in: query
+        name: mapping_project
+        schema:
+          type: string
+      - in: query
+        name: mapping_project__in
+        schema:
+          type: array
+          items:
+            type: string
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: offset
+        schema:
+          type: integer
+        description: Offset within the result set.
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - in: query
+        name: otb_active
+        schema:
+          type: boolean
+      - in: query
+        name: reference
+        schema:
+          type: string
+      - in: query
+        name: request_time_after
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: request_time_before
+        schema:
+          type: string
+          format: date-time
+      - in: query
+        name: search
+        schema:
+          type: string
+        description: Case-insensitive search across URL, site name, and comment.
+      - in: query
+        name: servicepack_tier
+        schema:
+          type: integer
+      - in: query
+        name: site_name
+        schema:
+          type: string
+      - in: query
+        name: site_url
+        schema:
+          type: string
+      - in: query
+        name: sitename
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: integer
+      - in: query
+        name: status__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: tagged_by
+        schema:
+          type: integer
+      - in: query
+        name: tagged_by__in
+        schema:
+          type: array
+          items:
+            type: integer
+        description: Multiple values may be separated by commas.
+        explode: false
+        style: form
+      - in: query
+        name: url
+        schema:
+          type: string
+      tags:
+      - Sites
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SiteRequest'
+          description: ''
+    post:
+      operationId: sites_requests_create
+      summary: Create a site request
+      tags:
+      - Sites
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SiteRequestCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SiteRequestCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SiteRequestCreate'
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteRequest'
+          description: ''
+    servers:
+    - url: https://api.opoint.com
+  /sites/requests/{id}/:
+    get:
+      operationId: sites_requests_retrieve
+      summary: Retrieve a site request
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this site request.
+        required: true
+      tags:
+      - Sites
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteRequest'
+          description: ''
+    put:
+      operationId: sites_requests_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this site request.
+        required: true
+      tags:
+      - Sites
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SiteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SiteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SiteRequest'
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteRequest'
+          description: ''
+      summary: Sites requests update
+      x-summary-source: derived
+    patch:
+      operationId: sites_requests_partial_update
+      summary: Update a site request
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this site request.
+        required: true
+      tags:
+      - Sites
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSiteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSiteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSiteRequest'
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteRequest'
+          description: ''
+    delete:
+      operationId: sites_requests_destroy
+      description: Deletes the site request and its linked NameMap row, if any.
+      summary: Delete a site request
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this site request.
+        required: true
+      tags:
+      - Sites
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+    servers:
+    - url: https://api.opoint.com
+  /sites/requests/{id}/create-site/:
+    post:
+      operationId: sites_requests_create_site_create
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this site request.
+        required: true
+      tags:
+      - Sites
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SiteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SiteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SiteRequest'
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteRequest'
+          description: ''
+      summary: Sites requests create site create
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /sites/requests/estimate-delivery:
+    get:
+      operationId: sites_requests_estimate_delivery_retrieve
+      description: Returns an ordered list of estimated deadlines for the provided number of requested sites.
+      summary: Estimate deadlines for new site requests
+      parameters:
+      - in: query
+        name: express
+        schema:
+          type: integer
+        description: Number of express requests.
+      - in: query
+        name: num
+        schema:
+          type: integer
+        description: Total number of requested sites.
+        required: true
+      tags:
+      - Sites
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: Array of ISO-8601 formatted dates representing the estimated deadlines.
+    servers:
+    - url: https://api.opoint.com
+  /sites/requests/from-namemap/{id_namemap}/:
+    post:
+      operationId: sites_requests_from_namemap_create
+      parameters:
+      - in: path
+        name: id_namemap
+        schema:
+          type: string
+          pattern: ^\d+$
+        required: true
+      tags:
+      - Sites
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SiteRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SiteRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SiteRequest'
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteRequest'
+          description: ''
+      summary: Sites requests from namemap create
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /sites/requests/mapping-projects/:
+    get:
+      operationId: sites_requests_mapping_projects_retrieve
+      tags:
+      - Sites
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteRequest'
+          description: ''
+      summary: Sites requests mapping projects retrieve
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /sites/requests/requesters/:
+    get:
+      operationId: sites_requests_requesters_retrieve
+      tags:
+      - Sites
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteRequest'
+          description: ''
+      summary: Sites requests requesters retrieve
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /sites/requests/site-activity:
+    get:
+      operationId: sites_requests_site_activity_retrieve
+      summary: Fetch active section counts for multiple sites
+      parameters:
+      - in: query
+        name: id
+        schema:
+          type: string
+        description: Comma separated list of `Site.id_site` values.
+        required: true
+      tags:
+      - Sites
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          description: Array of active section counts, aligned with the requested ids.
+    servers:
+    - url: https://api.opoint.com
+  /sites/search/:
+    get:
+      operationId: sites_search_retrieve
+      tags:
+      - Sites
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Site'
+          description: ''
+      summary: Sites search retrieve
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /sites/tags/:
+    get:
+      operationId: sites_tags_list
+      tags:
+      - Sites
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SiteTag'
+          description: ''
+      summary: Sites tags list
+      x-summary-source: derived
+    post:
+      operationId: sites_tags_create
+      tags:
+      - Sites
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SiteTag'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SiteTag'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SiteTag'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteTag'
+          description: ''
+      summary: Sites tags create
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /sites/tags/{id}/:
+    get:
+      operationId: sites_tags_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this site tag.
+        required: true
+      tags:
+      - Sites
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteTag'
+          description: ''
+      summary: Sites tags retrieve
+      x-summary-source: derived
+    put:
+      operationId: sites_tags_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this site tag.
+        required: true
+      tags:
+      - Sites
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SiteTag'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SiteTag'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SiteTag'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteTag'
+          description: ''
+      summary: Sites tags update
+      x-summary-source: derived
+    patch:
+      operationId: sites_tags_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this site tag.
+        required: true
+      tags:
+      - Sites
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedSiteTag'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedSiteTag'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedSiteTag'
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteTag'
+          description: ''
+      summary: Sites tags partial update
+      x-summary-source: derived
+    delete:
+      operationId: sites_tags_destroy
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this site tag.
+        required: true
+      tags:
+      - Sites
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+      summary: Sites tags destroy
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /sites/tags/{id}/{id_site}/:
+    post:
+      operationId: sites_tags_create_detail
+      description: Tags a site to the tag.
+      summary: Tag a single site
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: id_site
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Sites
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteBasket'
+          description: Site tagged
+        '404':
+          description: Site not found
+        '409':
+          description: Site is already tagged
+    delete:
+      operationId: sites_tags_destroy_detail
+      description: Untags a site to the tag.
+      summary: Untag a single site
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        required: true
+      - in: path
+        name: id_site
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Sites
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: Site untagged
+        '404':
+          description: Site not found
+    servers:
+    - url: https://api.opoint.com
+  /sites/tags/{id}/tag/:
+    post:
+      operationId: sites_tags_tag_create
+      summary: Tag multiple sites
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this site tag.
+        required: true
+      tags:
+      - Sites
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SiteIdList'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SiteIdList'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SiteIdList'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SiteBasket'
+          description: ''
+        '201':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SiteBasket'
+          description: ''
+    servers:
+    - url: https://api.opoint.com
+  /sites/tags/{id}/untag/:
+    post:
+      operationId: sites_tags_untag_create
+      summary: Untag multiple sites
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: integer
+        description: A unique integer value identifying this site tag.
+        required: true
+      tags:
+      - Sites
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SiteIdList'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/SiteIdList'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/SiteIdList'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteTagBulkUntagResult'
+          description: ''
+    servers:
+    - url: https://api.opoint.com
+components:
+  schemas:
+    SiteSearchReport:
+      type: object
+      description: 'Same request shape as a normal search (searchterm/expressions + params),
+
+        but always run in site-search mode and always over JSON.'
+      properties:
+        params:
+          type: object
+          additionalProperties: {}
+          writeOnly: true
+        searchterm:
+          type: string
+        expressions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProfileItem'
+        use_raw_query:
+          type: boolean
+        default_search:
+          type: string
+        title:
+          type: string
+          maxLength: 128
+      required:
+      - title
+    Site:
+      type: object
+      properties:
+        id_site:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+      required:
+      - id_site
+      - name
+    SearchLine:
+      type: object
+      properties:
+        searchterm:
+          type: string
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchLineFilter'
+    SiteList:
+      type: object
+      properties:
+        id_site:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        url:
+          type: string
+        country:
+          type: string
+          readOnly: true
+        languages:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        global_rank:
+          type: integer
+        active_sections:
+          type: integer
+        mediatype:
+          type: integer
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/Source'
+          readOnly: true
+      required:
+      - active_sections
+      - country
+      - global_rank
+      - id_site
+      - languages
+      - mediatype
+      - name
+      - sources
+      - url
+    SiteIdList:
+      type: object
+      properties:
+        sites:
+          type: array
+          items:
+            $ref: '#/components/schemas/SiteId'
+      required:
+      - sites
+    PatchedSiteRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        url:
+          type: string
+          maxLength: 255
+        sitename:
+          type: string
+          maxLength: 255
+        country:
+          type: string
+          maxLength: 2
+        comment:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+          maxLength: 255
+        importance:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+        status:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        conclusion:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+        customer:
+          allOf:
+          - $ref: '#/components/schemas/OpointCustomer'
+          readOnly: true
+        id_customer:
+          type:
+          - integer
+          - 'null'
+          writeOnly: true
+        mapping_project:
+          type:
+          - string
+          - 'null'
+        request_time:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        deadline:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        express:
+          type: boolean
+        billable:
+          type: boolean
+        id_site:
+          type:
+          - integer
+          - 'null'
+          writeOnly: true
+        site:
+          allOf:
+          - $ref: '#/components/schemas/Site'
+          readOnly: true
+        tagged_by:
+          allOf:
+          - $ref: '#/components/schemas/SimpleUser'
+          readOnly: true
+        tagged_by_id:
+          type:
+          - integer
+          - 'null'
+          writeOnly: true
+        tagged_time:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        completed_time:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        otb_active:
+          type: boolean
+        servicepack_tier:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+    SiteSearchReportAsyncResponse:
+      type: object
+      properties:
+        report_id:
+          type: integer
+      required:
+      - report_id
+    OpointCustomer:
+      type: object
+      properties:
+        id_customer:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          description: Customers name
+          maxLength: 255
+        partner:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+      required:
+      - id_customer
+      - name
+      - partner
+    SiteOptionsPatchRequest:
+      type: object
+      properties:
+        summarizer_param:
+          oneOf:
+          - $ref: '#/components/schemas/SummarizerParam'
+          - type: 'null'
+        max_archive_age:
+          type:
+          - integer
+          - 'null'
+        max_free_search_age:
+          type:
+          - integer
+          - 'null'
+    SiteRequestCreate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        url:
+          type: string
+          maxLength: 255
+        sitename:
+          type: string
+          maxLength: 255
+        country:
+          type: string
+          maxLength: 2
+        comment:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+          maxLength: 255
+        importance:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+        status:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        conclusion:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+        id_customer:
+          type:
+          - integer
+          - 'null'
+        mapping_project:
+          type:
+          - string
+          - 'null'
+        request_time:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        deadline:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        express:
+          type: boolean
+        billable:
+          type: boolean
+        id_site:
+          type:
+          - integer
+          - 'null'
+        tagged_by:
+          type:
+          - integer
+          - 'null'
+        otb_active:
+          type: boolean
+        servicepack_tier:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+      required:
+      - id
+    IdSiteList:
+      type: object
+      properties:
+        id_sites:
+          type: array
+          items:
+            type: integer
+          writeOnly: true
+      required:
+      - id_sites
+    SummarizerParamField:
+      type: object
+      description: Serializer describing the SummarizerParamField
+      properties:
+        type:
+          type: integer
+        number_of_sentences:
+          type: integer
+        max_percentage_of_characters_to_show:
+          type: integer
+        max_number_of_words_to_show:
+          type: integer
+      required:
+      - max_number_of_words_to_show
+      - max_percentage_of_characters_to_show
+      - number_of_sentences
+      - type
+    SiteBasket:
+      type: object
+      properties:
+        tag:
+          $ref: '#/components/schemas/SiteTag'
+        site:
+          $ref: '#/components/schemas/Site'
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - site
+      - tag
+    ProfileItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        searchline:
+          $ref: '#/components/schemas/SearchLine'
+        linemode:
+          $ref: '#/components/schemas/LinemodeEnum'
+        searchmode:
+          type: string
+          writeOnly: true
+      required:
+      - linemode
+      - searchline
+      - searchmode
+    LinemodeEnum:
+      enum:
+      - R
+      - O
+      - E
+      type: string
+      description: '* `R` - Required
+
+        * `O` - Optional
+
+        * `E` - Exclude'
+    Source:
+      type: object
+      properties:
+        id_source:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+      required:
+      - id_source
+      - name
+    SiteId:
+      type: object
+      properties:
+        id_site:
+          type: integer
+          minimum: 1
+      required:
+      - id_site
+    SourceOptionsPatchRequest:
+      type: object
+      properties:
+        licence:
+          type: integer
+        licence_share:
+          type: integer
+        licence_mail:
+          type: integer
+        licence_report:
+          type: integer
+        licence_enforce:
+          type: integer
+        licence_enforce_share:
+          type: integer
+        licence_enforce_mail:
+          type: integer
+        licence_enforce_report:
+          type: integer
+    PatchedSiteTag:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        color:
+          type: string
+          maxLength: 255
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedSiteAndSourceDetailRequest:
+      type: object
+      properties:
+        site_options:
+          $ref: '#/components/schemas/SiteOptionsPatchRequest'
+        source_options:
+          $ref: '#/components/schemas/SourceOptionsPatchRequest'
+    SourceDetail:
+      type: object
+      properties:
+        id_source:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        licence:
+          type: integer
+        licence_share:
+          type: integer
+        licence_mail:
+          type: integer
+        licence_report:
+          type: integer
+        licence_enforce:
+          type: integer
+        licence_enforce_share:
+          type: integer
+        licence_enforce_mail:
+          type: integer
+        licence_enforce_report:
+          type: integer
+      required:
+      - id_source
+      - licence
+      - licence_enforce
+      - licence_enforce_mail
+      - licence_enforce_report
+      - licence_enforce_share
+      - licence_mail
+      - licence_report
+      - licence_share
+      - name
+    SiteTagBulkUntagResult:
+      type: object
+      properties:
+        deleted:
+          type: integer
+      required:
+      - deleted
+    SimpleUser:
+      type: object
+      properties:
+        id_user:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+        customer:
+          type: string
+      required:
+      - customer
+      - id_user
+      - username
+    SummarizerParam:
+      type: object
+      properties:
+        license:
+          $ref: '#/components/schemas/SummarizerParamField'
+        report_license:
+          $ref: '#/components/schemas/SummarizerParamField'
+        mail_license:
+          $ref: '#/components/schemas/SummarizerParamField'
+        share_license:
+          $ref: '#/components/schemas/SummarizerParamField'
+      required:
+      - license
+      - mail_license
+      - report_license
+      - share_license
+    SiteTag:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        color:
+          type: string
+          maxLength: 255
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - color
+      - created_at
+      - id
+      - name
+      - updated_at
+    SiteAndSourceDetailResponse:
+      type: object
+      properties:
+        site_options:
+          $ref: '#/components/schemas/SiteDetail'
+        source_options:
+          $ref: '#/components/schemas/SourceDetail'
+      required:
+      - site_options
+      - source_options
+    SiteDetail:
+      type: object
+      properties:
+        id_site:
+          type: integer
+        id_agreement:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        summarizer_param:
+          oneOf:
+          - $ref: '#/components/schemas/SummarizerParam'
+          - type: 'null'
+        max_archive_age:
+          type:
+          - integer
+          - 'null'
+        max_free_search_age:
+          type:
+          - integer
+          - 'null'
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceDetail'
+          readOnly: true
+      required:
+      - id_agreement
+      - id_site
+      - max_archive_age
+      - max_free_search_age
+      - name
+      - sources
+      - summarizer_param
+    SiteRequest:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        url:
+          type: string
+          maxLength: 255
+        sitename:
+          type: string
+          maxLength: 255
+        country:
+          type: string
+          maxLength: 2
+        comment:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+          maxLength: 255
+        importance:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+        status:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        conclusion:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+        customer:
+          allOf:
+          - $ref: '#/components/schemas/OpointCustomer'
+          readOnly: true
+        id_customer:
+          type:
+          - integer
+          - 'null'
+          writeOnly: true
+        mapping_project:
+          type:
+          - string
+          - 'null'
+        request_time:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        deadline:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        express:
+          type: boolean
+        billable:
+          type: boolean
+        id_site:
+          type:
+          - integer
+          - 'null'
+          writeOnly: true
+        site:
+          allOf:
+          - $ref: '#/components/schemas/Site'
+          readOnly: true
+        tagged_by:
+          allOf:
+          - $ref: '#/components/schemas/SimpleUser'
+          readOnly: true
+        tagged_by_id:
+          type:
+          - integer
+          - 'null'
+          writeOnly: true
+        tagged_time:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        completed_time:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+        otb_active:
+          type: boolean
+        servicepack_tier:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+      required:
+      - completed_time
+      - customer
+      - id
+      - site
+      - tagged_by
+      - tagged_time
+    SitesListPaginated:
+      type: object
+      properties:
+        next:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SiteList'
+      required:
+      - next
+      - previous
+      - results
+    SearchLineFilter:
+      type: object
+      properties:
+        type:
+          type: string
+        id:
+          type: string
+      required:
+      - type
+  securitySchemes:
+    JWT:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "JWT"
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: PHPSESSID
+    ephmeralId:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Ephemeral"
+    staticToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
+x-refined-from:
+- opoint-openapi-original.yml
+- opoint-openapi.yml

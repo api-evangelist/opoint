@@ -1,0 +1,582 @@
+openapi: 3.2.0
+info:
+  title: Opoint Folders API
+  version: 1.0.0
+  description: 'Operations tagged folders across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.opoint.com
+tags:
+- name: Folders
+paths:
+  /folders/:
+    get:
+      operationId: folders_list
+      description: 'Lists available folders.
+
+
+        We have default folders of each type that should always be available to
+
+        everyone. They are not necessarily present in the db, so we fake the
+
+        existence in that case.'
+      summary: List available folders
+      tags:
+      - Folders
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/FolderView'
+          description: ''
+    post:
+      operationId: folders_create
+      summary: Create a Folder view
+      tags:
+      - Folders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FolderViewCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FolderViewCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FolderViewCreate'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FolderViewCreate'
+          description: ''
+    servers:
+    - url: https://api.opoint.com
+  /folders/{folder_id}/:
+    get:
+      operationId: folders_retrieve
+      summary: Retrieve a folder
+      parameters:
+      - in: path
+        name: folder_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Folders
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FolderViewDetail'
+          description: ''
+    put:
+      operationId: folders_update
+      summary: Update a folder
+      parameters:
+      - in: path
+        name: folder_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Folders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FolderViewDetail'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FolderViewDetail'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FolderViewDetail'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FolderViewDetail'
+          description: ''
+    patch:
+      operationId: folders_partial_update
+      summary: Partially update a folder
+      parameters:
+      - in: path
+        name: folder_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Folders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedFolderViewDetail'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedFolderViewDetail'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedFolderViewDetail'
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FolderViewDetail'
+          description: ''
+    delete:
+      operationId: folders_destroy
+      summary: Delete a folder
+      parameters:
+      - in: path
+        name: folder_id
+        schema:
+          type: integer
+        required: true
+      tags:
+      - Folders
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+    servers:
+    - url: https://api.opoint.com
+  /folders/shares/targets/search/:
+    get:
+      operationId: folders_shares_targets_search_list
+      description: 'Lists users that could be shared.
+
+
+        This endpoint is considered experimental, and will likely be replaced
+
+        in the longer term with a standardized /user/search/ accross all kinds
+
+        of sharing.'
+      parameters:
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+          maximum: 500
+          minimum: 1
+        description: Maximum number of results to return
+      - in: query
+        name: q
+        schema:
+          type: string
+        description: Search term
+        required: true
+      tags:
+      - Folders
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OpointUser'
+          description: ''
+      summary: Folders shares targets search list
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /folders/sort/:
+    post:
+      operationId: folders_sort_create
+      description: 'Sort folders.
+
+
+        Sort folders that we own or have access to.'
+      tags:
+      - Folders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FolderSortRequestBody'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/FolderSortRequestBody'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/FolderSortRequestBody'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '204':
+          description: No response body
+      summary: Folders sort create
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+components:
+  schemas:
+    FolderViewCreateTypeEnum:
+      enum:
+      - 0
+      - 1
+      - 2
+      - 6
+      type: integer
+      description: '* `0` - Profile
+
+        * `1` - Tag
+
+        * `2` - Sentiment tag
+
+        * `6` - Saved statistic'
+    FolderShareConfigFilter:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/FolderShareConfigFilterTypeEnum'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/FolderShareConfigFilterId'
+      required:
+      - type
+    PatchedFolderViewDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 256
+        description:
+          type: string
+          default: ''
+          maxLength: 256
+        icon:
+          type: string
+          default: ''
+          maxLength: 256
+        type:
+          type: integer
+          readOnly: true
+        category:
+          type: integer
+        owner:
+          allOf:
+          - $ref: '#/components/schemas/Owner'
+          readOnly: true
+        traits:
+          type: integer
+          default: 0
+        access:
+          allOf:
+          - $ref: '#/components/schemas/FolderShareConfigAccess'
+          readOnly: true
+        shares:
+          type: array
+          items:
+            $ref: '#/components/schemas/FolderShareConfig'
+    OpointUser:
+      type: object
+      properties:
+        id_user:
+          type: integer
+          readOnly: true
+        external_id:
+          type: string
+          description: Id from external Identity Provider
+          maxLength: 255
+        username:
+          type: string
+          maxLength: 255
+        is_active:
+          type: boolean
+          description: Designates whether this user should be treated as active. Unselect this instead of deleting accounts.
+        owner:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        customer:
+          type: string
+        user_type:
+          allOf:
+          - $ref: '#/components/schemas/UserTypeField'
+          default:
+            value: 0
+            name: Standard
+        display_name:
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+      required:
+      - customer
+      - id_user
+      - username
+    UserTypeField:
+      type: object
+      properties:
+        value:
+          type: integer
+        name:
+          type: string
+      required:
+      - name
+      - value
+    FolderView:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 256
+        description:
+          type: string
+          default: ''
+          maxLength: 256
+        icon:
+          type: string
+          default: ''
+          maxLength: 256
+        type:
+          type: integer
+          readOnly: true
+        category:
+          type: integer
+        owner:
+          allOf:
+          - $ref: '#/components/schemas/Owner'
+          readOnly: true
+        traits:
+          type: integer
+          default: 0
+        access:
+          allOf:
+          - $ref: '#/components/schemas/FolderShareConfigAccess'
+          readOnly: true
+      required:
+      - access
+      - id
+      - name
+      - owner
+      - type
+    FolderViewDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 256
+        description:
+          type: string
+          default: ''
+          maxLength: 256
+        icon:
+          type: string
+          default: ''
+          maxLength: 256
+        type:
+          type: integer
+          readOnly: true
+        category:
+          type: integer
+        owner:
+          allOf:
+          - $ref: '#/components/schemas/Owner'
+          readOnly: true
+        traits:
+          type: integer
+          default: 0
+        access:
+          allOf:
+          - $ref: '#/components/schemas/FolderShareConfigAccess'
+          readOnly: true
+        shares:
+          type: array
+          items:
+            $ref: '#/components/schemas/FolderShareConfig'
+      required:
+      - access
+      - id
+      - name
+      - owner
+      - type
+    FolderSortRequestBody:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Id of folder to change sort position of.
+        position:
+          type: integer
+          description: Desired position of folder, 0-based.
+      required:
+      - id
+      - position
+    FolderViewCreate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 256
+        description:
+          type: string
+          default: ''
+          maxLength: 256
+        icon:
+          type: string
+          maxLength: 256
+        type:
+          $ref: '#/components/schemas/FolderViewCreateTypeEnum'
+        category:
+          type: integer
+        owner:
+          allOf:
+          - $ref: '#/components/schemas/Owner'
+          readOnly: true
+        traits:
+          type: integer
+          default: 0
+        shares:
+          type: array
+          items:
+            $ref: '#/components/schemas/FolderShareConfig'
+      required:
+      - id
+      - name
+      - owner
+      - type
+    FolderShareConfigAccess:
+      type: object
+      properties:
+        edit_folder:
+          type: boolean
+          default: false
+        delete_folder:
+          type: boolean
+          default: false
+        tag_articles:
+          type: boolean
+          default: false
+        add_items:
+          type: boolean
+          default: false
+          description: Allows creating new items (e.g. profiles) directly in the folder, or moving own items into it.
+    Owner:
+      type: object
+      properties:
+        id_user:
+          type: integer
+        username:
+          type: string
+          readOnly: true
+      required:
+      - id_user
+      - username
+    FolderShareConfig:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/Owner'
+        inherit:
+          type: boolean
+        filter:
+          $ref: '#/components/schemas/FolderShareConfigFilter'
+        access:
+          $ref: '#/components/schemas/FolderShareConfigAccess'
+      required:
+      - access
+      - inherit
+      - user
+    FolderShareConfigFilterTypeEnum:
+      enum:
+      - none
+      - only
+      type: string
+      description: '* `none` - none
+
+        * `only` - only'
+    FolderShareConfigFilterId:
+      type: object
+      properties:
+        id:
+          type: integer
+      required:
+      - id
+  securitySchemes:
+    JWT:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "JWT"
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: PHPSESSID
+    ephmeralId:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Ephemeral"
+    staticToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
+x-refined-from:
+- opoint-openapi-original.yml
+- opoint-openapi.yml

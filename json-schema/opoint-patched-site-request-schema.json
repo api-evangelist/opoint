@@ -1,0 +1,218 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/opoint/main/json-schema/opoint-patched-site-request-schema.json",
+  "title": "PatchedSiteRequest",
+  "x-generated": "2026-10-07",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/opoint-openapi.yml#/components/schemas/PatchedSiteRequest",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "url": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "sitename": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "country": {
+      "type": "string",
+      "maxLength": 2
+    },
+    "comment": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "reference": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "importance": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "maximum": 2147483647,
+      "minimum": -2147483648
+    },
+    "status": {
+      "type": "integer",
+      "maximum": 2147483647,
+      "minimum": -2147483648
+    },
+    "conclusion": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "maximum": 2147483647,
+      "minimum": -2147483648
+    },
+    "customer": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/OpointCustomer"
+        }
+      ],
+      "readOnly": true
+    },
+    "id_customer": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "writeOnly": true
+    },
+    "mapping_project": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "request_time": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "deadline": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time"
+    },
+    "express": {
+      "type": "boolean"
+    },
+    "billable": {
+      "type": "boolean"
+    },
+    "id_site": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "writeOnly": true
+    },
+    "site": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/Site"
+        }
+      ],
+      "readOnly": true
+    },
+    "tagged_by": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/SimpleUser"
+        }
+      ],
+      "readOnly": true
+    },
+    "tagged_by_id": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "writeOnly": true
+    },
+    "tagged_time": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "readOnly": true
+    },
+    "completed_time": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date-time",
+      "readOnly": true
+    },
+    "otb_active": {
+      "type": "boolean"
+    },
+    "servicepack_tier": {
+      "type": "integer",
+      "maximum": 2147483647,
+      "minimum": -2147483648
+    }
+  },
+  "$defs": {
+    "OpointCustomer": {
+      "type": "object",
+      "properties": {
+        "id_customer": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string",
+          "description": "Customers name",
+          "maxLength": 255
+        },
+        "partner": {
+          "type": "integer",
+          "maximum": 2147483647,
+          "minimum": -2147483648
+        }
+      },
+      "required": [
+        "id_customer",
+        "name",
+        "partner"
+      ]
+    },
+    "SimpleUser": {
+      "type": "object",
+      "properties": {
+        "id_user": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "username": {
+          "type": "string",
+          "readOnly": true
+        },
+        "customer": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "customer",
+        "id_user",
+        "username"
+      ]
+    },
+    "Site": {
+      "type": "object",
+      "properties": {
+        "id_site": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "id_site",
+        "name"
+      ]
+    }
+  }
+}

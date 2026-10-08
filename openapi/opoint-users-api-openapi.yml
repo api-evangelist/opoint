@@ -1,0 +1,490 @@
+openapi: 3.2.0
+info:
+  title: Opoint Users API
+  version: 1.0.0
+  description: 'Operations tagged users across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
+servers:
+- url: https://api.opoint.com
+tags:
+- name: Users
+paths:
+  /users/currency/:
+    get:
+      operationId: users_currency_list
+      parameters:
+      - in: query
+        name: n
+        schema:
+          type: integer
+          default: 8
+        description: Number of return entries
+      - in: query
+        name: q
+        schema:
+          type: string
+        description: Search query
+      tags:
+      - Users
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Currency'
+          description: ''
+      summary: Users currency list
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /users/impersonation_targets/:
+    get:
+      operationId: users_impersonation_targets_list
+      description: 'Search impersonation targets.
+
+
+        The search syntax is simple, any spaces in the search expression, that are
+
+        not at the start or the end are counted as AND operators, while the terms
+
+        has to be a substring:
+
+
+        tech admin
+
+
+        Translates to something like
+
+
+        substring(text, tech) AND substring(text, admin)
+
+
+        By default, the search is run against the username, email and customer
+
+        names concatenated.'
+      summary: Search impersonation targets
+      parameters:
+      - in: query
+        name: exclude_self
+        schema:
+          type: boolean
+          default: false
+        description: Exclude self targets from results.
+      - in: query
+        name: last_id_user
+        schema:
+          type: integer
+          minimum: 0
+        description: Only return results with user ids above it. Used for pagination.
+      - in: query
+        name: only_self
+        schema:
+          type: boolean
+          default: false
+        description: Only return results that are self targets.
+      - in: query
+        name: page_size
+        schema:
+          type: integer
+          minimum: 1
+          default: 20
+        description: Number of results to return
+      - in: query
+        name: search
+        schema:
+          type: string
+          minLength: 1
+        description: Filter results based on search term.
+      tags:
+      - Users
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ImpersonationTarget'
+          description: ''
+    servers:
+    - url: https://api.opoint.com
+  /users/management/{id_user}/:
+    get:
+      operationId: users_management_retrieve
+      parameters:
+      - in: path
+        name: id_user
+        schema:
+          type: integer
+        description: A unique integer value identifying this opoint user.
+        required: true
+      tags:
+      - Users
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DanishUser'
+          description: ''
+      summary: Users management retrieve
+      x-summary-source: derived
+    patch:
+      operationId: users_management_partial_update
+      parameters:
+      - in: path
+        name: id_user
+        schema:
+          type: integer
+        description: A unique integer value identifying this opoint user.
+        required: true
+      tags:
+      - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedDanishUser'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedDanishUser'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedDanishUser'
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DanishUser'
+          description: ''
+      summary: Users management partial update
+      x-summary-source: derived
+    servers:
+    - url: https://api.opoint.com
+  /users/management/{id_user}/alerts/:
+    get:
+      operationId: users_management_alerts_list
+      summary: Get alert subscription status for user
+      parameters:
+      - in: path
+        name: id_user
+        schema:
+          type: integer
+        description: A unique integer value identifying this opoint user.
+        required: true
+      tags:
+      - Users
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AlertSubscription'
+          description: ''
+    post:
+      operationId: users_management_alerts_create
+      summary: Subscribe and unsubscribe user from alerts
+      parameters:
+      - in: path
+        name: id_user
+        schema:
+          type: integer
+        description: A unique integer value identifying this opoint user.
+        required: true
+      tags:
+      - Users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/AlertSubscriptionDetail'
+          application/x-www-form-urlencoded:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/AlertSubscriptionDetail'
+          multipart/form-data:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/AlertSubscriptionDetail'
+        required: true
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '201':
+          description: Successfully updated subscriptions
+        '404':
+          description: One of the provided alert ids is invalid
+    servers:
+    - url: https://api.opoint.com
+  /users/search/:
+    get:
+      operationId: users_search_list
+      description: Search for users using either a user id, salesforce id, or match some query string to part of a username, organisation name, or email. Data should be provided in the query params.
+      summary: Search for users
+      parameters:
+      - in: query
+        name: q
+        schema:
+          type: string
+        description: Search query
+      tags:
+      - Users
+      security:
+      - JWT: []
+      - ephmeralId: []
+      - staticToken: []
+      - cookieAuth: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OpointUser'
+          description: ''
+        '403':
+          description: Required access not set
+        '500':
+          description: Access is incorrectly configured
+    servers:
+    - url: https://api.opoint.com
+components:
+  schemas:
+    Currency:
+      type: object
+      properties:
+        currency:
+          type: string
+          maxLength: 3
+        name:
+          type: string
+          maxLength: 255
+      required:
+      - currency
+      - name
+    OpointUser:
+      type: object
+      properties:
+        id_user:
+          type: integer
+          readOnly: true
+        external_id:
+          type: string
+          description: Id from external Identity Provider
+          maxLength: 255
+        username:
+          type: string
+          maxLength: 255
+        is_active:
+          type: boolean
+          description: Designates whether this user should be treated as active. Unselect this instead of deleting accounts.
+        owner:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        customer:
+          type: string
+        user_type:
+          allOf:
+          - $ref: '#/components/schemas/UserTypeField'
+          default:
+            value: 0
+            name: Standard
+        display_name:
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+      required:
+      - customer
+      - id_user
+      - username
+    ImpersonationTarget:
+      type: object
+      properties:
+        id_user:
+          type: integer
+          description: User id of impersonation target.
+        username:
+          type: string
+          description: Username of impersonation target.
+        self:
+          type: boolean
+          description: If the target is of self type, meaning it represents the logged in user in another context.
+        customer:
+          $ref: '#/components/schemas/OpointCustomer'
+      required:
+      - customer
+      - id_user
+      - self
+      - username
+    UserTypeField:
+      type: object
+      properties:
+        value:
+          type: integer
+        name:
+          type: string
+      required:
+      - name
+      - value
+    AlertSubscription:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        is_subscribed:
+          type: boolean
+      required:
+      - id
+      - is_subscribed
+      - name
+    DanishUser:
+      type: object
+      properties:
+        id_user:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+        email:
+          type: string
+          readOnly: true
+        is_active:
+          type: boolean
+          description: Designates whether this user should be treated as active. Unselect this instead of deleting accounts.
+        owner:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        last_login:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+      required:
+      - email
+      - id_user
+      - last_login
+      - username
+    OpointCustomer:
+      type: object
+      properties:
+        id_customer:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          description: Customers name
+          maxLength: 255
+        partner:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+      required:
+      - id_customer
+      - name
+      - partner
+    PatchedDanishUser:
+      type: object
+      properties:
+        id_user:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+        email:
+          type: string
+          readOnly: true
+        is_active:
+          type: boolean
+          description: Designates whether this user should be treated as active. Unselect this instead of deleting accounts.
+        owner:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        last_login:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+    AlertSubscriptionDetail:
+      type: object
+      properties:
+        is_mail:
+          type: boolean
+          default: true
+        alert_id:
+          type: integer
+          minimum: 1
+        subscribe:
+          type: boolean
+      required:
+      - alert_id
+      - subscribe
+  securitySchemes:
+    JWT:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "JWT"
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: PHPSESSID
+    ephmeralId:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Ephemeral"
+    staticToken:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Token-based authentication with required prefix "Token"
+x-refined-from:
+- opoint-openapi-original.yml
+- opoint-openapi.yml

@@ -1,0 +1,352 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/api-evangelist/opoint/main/json-schema/opoint-profile-detail-schema.json",
+  "title": "ProfileDetail",
+  "x-generated": "2026-10-07",
+  "x-method": "derived",
+  "x-generator": "derive-json-schema.py",
+  "x-source": "openapi/opoint-openapi.yml#/components/schemas/ProfileDetail",
+  "type": "object",
+  "properties": {
+    "url": {
+      "type": "string",
+      "format": "uri",
+      "readOnly": true
+    },
+    "id": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "name": {
+      "type": "string",
+      "maxLength": 255
+    },
+    "parent": {
+      "type": "integer"
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ProfileItem"
+      }
+    },
+    "statistics": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "blessed": {
+      "type": "boolean"
+    },
+    "sm_rate": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/MifluzRate"
+      }
+    },
+    "sm_phrases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": {}
+      },
+      "readOnly": true
+    },
+    "stored_search": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/StoredSearchField"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "folder": {
+      "type": "integer"
+    },
+    "category": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "type": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "owner": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "make_persistent": {
+      "type": [
+        "boolean",
+        "null"
+      ]
+    },
+    "persistent_profile": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "persistent_backfill": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "deprecated. see backfill_start"
+    },
+    "persistent_backfill_start": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "persistent_backfill_end": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "oldest_article": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "ifm_profile": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "readOnly": true
+    },
+    "est_search_impact": {
+      "type": "integer",
+      "readOnly": true
+    },
+    "persistent_grouping": {
+      "type": "boolean",
+      "default": false
+    },
+    "persistent_backfill_grouping": {
+      "type": "boolean",
+      "default": false
+    },
+    "trend_interval": {
+      "type": "integer",
+      "maximum": 1209600,
+      "minimum": -1,
+      "description": "Time interval for trends. -1 for no trends, 0 for global time interval, or up to 2 weeks back in time."
+    },
+    "trend_preset": {
+      "allOf": [
+        {
+          "$ref": "#/$defs/TrendPreset"
+        }
+      ],
+      "readOnly": true
+    },
+    "trend_preset_id": {
+      "type": "integer",
+      "writeOnly": true
+    },
+    "saved_by": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/MinimalUser"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "readOnly": true
+    },
+    "has_draft": {
+      "type": "boolean",
+      "readOnly": true
+    },
+    "last_set": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    },
+    "revisions": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "readOnly": true
+    }
+  },
+  "required": [
+    "category",
+    "est_search_impact",
+    "has_draft",
+    "id",
+    "ifm_profile",
+    "last_set",
+    "name",
+    "oldest_article",
+    "owner",
+    "persistent_profile",
+    "revisions",
+    "saved_by",
+    "sm_phrases",
+    "trend_preset",
+    "type",
+    "url"
+  ],
+  "$defs": {
+    "LinemodeEnum": {
+      "enum": [
+        "R",
+        "O",
+        "E"
+      ],
+      "type": "string",
+      "description": "* `R` - Required\n* `O` - Optional\n* `E` - Exclude"
+    },
+    "MifluzRate": {
+      "type": "object",
+      "properties": {
+        "feed_id": {
+          "type": "string",
+          "maxLength": 3
+        },
+        "feed_name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "readOnly": true
+        },
+        "maxrate": {
+          "type": "integer",
+          "maximum": 2147483647,
+          "minimum": -2147483648
+        },
+        "actual_rate": {
+          "type": "number",
+          "format": "double",
+          "readOnly": true
+        },
+        "rate_used": {
+          "type": "number",
+          "format": "double",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "actual_rate",
+        "feed_id",
+        "feed_name",
+        "maxrate",
+        "rate_used"
+      ]
+    },
+    "MinimalUser": {
+      "type": "object",
+      "properties": {
+        "id_user": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "username": {
+          "type": "string",
+          "readOnly": true
+        }
+      },
+      "required": [
+        "id_user",
+        "username"
+      ]
+    },
+    "ProfileItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "searchline": {
+          "$ref": "#/$defs/SearchLine"
+        },
+        "linemode": {
+          "$ref": "#/$defs/LinemodeEnum"
+        },
+        "searchmode": {
+          "type": "string",
+          "writeOnly": true
+        }
+      },
+      "required": [
+        "linemode",
+        "searchline",
+        "searchmode"
+      ]
+    },
+    "SearchLine": {
+      "type": "object",
+      "properties": {
+        "searchterm": {
+          "type": "string"
+        },
+        "filters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SearchLineFilter"
+          }
+        }
+      }
+    },
+    "SearchLineFilter": {
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "id": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "type"
+      ]
+    },
+    "StoredSearchField": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer"
+        },
+        "art_limit": {
+          "type": "integer"
+        },
+        "active": {
+          "type": "integer"
+        }
+      },
+      "required": [
+        "active",
+        "art_limit",
+        "id"
+      ]
+    },
+    "TrendPreset": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "readOnly": true
+        },
+        "name": {
+          "type": "string",
+          "maxLength": 255
+        },
+        "params": {}
+      },
+      "required": [
+        "id",
+        "name",
+        "params"
+      ]
+    }
+  }
+}
