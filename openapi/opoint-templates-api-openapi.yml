@@ -2,7 +2,6 @@ openapi: 3.2.0
 info:
   title: Opoint Templates API
   version: 1.0.0
-  description: 'Operations tagged templates across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.opoint.com
 tags:
@@ -59,8 +58,6 @@ paths:
           description: ''
       summary: Templates create
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /templates/{id}/:
     get:
       operationId: templates_retrieve
@@ -145,8 +142,6 @@ paths:
           description: No response body
       summary: Templates destroy
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /templates/{id}/preview/:
     post:
       operationId: templates_preview_create
@@ -185,8 +180,6 @@ paths:
           description: ''
       summary: Templates preview create
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
 components:
   schemas:
     Template:
@@ -232,6 +225,3 @@ components:
       in: header
       name: Authorization
       description: Token-based authentication with required prefix "Token"
-x-refined-from:
-- opoint-openapi-original.yml
-- opoint-openapi.yml

@@ -2,7 +2,6 @@ openapi: 3.2.0
 info:
   title: Opoint Auth API
   version: 1.0.0
-  description: 'Operations tagged auth across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.opoint.com
 tags:
@@ -53,8 +52,6 @@ paths:
           description: ''
       summary: Auth get token infomedia create
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /auth/invite/remaining-invites/:
     get:
       operationId: auth_invite_remaining_invites_retrieve
@@ -82,8 +79,6 @@ paths:
           description: User is not authorized
       summary: Auth invite remaining invites retrieve
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /auth/invite/remaining-invites-new/:
     get:
       operationId: auth_invite_remaining_invites_new_retrieve
@@ -116,8 +111,6 @@ paths:
           description: User is not authorized
       summary: Auth invite remaining invites new retrieve
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /auth/invite/resend-email/:
     post:
       operationId: auth_invite_resend_email_create
@@ -157,8 +150,6 @@ paths:
           description: Invitation has already been accepted
       summary: Auth invite resend email create
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /auth/invite/search/:
     get:
       operationId: auth_invite_search_retrieve
@@ -210,128 +201,8 @@ paths:
           description: ''
       summary: Auth invite search retrieve
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
 components:
   schemas:
-    InvitationSearch:
-      type: object
-      properties:
-        id:
-          oneOf:
-          - type: integer
-          - type: string
-          - type: 'null'
-          readOnly: true
-        name:
-          type: string
-        is_user:
-          type: boolean
-        email:
-          type: string
-        is_active:
-          type: boolean
-        role:
-          type: string
-        last_login:
-          type: string
-          format: date-time
-      required:
-      - id
-      - is_user
-      - name
-    Remaining_invites_response_old:
-      type: object
-      properties:
-        remaining_invites:
-          type: integer
-      required:
-      - remaining_invites
-    Remaining_invites_response:
-      type: object
-      properties:
-        target_id:
-          type: integer
-        remaining_invites:
-          type: integer
-      required:
-      - remaining_invites
-      - target_id
-    IFMLogin:
-      type: object
-      properties:
-        user:
-          $ref: '#/components/schemas/IFMLoginUser'
-        organization:
-          $ref: '#/components/schemas/IFMLoginOrganization'
-        rights:
-          $ref: '#/components/schemas/IFMLoginRights'
-        remember_me:
-          type: boolean
-          default: true
-      required:
-      - organization
-      - rights
-      - user
-    IFMLoginUser:
-      type: object
-      properties:
-        uuid:
-          type: string
-          maxLength: 36
-          minLength: 36
-        login:
-          type: string
-          format: email
-        name:
-          type: string
-        create_date:
-          type: integer
-        archive_length:
-          type: integer
-        profiles:
-          type: array
-          items:
-            type: integer
-            minimum: 0
-      required:
-      - archive_length
-      - create_date
-      - login
-      - profiles
-      - uuid
-    Resend_email_response:
-      type: object
-      properties:
-        email_delivered:
-          type: boolean
-      required:
-      - email_delivered
-    UserInvitationSearch:
-      type: object
-      properties:
-        count:
-          type: integer
-        next:
-          type: string
-        previous:
-          type: string
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/InvitationSearch'
-      required:
-      - count
-      - next
-      - previous
-      - results
-    Response:
-      type: object
-      properties:
-        token:
-          type: string
-      required:
-      - token
     IFMLoginRights:
       type: object
       properties:
@@ -373,6 +244,124 @@ components:
       - debitor_id
       - name
       - uuid
+    InvitationSearch:
+      type: object
+      properties:
+        id:
+          oneOf:
+          - type: integer
+          - type: string
+          - type: 'null'
+          readOnly: true
+        name:
+          type: string
+        is_user:
+          type: boolean
+        email:
+          type: string
+        is_active:
+          type: boolean
+        role:
+          type: string
+        last_login:
+          type: string
+          format: date-time
+      required:
+      - id
+      - is_user
+      - name
+    UserInvitationSearch:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type: string
+        previous:
+          type: string
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/InvitationSearch'
+      required:
+      - count
+      - next
+      - previous
+      - results
+    Remaining_invites_response:
+      type: object
+      properties:
+        target_id:
+          type: integer
+        remaining_invites:
+          type: integer
+      required:
+      - remaining_invites
+      - target_id
+    IFMLogin:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/IFMLoginUser'
+        organization:
+          $ref: '#/components/schemas/IFMLoginOrganization'
+        rights:
+          $ref: '#/components/schemas/IFMLoginRights'
+        remember_me:
+          type: boolean
+          default: true
+      required:
+      - organization
+      - rights
+      - user
+    Remaining_invites_response_old:
+      type: object
+      properties:
+        remaining_invites:
+          type: integer
+      required:
+      - remaining_invites
+    Resend_email_response:
+      type: object
+      properties:
+        email_delivered:
+          type: boolean
+      required:
+      - email_delivered
+    IFMLoginUser:
+      type: object
+      properties:
+        uuid:
+          type: string
+          maxLength: 36
+          minLength: 36
+        login:
+          type: string
+          format: email
+        name:
+          type: string
+        create_date:
+          type: integer
+        archive_length:
+          type: integer
+        profiles:
+          type: array
+          items:
+            type: integer
+            minimum: 0
+      required:
+      - archive_length
+      - create_date
+      - login
+      - profiles
+      - uuid
+    Response:
+      type: object
+      properties:
+        token:
+          type: string
+      required:
+      - token
   securitySchemes:
     JWT:
       type: apiKey
@@ -393,6 +382,3 @@ components:
       in: header
       name: Authorization
       description: Token-based authentication with required prefix "Token"
-x-refined-from:
-- opoint-openapi-original.yml
-- opoint-openapi.yml

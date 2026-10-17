@@ -2,7 +2,6 @@ openapi: 3.2.0
 info:
   title: Opoint Agreements API
   version: 1.0.0
-  description: 'Operations tagged agreements across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.opoint.com
 tags:
@@ -35,8 +34,6 @@ paths:
                 items:
                   $ref: '#/components/schemas/AgreementList'
           description: ''
-    servers:
-    - url: https://api.opoint.com
   /agreements/{id}:
     get:
       operationId: agreements_retrieve
@@ -62,8 +59,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Agreement'
           description: ''
-    servers:
-    - url: https://api.opoint.com
   /agreements/{id}/sites:
     get:
       operationId: agreements_sites_list
@@ -96,8 +91,6 @@ paths:
                 items:
                   $ref: '#/components/schemas/AgreementSite'
           description: ''
-    servers:
-    - url: https://api.opoint.com
   /agreements/{id}/sources:
     get:
       operationId: agreements_sources_list
@@ -130,10 +123,94 @@ paths:
                 items:
                   $ref: '#/components/schemas/AgreementSource'
           description: ''
-    servers:
-    - url: https://api.opoint.com
 components:
   schemas:
+    AgreementTagRef:
+      type: object
+      properties:
+        id_sitetag:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        access_group:
+          oneOf:
+          - $ref: '#/components/schemas/AgreementAccessGroup'
+          - type: 'null'
+          readOnly: true
+          description: The legacy access group kept in step with this tag, if any. One tag has one at most.
+      required:
+      - access_group
+      - id_sitetag
+      - name
+    AgreementTag:
+      type: object
+      properties:
+        id_sitetag:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        access_group:
+          oneOf:
+          - $ref: '#/components/schemas/AgreementAccessGroup'
+          - type: 'null'
+          readOnly: true
+          description: The legacy access group kept in step with this tag, if any. One tag has one at most.
+        agreements:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgreementRef'
+          readOnly: true
+          description: Every agreement on this tag. Its sites and sources are theirs too.
+      required:
+      - access_group
+      - agreements
+      - id_sitetag
+      - name
+    AgreementAccessGroup:
+      type: object
+      properties:
+        access_groups:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        name:
+          type: string
+          maxLength: 255
+      required:
+      - access_groups
+    AgreementSite:
+      type: object
+      properties:
+        id_site:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        url:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+      required:
+      - id_site
+      - name
+      - url
+    LicenseConfigurationRef:
+      type: object
+      properties:
+        id_license_configuration:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+      required:
+      - id_license_configuration
     AgreementList:
       type: object
       properties:
@@ -205,18 +282,163 @@ components:
       - site_count
       - source_count
       - tag
-    AgreementAccessGroup:
+    SummarizerParam:
       type: object
       properties:
-        access_groups:
+        license:
+          $ref: '#/components/schemas/SummarizerParamField'
+        report_license:
+          $ref: '#/components/schemas/SummarizerParamField'
+        mail_license:
+          $ref: '#/components/schemas/SummarizerParamField'
+        share_license:
+          $ref: '#/components/schemas/SummarizerParamField'
+      required:
+      - license
+      - mail_license
+      - report_license
+      - share_license
+    AgreementSource:
+      type: object
+      properties:
+        id_source:
           type: integer
-          maximum: 2147483647
-          minimum: -2147483648
+          readOnly: true
         name:
           type: string
-          maxLength: 255
+          readOnly: true
+        url:
+          type: string
+          readOnly: true
+        id_site:
+          type: integer
+          readOnly: true
       required:
-      - access_groups
+      - id_site
+      - id_source
+      - name
+      - url
+    SummarizerParamField:
+      type: object
+      description: Serializer describing the SummarizerParamField
+      properties:
+        type:
+          type: integer
+        number_of_sentences:
+          type: integer
+        max_percentage_of_characters_to_show:
+          type: integer
+        max_number_of_words_to_show:
+          type: integer
+      required:
+      - max_number_of_words_to_show
+      - max_percentage_of_characters_to_show
+      - number_of_sentences
+      - type
+    AgreementRef:
+      type: object
+      description: 'An agreement mentioned by another: on the same tag, or sharing a configuration.'
+      properties:
+        id_agreement:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+          description: The agreement's site tag's name.
+        label:
+          type: string
+          readOnly: true
+          description: The name followed by the licence configuration's name, which tells same-named agreements apart.
+      required:
+      - id_agreement
+      - label
+      - name
+    LicenseConfiguration:
+      type: object
+      properties:
+        id_license_configuration:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        description:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        summarizer_param:
+          oneOf:
+          - $ref: '#/components/schemas/SummarizerParam'
+          - type: 'null'
+          readOnly: true
+        max_archive_age:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+        max_free_search_age:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+        licence:
+          type: integer
+          readOnly: true
+        licence_share:
+          type: integer
+          readOnly: true
+        licence_mail:
+          type: integer
+          readOnly: true
+        licence_report:
+          type: integer
+          readOnly: true
+        licence_enforce:
+          type: integer
+          readOnly: true
+        licence_enforce_share:
+          type: integer
+          readOnly: true
+        licence_enforce_mail:
+          type: integer
+          readOnly: true
+        licence_enforce_report:
+          type: integer
+          readOnly: true
+        created:
+          type: string
+          format: date-time
+          readOnly: true
+        last_change:
+          type: string
+          format: date-time
+          readOnly: true
+        agreements:
+          type: array
+          items:
+            $ref: '#/components/schemas/AgreementRef'
+          readOnly: true
+          description: Every agreement using this configuration. Editing it changes them all.
+      required:
+      - agreements
+      - created
+      - description
+      - id_license_configuration
+      - last_change
+      - licence
+      - licence_enforce
+      - licence_enforce_mail
+      - licence_enforce_report
+      - licence_enforce_share
+      - licence_mail
+      - licence_report
+      - licence_share
+      - max_archive_age
+      - max_free_search_age
+      - name
+      - summarizer_param
     Agreement:
       type: object
       properties:
@@ -308,237 +530,6 @@ components:
       required:
       - licence_configuration
       - scope
-    SummarizerParamField:
-      type: object
-      description: Serializer describing the SummarizerParamField
-      properties:
-        type:
-          type: integer
-        number_of_sentences:
-          type: integer
-        max_percentage_of_characters_to_show:
-          type: integer
-        max_number_of_words_to_show:
-          type: integer
-      required:
-      - max_number_of_words_to_show
-      - max_percentage_of_characters_to_show
-      - number_of_sentences
-      - type
-    AgreementRef:
-      type: object
-      description: 'An agreement mentioned by another: on the same tag, or sharing a configuration.'
-      properties:
-        id_agreement:
-          type: integer
-          readOnly: true
-        name:
-          type: string
-          readOnly: true
-          description: The agreement's site tag's name.
-        label:
-          type: string
-          readOnly: true
-          description: The name followed by the licence configuration's name, which tells same-named agreements apart.
-      required:
-      - id_agreement
-      - label
-      - name
-    LicenseConfigurationRef:
-      type: object
-      properties:
-        id_license_configuration:
-          type: integer
-          readOnly: true
-        name:
-          type: string
-          maxLength: 255
-      required:
-      - id_license_configuration
-    SummarizerParam:
-      type: object
-      properties:
-        license:
-          $ref: '#/components/schemas/SummarizerParamField'
-        report_license:
-          $ref: '#/components/schemas/SummarizerParamField'
-        mail_license:
-          $ref: '#/components/schemas/SummarizerParamField'
-        share_license:
-          $ref: '#/components/schemas/SummarizerParamField'
-      required:
-      - license
-      - mail_license
-      - report_license
-      - share_license
-    LicenseConfiguration:
-      type: object
-      properties:
-        id_license_configuration:
-          type: integer
-          readOnly: true
-        name:
-          type: string
-          readOnly: true
-        description:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-        summarizer_param:
-          oneOf:
-          - $ref: '#/components/schemas/SummarizerParam'
-          - type: 'null'
-          readOnly: true
-        max_archive_age:
-          type:
-          - integer
-          - 'null'
-          readOnly: true
-        max_free_search_age:
-          type:
-          - integer
-          - 'null'
-          readOnly: true
-        licence:
-          type: integer
-          readOnly: true
-        licence_share:
-          type: integer
-          readOnly: true
-        licence_mail:
-          type: integer
-          readOnly: true
-        licence_report:
-          type: integer
-          readOnly: true
-        licence_enforce:
-          type: integer
-          readOnly: true
-        licence_enforce_share:
-          type: integer
-          readOnly: true
-        licence_enforce_mail:
-          type: integer
-          readOnly: true
-        licence_enforce_report:
-          type: integer
-          readOnly: true
-        created:
-          type: string
-          format: date-time
-          readOnly: true
-        last_change:
-          type: string
-          format: date-time
-          readOnly: true
-        agreements:
-          type: array
-          items:
-            $ref: '#/components/schemas/AgreementRef'
-          readOnly: true
-          description: Every agreement using this configuration. Editing it changes them all.
-      required:
-      - agreements
-      - created
-      - description
-      - id_license_configuration
-      - last_change
-      - licence
-      - licence_enforce
-      - licence_enforce_mail
-      - licence_enforce_report
-      - licence_enforce_share
-      - licence_mail
-      - licence_report
-      - licence_share
-      - max_archive_age
-      - max_free_search_age
-      - name
-      - summarizer_param
-    AgreementTagRef:
-      type: object
-      properties:
-        id_sitetag:
-          type: integer
-          readOnly: true
-        name:
-          type: string
-          maxLength: 255
-        access_group:
-          oneOf:
-          - $ref: '#/components/schemas/AgreementAccessGroup'
-          - type: 'null'
-          readOnly: true
-          description: The legacy access group kept in step with this tag, if any. One tag has one at most.
-      required:
-      - access_group
-      - id_sitetag
-      - name
-    AgreementSource:
-      type: object
-      properties:
-        id_source:
-          type: integer
-          readOnly: true
-        name:
-          type: string
-          readOnly: true
-        url:
-          type: string
-          readOnly: true
-        id_site:
-          type: integer
-          readOnly: true
-      required:
-      - id_site
-      - id_source
-      - name
-      - url
-    AgreementTag:
-      type: object
-      properties:
-        id_sitetag:
-          type: integer
-          readOnly: true
-        name:
-          type: string
-          maxLength: 255
-        access_group:
-          oneOf:
-          - $ref: '#/components/schemas/AgreementAccessGroup'
-          - type: 'null'
-          readOnly: true
-          description: The legacy access group kept in step with this tag, if any. One tag has one at most.
-        agreements:
-          type: array
-          items:
-            $ref: '#/components/schemas/AgreementRef'
-          readOnly: true
-          description: Every agreement on this tag. Its sites and sources are theirs too.
-      required:
-      - access_group
-      - agreements
-      - id_sitetag
-      - name
-    AgreementSite:
-      type: object
-      properties:
-        id_site:
-          type: integer
-          readOnly: true
-        name:
-          type: string
-          readOnly: true
-        url:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-      required:
-      - id_site
-      - name
-      - url
   securitySchemes:
     JWT:
       type: apiKey
@@ -559,6 +550,3 @@ components:
       in: header
       name: Authorization
       description: Token-based authentication with required prefix "Token"
-x-refined-from:
-- opoint-openapi-original.yml
-- opoint-openapi.yml

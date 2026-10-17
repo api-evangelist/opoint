@@ -2,7 +2,6 @@ openapi: 3.2.0
 info:
   title: Opoint Folders API
   version: 1.0.0
-  description: 'Operations tagged folders across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.opoint.com
 tags:
@@ -65,8 +64,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/FolderViewCreate'
           description: ''
-    servers:
-    - url: https://api.opoint.com
   /folders/{folder_id}/:
     get:
       operationId: folders_retrieve
@@ -179,8 +176,6 @@ paths:
       responses:
         '204':
           description: No response body
-    servers:
-    - url: https://api.opoint.com
   /folders/shares/targets/search/:
     get:
       operationId: folders_shares_targets_search_list
@@ -224,8 +219,6 @@ paths:
           description: ''
       summary: Folders shares targets search list
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /folders/sort/:
     post:
       operationId: folders_sort_create
@@ -257,10 +250,89 @@ paths:
           description: No response body
       summary: Folders sort create
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
 components:
   schemas:
+    FolderShareConfigFilterTypeEnum:
+      enum:
+      - none
+      - only
+      type: string
+      description: '* `none` - none
+
+        * `only` - only'
+    FolderShareConfigAccess:
+      type: object
+      properties:
+        edit_folder:
+          type: boolean
+          default: false
+        delete_folder:
+          type: boolean
+          default: false
+        tag_articles:
+          type: boolean
+          default: false
+        add_items:
+          type: boolean
+          default: false
+          description: Allows creating new items (e.g. profiles) directly in the folder, or moving own items into it.
+    Owner:
+      type: object
+      properties:
+        id_user:
+          type: integer
+        username:
+          type: string
+          readOnly: true
+      required:
+      - id_user
+      - username
+    FolderShareConfigFilterId:
+      type: object
+      properties:
+        id:
+          type: integer
+      required:
+      - id
+    FolderView:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 256
+        description:
+          type: string
+          default: ''
+          maxLength: 256
+        icon:
+          type: string
+          default: ''
+          maxLength: 256
+        type:
+          type: integer
+          readOnly: true
+        category:
+          type: integer
+        owner:
+          allOf:
+          - $ref: '#/components/schemas/Owner'
+          readOnly: true
+        traits:
+          type: integer
+          default: 0
+        access:
+          allOf:
+          - $ref: '#/components/schemas/FolderShareConfigAccess'
+          readOnly: true
+      required:
+      - access
+      - id
+      - name
+      - owner
+      - type
     FolderViewCreateTypeEnum:
       enum:
       - 0
@@ -275,17 +347,112 @@ components:
         * `2` - Sentiment tag
 
         * `6` - Saved statistic'
-    FolderShareConfigFilter:
+    FolderSortRequestBody:
       type: object
       properties:
+        id:
+          type: integer
+          description: Id of folder to change sort position of.
+        position:
+          type: integer
+          description: Desired position of folder, 0-based.
+      required:
+      - id
+      - position
+    FolderViewCreate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 256
+        description:
+          type: string
+          default: ''
+          maxLength: 256
+        icon:
+          type: string
+          maxLength: 256
         type:
-          $ref: '#/components/schemas/FolderShareConfigFilterTypeEnum'
-        items:
+          $ref: '#/components/schemas/FolderViewCreateTypeEnum'
+        category:
+          type: integer
+        owner:
+          allOf:
+          - $ref: '#/components/schemas/Owner'
+          readOnly: true
+        traits:
+          type: integer
+          default: 0
+        shares:
           type: array
           items:
-            $ref: '#/components/schemas/FolderShareConfigFilterId'
+            $ref: '#/components/schemas/FolderShareConfig'
       required:
+      - id
+      - name
+      - owner
       - type
+    FolderViewDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 256
+        description:
+          type: string
+          default: ''
+          maxLength: 256
+        icon:
+          type: string
+          default: ''
+          maxLength: 256
+        type:
+          type: integer
+          readOnly: true
+        category:
+          type: integer
+        owner:
+          allOf:
+          - $ref: '#/components/schemas/Owner'
+          readOnly: true
+        traits:
+          type: integer
+          default: 0
+        access:
+          allOf:
+          - $ref: '#/components/schemas/FolderShareConfigAccess'
+          readOnly: true
+        shares:
+          type: array
+          items:
+            $ref: '#/components/schemas/FolderShareConfig'
+      required:
+      - access
+      - id
+      - name
+      - owner
+      - type
+    FolderShareConfig:
+      type: object
+      properties:
+        user:
+          $ref: '#/components/schemas/Owner'
+        inherit:
+          type: boolean
+        filter:
+          $ref: '#/components/schemas/FolderShareConfigFilter'
+        access:
+          $ref: '#/components/schemas/FolderShareConfigAccess'
+      required:
+      - access
+      - inherit
+      - user
     PatchedFolderViewDetail:
       type: object
       properties:
@@ -370,193 +537,17 @@ components:
       required:
       - name
       - value
-    FolderView:
+    FolderShareConfigFilter:
       type: object
       properties:
-        id:
-          type: integer
-          readOnly: true
-        name:
-          type: string
-          maxLength: 256
-        description:
-          type: string
-          default: ''
-          maxLength: 256
-        icon:
-          type: string
-          default: ''
-          maxLength: 256
         type:
-          type: integer
-          readOnly: true
-        category:
-          type: integer
-        owner:
-          allOf:
-          - $ref: '#/components/schemas/Owner'
-          readOnly: true
-        traits:
-          type: integer
-          default: 0
-        access:
-          allOf:
-          - $ref: '#/components/schemas/FolderShareConfigAccess'
-          readOnly: true
-      required:
-      - access
-      - id
-      - name
-      - owner
-      - type
-    FolderViewDetail:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        name:
-          type: string
-          maxLength: 256
-        description:
-          type: string
-          default: ''
-          maxLength: 256
-        icon:
-          type: string
-          default: ''
-          maxLength: 256
-        type:
-          type: integer
-          readOnly: true
-        category:
-          type: integer
-        owner:
-          allOf:
-          - $ref: '#/components/schemas/Owner'
-          readOnly: true
-        traits:
-          type: integer
-          default: 0
-        access:
-          allOf:
-          - $ref: '#/components/schemas/FolderShareConfigAccess'
-          readOnly: true
-        shares:
+          $ref: '#/components/schemas/FolderShareConfigFilterTypeEnum'
+        items:
           type: array
           items:
-            $ref: '#/components/schemas/FolderShareConfig'
+            $ref: '#/components/schemas/FolderShareConfigFilterId'
       required:
-      - access
-      - id
-      - name
-      - owner
       - type
-    FolderSortRequestBody:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Id of folder to change sort position of.
-        position:
-          type: integer
-          description: Desired position of folder, 0-based.
-      required:
-      - id
-      - position
-    FolderViewCreate:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        name:
-          type: string
-          maxLength: 256
-        description:
-          type: string
-          default: ''
-          maxLength: 256
-        icon:
-          type: string
-          maxLength: 256
-        type:
-          $ref: '#/components/schemas/FolderViewCreateTypeEnum'
-        category:
-          type: integer
-        owner:
-          allOf:
-          - $ref: '#/components/schemas/Owner'
-          readOnly: true
-        traits:
-          type: integer
-          default: 0
-        shares:
-          type: array
-          items:
-            $ref: '#/components/schemas/FolderShareConfig'
-      required:
-      - id
-      - name
-      - owner
-      - type
-    FolderShareConfigAccess:
-      type: object
-      properties:
-        edit_folder:
-          type: boolean
-          default: false
-        delete_folder:
-          type: boolean
-          default: false
-        tag_articles:
-          type: boolean
-          default: false
-        add_items:
-          type: boolean
-          default: false
-          description: Allows creating new items (e.g. profiles) directly in the folder, or moving own items into it.
-    Owner:
-      type: object
-      properties:
-        id_user:
-          type: integer
-        username:
-          type: string
-          readOnly: true
-      required:
-      - id_user
-      - username
-    FolderShareConfig:
-      type: object
-      properties:
-        user:
-          $ref: '#/components/schemas/Owner'
-        inherit:
-          type: boolean
-        filter:
-          $ref: '#/components/schemas/FolderShareConfigFilter'
-        access:
-          $ref: '#/components/schemas/FolderShareConfigAccess'
-      required:
-      - access
-      - inherit
-      - user
-    FolderShareConfigFilterTypeEnum:
-      enum:
-      - none
-      - only
-      type: string
-      description: '* `none` - none
-
-        * `only` - only'
-    FolderShareConfigFilterId:
-      type: object
-      properties:
-        id:
-          type: integer
-      required:
-      - id
   securitySchemes:
     JWT:
       type: apiKey
@@ -577,6 +568,3 @@ components:
       in: header
       name: Authorization
       description: Token-based authentication with required prefix "Token"
-x-refined-from:
-- opoint-openapi-original.yml
-- opoint-openapi.yml

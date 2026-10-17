@@ -2,7 +2,6 @@ openapi: 3.2.0
 info:
   title: Opoint Mailstatus API
   version: 1.0.0
-  description: 'Operations tagged mailstatus across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.opoint.com
 tags:
@@ -43,8 +42,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/AlertMails'
           description: ''
-    servers:
-    - url: https://api.opoint.com
   /mailstatus/alert_delays/:
     get:
       operationId: mailstatus_alert_delays_list
@@ -76,8 +73,6 @@ paths:
                 items:
                   $ref: '#/components/schemas/ScheduleItemDelay'
           description: ''
-    servers:
-    - url: https://api.opoint.com
   /mailstatus/daily_fails/:
     get:
       operationId: mailstatus_daily_fails_list
@@ -99,8 +94,6 @@ paths:
                 items:
                   $ref: '#/components/schemas/MostImportantFails'
           description: ''
-    servers:
-    - url: https://api.opoint.com
   /mailstatus/recipient/{email}/:
     get:
       operationId: mailstatus_recipient_retrieve
@@ -136,8 +129,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/RecipientMails'
           description: ''
-    servers:
-    - url: https://api.opoint.com
   /mailstatus/search/{search_string}/:
     get:
       operationId: mailstatus_search_list
@@ -167,8 +158,6 @@ paths:
                 items:
                   $ref: '#/components/schemas/MailLookup'
           description: ''
-    servers:
-    - url: https://api.opoint.com
   /mailstatus/stats/{time_from}/{time_to}/:
     get:
       operationId: mailstatus_stats_list
@@ -201,8 +190,6 @@ paths:
                 items:
                   $ref: '#/components/schemas/MailStats'
           description: ''
-    servers:
-    - url: https://api.opoint.com
   /mailstatus/status/messages/{value}/:
     get:
       operationId: mailstatus_status_messages_retrieve
@@ -227,8 +214,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/GroupedEventMessage'
           description: ''
-    servers:
-    - url: https://api.opoint.com
   /mailstatus/status/range/{unix_hour}/:
     get:
       operationId: mailstatus_status_range_retrieve
@@ -253,8 +238,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/AggregatedRange'
           description: ''
-    servers:
-    - url: https://api.opoint.com
   /mailstatus/status/statuses/{status}/{unix_hour}/:
     get:
       operationId: mailstatus_status_statuses_retrieve
@@ -289,8 +272,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/TotalStatusesPaginated'
           description: ''
-    servers:
-    - url: https://api.opoint.com
   /mailstatus/user/{user_id}/:
     get:
       operationId: mailstatus_user_retrieve
@@ -326,10 +307,49 @@ paths:
               schema:
                 $ref: '#/components/schemas/UserMails'
           description: ''
-    servers:
-    - url: https://api.opoint.com
 components:
   schemas:
+    MailLookup:
+      type: object
+      properties:
+        value:
+          type: string
+        searchval:
+          type: string
+        type_field:
+          type: string
+          readOnly: true
+      required:
+      - searchval
+      - type_field
+      - value
+    RecipientMails:
+      type: object
+      properties:
+        mails:
+          type: array
+          items:
+            $ref: '#/components/schemas/RecipientMailList'
+      required:
+      - mails
+    AlertMails:
+      type: object
+      properties:
+        alert_name:
+          type: string
+        owner_name:
+          type: string
+        owner_id:
+          type: integer
+        mails:
+          type: array
+          items:
+            $ref: '#/components/schemas/MailList'
+      required:
+      - alert_name
+      - mails
+      - owner_id
+      - owner_name
     RecipientMailList:
       type: object
       properties:
@@ -352,15 +372,49 @@ components:
       - status
       - subject
       - timestamp
-    AggregatedRange:
+    ScheduleItemDelay:
       type: object
       properties:
-        statuses:
-          type: array
-          items:
-            $ref: '#/components/schemas/StatusOverview'
+        id_item:
+          type: integer
+        ScheduledAt:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        SendAt:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
       required:
-      - statuses
+      - ScheduledAt
+      - SendAt
+      - id_item
+    StatusOverview:
+      type: object
+      properties:
+        status:
+          type: integer
+        count:
+          type: integer
+      required:
+      - count
+      - status
+    MailList:
+      type: object
+      properties:
+        timestamp:
+          type: integer
+        status:
+          type: integer
+        subject:
+          type: string
+        id_mail:
+          type: integer
+      required:
+      - id_mail
+      - status
+      - subject
+      - timestamp
     TotalStatusesPaginated:
       type: object
       properties:
@@ -380,22 +434,36 @@ components:
       - next
       - previous
       - results
-    MailList:
+    AggregatedRange:
       type: object
       properties:
-        timestamp:
-          type: integer
-        status:
-          type: integer
-        subject:
-          type: string
-        id_mail:
-          type: integer
+        statuses:
+          type: array
+          items:
+            $ref: '#/components/schemas/StatusOverview'
       required:
-      - id_mail
-      - status
-      - subject
-      - timestamp
+      - statuses
+    GroupedEventMessage:
+      type: object
+      properties:
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/EventMessage'
+      required:
+      - messages
+    UserMails:
+      type: object
+      properties:
+        name:
+          type: string
+        mails:
+          type: array
+          items:
+            $ref: '#/components/schemas/MailList'
+      required:
+      - mails
+      - name
     EventMessage:
       type: object
       properties:
@@ -406,38 +474,6 @@ components:
       required:
       - message
       - timestamp
-    AlertMails:
-      type: object
-      properties:
-        alert_name:
-          type: string
-        owner_name:
-          type: string
-        owner_id:
-          type: integer
-        mails:
-          type: array
-          items:
-            $ref: '#/components/schemas/MailList'
-      required:
-      - alert_name
-      - mails
-      - owner_id
-      - owner_name
-    MailLookup:
-      type: object
-      properties:
-        value:
-          type: string
-        searchval:
-          type: string
-        type_field:
-          type: string
-          readOnly: true
-      required:
-      - searchval
-      - type_field
-      - value
     MailStats:
       type: object
       properties:
@@ -463,44 +499,22 @@ components:
       - recipients_failed
       - recipients_total
       - unix_hour
-    GroupedEventMessage:
+    TotalStatuses:
       type: object
       properties:
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/EventMessage'
-      required:
-      - messages
-    UserMails:
-      type: object
-      properties:
-        name:
+        address:
           type: string
-        mails:
-          type: array
-          items:
-            $ref: '#/components/schemas/MailList'
+        username:
+          type: string
+        id_user:
+          type: integer
+        timestamp:
+          type: integer
       required:
-      - mails
-      - name
-    ScheduleItemDelay:
-      type: object
-      properties:
-        id_item:
-          type: integer
-        ScheduledAt:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-        SendAt:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-      required:
-      - ScheduledAt
-      - SendAt
-      - id_item
+      - address
+      - id_user
+      - timestamp
+      - username
     MostImportantFails:
       type: object
       properties:
@@ -518,41 +532,6 @@ components:
       - score
       - search_value
       - user
-    TotalStatuses:
-      type: object
-      properties:
-        address:
-          type: string
-        username:
-          type: string
-        id_user:
-          type: integer
-        timestamp:
-          type: integer
-      required:
-      - address
-      - id_user
-      - timestamp
-      - username
-    RecipientMails:
-      type: object
-      properties:
-        mails:
-          type: array
-          items:
-            $ref: '#/components/schemas/RecipientMailList'
-      required:
-      - mails
-    StatusOverview:
-      type: object
-      properties:
-        status:
-          type: integer
-        count:
-          type: integer
-      required:
-      - count
-      - status
   securitySchemes:
     JWT:
       type: apiKey
@@ -573,6 +552,3 @@ components:
       in: header
       name: Authorization
       description: Token-based authentication with required prefix "Token"
-x-refined-from:
-- opoint-openapi-original.yml
-- opoint-openapi.yml

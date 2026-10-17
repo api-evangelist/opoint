@@ -2,7 +2,6 @@ openapi: 3.2.0
 info:
   title: Opoint Customers API
   version: 1.0.0
-  description: 'Operations tagged customers across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.opoint.com
 tags:
@@ -105,8 +104,6 @@ paths:
           description: ''
       summary: Customers create
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /customers/{id_customer}/:
     get:
       operationId: customers_retrieve
@@ -286,8 +283,6 @@ paths:
           description: ''
       summary: Customers partial update
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /customers/{id_customer}/usage/:
     get:
       operationId: customers_usage_retrieve_detail
@@ -338,8 +333,6 @@ paths:
           description: ''
       summary: Customers usage retrieve detail
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /customers/search/:
     get:
       operationId: customers_search_list
@@ -386,8 +379,6 @@ paths:
           description: ''
       summary: Customers search list
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /customers/self/usage/:
     get:
       operationId: customers_self_usage_retrieve
@@ -432,8 +423,6 @@ paths:
           description: ''
       summary: Customers self usage retrieve
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /customers/usage/:
     get:
       operationId: customers_usage_retrieve
@@ -478,10 +467,107 @@ paths:
           description: ''
       summary: Customers usage retrieve
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
 components:
   schemas:
+    CustomerDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          description: Customers name
+          maxLength: 255
+        partner:
+          type: integer
+          minimum: 0
+        is_active:
+          type: boolean
+          description: Customers active status. When the customer is inactive, users can no longer login. Currently not enforced
+        is_educational:
+          type: boolean
+          description: Whether customer is an educational institution
+        is_opoint:
+          type: boolean
+          default: false
+          description: Specifies if the user is owned by opoint or not
+        max_num_users:
+          type:
+          - integer
+          - 'null'
+          minimum: 1
+        navision_id:
+          type: string
+          description: Customers navision id
+        salesforce_id:
+          type: string
+          description: Customers salesforce id
+        num_users:
+          type: integer
+          readOnly: true
+          description: Number of users the customer has signed up
+      required:
+      - id
+      - max_num_users
+      - name
+      - num_users
+      - partner
+    Customer:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          description: Customers name
+          maxLength: 255
+        partner:
+          type: integer
+          minimum: 0
+      required:
+      - id
+      - name
+      - partner
+    PatchedCustomerDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          description: Customers name
+          maxLength: 255
+        partner:
+          type: integer
+          minimum: 0
+        is_active:
+          type: boolean
+          description: Customers active status. When the customer is inactive, users can no longer login. Currently not enforced
+        is_educational:
+          type: boolean
+          description: Whether customer is an educational institution
+        is_opoint:
+          type: boolean
+          default: false
+          description: Specifies if the user is owned by opoint or not
+        max_num_users:
+          type:
+          - integer
+          - 'null'
+          minimum: 1
+        navision_id:
+          type: string
+          description: Customers navision id
+        salesforce_id:
+          type: string
+          description: Customers salesforce id
+        num_users:
+          type: integer
+          readOnly: true
+          description: Number of users the customer has signed up
     CustomerUsageListEntry:
       type: object
       properties:
@@ -500,23 +586,6 @@ components:
       - id_customer
       - name
       - totals
-    Customer:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        name:
-          type: string
-          description: Customers name
-          maxLength: 255
-        partner:
-          type: integer
-          minimum: 0
-      required:
-      - id
-      - name
-      - partner
     CustomerUsageListResponse:
       type: object
       properties:
@@ -529,6 +598,21 @@ components:
       required:
       - customers
       - delivery
+    UsageDelivery:
+      type: object
+      properties:
+        type:
+          type: string
+        id:
+          type: integer
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/UsageDataPoint'
+      required:
+      - data
+      - id
+      - type
     UsageDataPoint:
       type: object
       properties:
@@ -581,103 +665,6 @@ components:
       required:
       - delivery
       - totals
-    UsageDelivery:
-      type: object
-      properties:
-        type:
-          type: string
-        id:
-          type: integer
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/UsageDataPoint'
-      required:
-      - data
-      - id
-      - type
-    CustomerDetail:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        name:
-          type: string
-          description: Customers name
-          maxLength: 255
-        partner:
-          type: integer
-          minimum: 0
-        is_active:
-          type: boolean
-          description: Customers active status. When the customer is inactive, users can no longer login. Currently not enforced
-        is_educational:
-          type: boolean
-          description: Whether customer is an educational institution
-        is_opoint:
-          type: boolean
-          default: false
-          description: Specifies if the user is owned by opoint or not
-        max_num_users:
-          type:
-          - integer
-          - 'null'
-          minimum: 1
-        navision_id:
-          type: string
-          description: Customers navision id
-        salesforce_id:
-          type: string
-          description: Customers salesforce id
-        num_users:
-          type: integer
-          readOnly: true
-          description: Number of users the customer has signed up
-      required:
-      - id
-      - max_num_users
-      - name
-      - num_users
-      - partner
-    PatchedCustomerDetail:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        name:
-          type: string
-          description: Customers name
-          maxLength: 255
-        partner:
-          type: integer
-          minimum: 0
-        is_active:
-          type: boolean
-          description: Customers active status. When the customer is inactive, users can no longer login. Currently not enforced
-        is_educational:
-          type: boolean
-          description: Whether customer is an educational institution
-        is_opoint:
-          type: boolean
-          default: false
-          description: Specifies if the user is owned by opoint or not
-        max_num_users:
-          type:
-          - integer
-          - 'null'
-          minimum: 1
-        navision_id:
-          type: string
-          description: Customers navision id
-        salesforce_id:
-          type: string
-          description: Customers salesforce id
-        num_users:
-          type: integer
-          readOnly: true
-          description: Number of users the customer has signed up
   securitySchemes:
     JWT:
       type: apiKey
@@ -698,6 +685,3 @@ components:
       in: header
       name: Authorization
       description: Token-based authentication with required prefix "Token"
-x-refined-from:
-- opoint-openapi-original.yml
-- opoint-openapi.yml

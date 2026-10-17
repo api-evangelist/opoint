@@ -2,7 +2,6 @@ openapi: 3.2.0
 info:
   title: Opoint Profiles API
   version: 1.0.0
-  description: 'Operations tagged profiles across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.opoint.com
 tags:
@@ -66,8 +65,6 @@ paths:
           description: Invalid request body
         '403':
           description: User has exceeded profile quota
-    servers:
-    - url: https://api.opoint.com
   /profiles/{id_list}/{timestamp}/:
     delete:
       operationId: profiles_timestamp_destroy
@@ -98,8 +95,6 @@ paths:
           description: History item deleted
         '404':
           description: History item not found
-    servers:
-    - url: https://api.opoint.com
   /profiles/{id_list}/:
     get:
       operationId: profiles_retrieve
@@ -256,8 +251,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/DeleteProfileResponse400'
           description: Invalid request body
-    servers:
-    - url: https://api.opoint.com
   /profiles/{id_list}/backfill/:
     post:
       operationId: profiles_backfill_create
@@ -305,8 +298,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
           description: Profile has no schedule item
-    servers:
-    - url: https://api.opoint.com
   /profiles/{id_list}/dependencies/:
     get:
       operationId: profiles_dependencies_retrieve
@@ -333,8 +324,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/ProfileDependenciesResponse'
           description: Success
-    servers:
-    - url: https://api.opoint.com
   /profiles/{id_list}/draft/:
     put:
       operationId: profiles_draft_update
@@ -383,8 +372,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
           description: Another save for this profile's draft is in flight
-    servers:
-    - url: https://api.opoint.com
   /profiles/{id_list}/history/:
     get:
       operationId: profiles_history_retrieve
@@ -418,8 +405,6 @@ paths:
           description: Success
         '404':
           description: Profile not found for this user
-    servers:
-    - url: https://api.opoint.com
   /profiles/{id_list}/restore/{timestamp}/:
     get:
       operationId: profiles_restore_retrieve
@@ -460,8 +445,6 @@ paths:
           description: Bad inputs, or the reserved draft timestamp 2147483647, which cannot be restored
         '404':
           description: Profile not found
-    servers:
-    - url: https://api.opoint.com
   /profiles/{id_list}/unpersist/:
     post:
       operationId: profiles_unpersist_create
@@ -508,8 +491,6 @@ paths:
           description: Profile is not persistent
         '404':
           description: Profile not found for this user
-    servers:
-    - url: https://api.opoint.com
   /profiles/clear-watch-cache/:
     delete:
       operationId: profiles_clear_watch_cache_destroy
@@ -527,8 +508,6 @@ paths:
           description: Watch cache deleted
         '404':
           description: Profile with the provided name does not exist for current user
-    servers:
-    - url: https://api.opoint.com
   /profiles/deleted/:
     get:
       operationId: profiles_deleted_retrieve
@@ -548,8 +527,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/DeletedProfilesResponse'
           description: Success
-    servers:
-    - url: https://api.opoint.com
   /profiles/map_ifm_profiles/:
     post:
       operationId: profiles_map_ifm_profiles_create
@@ -592,8 +569,6 @@ paths:
                     '363563': 1552125
                   summary: Map IFM profiles response
           description: Success
-    servers:
-    - url: https://api.opoint.com
   /profiles/otb-list-detail/{otb_id_list}/:
     get:
       operationId: profiles_otb_list_detail_retrieve
@@ -624,8 +599,6 @@ paths:
           description: Forbidden for current user or the OTB list
         '404':
           description: Opoint topic builder list not found
-    servers:
-    - url: https://api.opoint.com
   /profiles/otb-rule-detail/{otb_id_rule}/:
     get:
       operationId: profiles_otb_rule_detail_retrieve
@@ -652,8 +625,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/OTBRule'
           description: Success
-    servers:
-    - url: https://api.opoint.com
   /profiles/sort/:
     post:
       operationId: profiles_sort_create
@@ -690,8 +661,6 @@ paths:
           description: Profiles sorted
         '404':
           description: Profile with profileId not found
-    servers:
-    - url: https://api.opoint.com
   /profiles/watch/:
     post:
       operationId: profiles_watch_create
@@ -729,59 +698,8 @@ paths:
                     username: username
                   summary: Profile watch example
           description: Success
-    servers:
-    - url: https://api.opoint.com
 components:
   schemas:
-    MinimalUser:
-      type: object
-      properties:
-        id_user:
-          type: integer
-          readOnly: true
-        username:
-          type: string
-          readOnly: true
-      required:
-      - id_user
-      - username
-    ProfileRestoreError:
-      type: object
-      properties:
-        message:
-          type: string
-      required:
-      - message
-    ProfilePatch:
-      type: object
-      properties:
-        trend_interval:
-          type: integer
-          minimum: -1
-          description: Time resolution for trends, in seconds. This is the size of the time slices, and affects whether you get fast-moving trends over minutes, or slow-moving trends over days.
-        trend_preset_id:
-          type: integer
-          writeOnly: true
-        trend_preset:
-          allOf:
-          - $ref: '#/components/schemas/TrendPreset'
-          readOnly: true
-        name:
-          type: string
-          maxLength: 255
-        parent:
-          type: integer
-        blessed:
-          type: boolean
-        folder:
-          type: integer
-        stored_search:
-          oneOf:
-          - $ref: '#/components/schemas/StoredSearchField'
-          - type: 'null'
-      required:
-      - name
-      - trend_preset
     SearchLine:
       type: object
       properties:
@@ -791,58 +709,46 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SearchLineFilter'
-    ProfileDraftSavedResponse:
+    AlertProfileDependencies:
       type: object
       properties:
         id:
           type: integer
-        kind:
-          $ref: '#/components/schemas/ProfileVersionKind'
-        timestamp:
-          type: integer
-        last_set:
-          type: integer
-      required:
-      - id
-      - kind
-      - last_set
-      - timestamp
-    ProfileHistoryItemsResponse:
-      type: object
-      properties:
-        id_list:
-          type: integer
         name:
           type: string
-        make_persistent:
-          type:
-          - boolean
-          - 'null'
-        items:
+      required:
+      - id
+      - name
+    MapIFMProfilesResponse:
+      type: object
+      properties:
+        IFMProfileName:
+          type: integer
+      required:
+      - IFMProfileName
+    IFMOrganizationProfileNumbers:
+      type: object
+      properties:
+        profiles:
           type: array
           items:
-            $ref: '#/components/schemas/ProfileItem'
-        timestamp:
-          type: integer
-        saved_by:
-          oneOf:
-          - $ref: '#/components/schemas/MinimalUser'
-          - type: 'null'
-        kind:
-          $ref: '#/components/schemas/ProfileVersionKind'
-        last_set:
-          type:
-          - integer
-          - 'null'
+            type: integer
       required:
-      - id_list
-      - items
-      - kind
-      - last_set
-      - make_persistent
-      - name
-      - saved_by
-      - timestamp
+      - profiles
+    ProfileRestoreError:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+      - message
+    ProfileWatchResponse:
+      type: object
+      properties:
+        username:
+          type: string
+      required:
+      - username
     TrendPreset:
       type: object
       properties:
@@ -857,28 +763,53 @@ components:
       - id
       - name
       - params
-    ProfileVersionKind:
-      enum:
-      - draft
-      - historical
-      type: string
-      description: '* `draft` - Draft
-
-        * `historical` - Historical'
-    OTBRule:
+    MinimalUser:
       type: object
       properties:
-        id_rule:
+        id_user:
           type: integer
-        startvalue:
-          type: integer
-        header:
+          readOnly: true
+        username:
           type: string
-        description:
-          type: string
+          readOnly: true
       required:
-      - id_rule
-      - startvalue
+      - id_user
+      - username
+    DeletedProfilesResponse:
+      type: object
+      properties:
+        count:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeletedProfilesItemsResponse'
+      required:
+      - count
+      - results
+    ProfileHistoryResponse:
+      type: object
+      properties:
+        count:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProfileHistoryItemsResponse'
+      required:
+      - count
+      - results
+    LinemodeEnum:
+      enum:
+      - R
+      - O
+      - E
+      type: string
+      description: '* `R` - Required
+
+        * `O` - Optional
+
+        * `E` - Exclude'
     Profile:
       type: object
       properties:
@@ -951,98 +882,6 @@ components:
       - score
       - type
       - url
-    StoredSearchField:
-      type: object
-      properties:
-        id:
-          type: integer
-        art_limit:
-          type: integer
-        active:
-          type: integer
-      required:
-      - active
-      - art_limit
-      - id
-    ProfileDraft:
-      type: object
-      description: 'Write payload for saving a profile draft.
-
-
-        A draft holds search lines only; name, parent, folder and trend settings
-
-        are not part of it and any such keys in the body are ignored. Line shape
-
-        is validated, search syntax is not; full validation happens when the
-
-        draft is published through the normal update endpoint.'
-      properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProfileItem'
-      required:
-      - items
-    ProfileUnpersistResponse:
-      type: object
-      properties:
-        message:
-          type: string
-      required:
-      - message
-    ProfileSort:
-      type: object
-      properties:
-        parent:
-          type: integer
-        profileId:
-          type: integer
-        position:
-          type: integer
-          default: 9999
-      required:
-      - parent
-      - profileId
-    UUIDCommaSeparatedList:
-      type: object
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-      required:
-      - id
-      - name
-    OTBList:
-      type: object
-      properties:
-        id_rule:
-          type: integer
-        startvalue:
-          type: integer
-        header:
-          type: string
-        description:
-          type: string
-      required:
-      - id_rule
-      - startvalue
-    IFMOrganizationProfileNumbers:
-      type: object
-      properties:
-        profiles:
-          type: array
-          items:
-            type: integer
-      required:
-      - profiles
-    MapIFMProfilesResponse:
-      type: object
-      properties:
-        IFMProfileName:
-          type: integer
-      required:
-      - IFMProfileName
     DeletedProfilesItemsResponse:
       type: object
       properties:
@@ -1079,86 +918,6 @@ components:
       - name
       - saved_by
       - timestamp
-    ProfileItem:
-      type: object
-      properties:
-        id:
-          type: integer
-        searchline:
-          $ref: '#/components/schemas/SearchLine'
-        linemode:
-          $ref: '#/components/schemas/LinemodeEnum'
-        searchmode:
-          type: string
-          writeOnly: true
-      required:
-      - linemode
-      - searchline
-      - searchmode
-    LinemodeEnum:
-      enum:
-      - R
-      - O
-      - E
-      type: string
-      description: '* `R` - Required
-
-        * `O` - Optional
-
-        * `E` - Exclude'
-    ProfileWatchResponse:
-      type: object
-      properties:
-        username:
-          type: string
-      required:
-      - username
-    ProfileHistoryResponse:
-      type: object
-      properties:
-        count:
-          type: integer
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProfileHistoryItemsResponse'
-      required:
-      - count
-      - results
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-      required:
-      - message
-    ProfileDependenciesResponse:
-      type: object
-      properties:
-        profiles:
-          type: array
-          items:
-            type: integer
-        alerts:
-          type: array
-          items:
-            $ref: '#/components/schemas/AlertProfileDependencies'
-        feeds:
-          type: array
-          items:
-            $ref: '#/components/schemas/FeedProfileDependencies'
-        parent:
-          type: boolean
-        statistics:
-          type: array
-          items:
-            type: integer
-      required:
-      - alerts
-      - feeds
-      - parent
-      - profiles
-      - statistics
     PatchedProfilePatch:
       type: object
       properties:
@@ -1186,16 +945,19 @@ components:
           oneOf:
           - $ref: '#/components/schemas/StoredSearchField'
           - type: 'null'
-    DeleteProfileResponse400:
+    StoredSearchField:
       type: object
       properties:
-        data:
-          type: string
-        message:
-          type: string
+        id:
+          type: integer
+        art_limit:
+          type: integer
+        active:
+          type: integer
       required:
-      - data
-      - message
+      - active
+      - art_limit
+      - id
     FeedProfileDependencies:
       type: object
       properties:
@@ -1206,18 +968,266 @@ components:
       required:
       - id
       - name
-    DeletedProfilesResponse:
+    ProfileVersionKind:
+      enum:
+      - draft
+      - historical
+      type: string
+      description: '* `draft` - Draft
+
+        * `historical` - Historical'
+    DeleteProfileResponse400:
       type: object
       properties:
-        count:
+        data:
+          type: string
+        message:
+          type: string
+      required:
+      - data
+      - message
+    PersistentBackfill:
+      type: object
+      properties:
+        start_time:
           type: integer
-        results:
+        end_time:
+          type: integer
+      required:
+      - start_time
+    ProfilePatch:
+      type: object
+      properties:
+        trend_interval:
+          type: integer
+          minimum: -1
+          description: Time resolution for trends, in seconds. This is the size of the time slices, and affects whether you get fast-moving trends over minutes, or slow-moving trends over days.
+        trend_preset_id:
+          type: integer
+          writeOnly: true
+        trend_preset:
+          allOf:
+          - $ref: '#/components/schemas/TrendPreset'
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        parent:
+          type: integer
+        blessed:
+          type: boolean
+        folder:
+          type: integer
+        stored_search:
+          oneOf:
+          - $ref: '#/components/schemas/StoredSearchField'
+          - type: 'null'
+      required:
+      - name
+      - trend_preset
+    ProfileHistoryItemsResponse:
+      type: object
+      properties:
+        id_list:
+          type: integer
+        name:
+          type: string
+        make_persistent:
+          type:
+          - boolean
+          - 'null'
+        items:
           type: array
           items:
-            $ref: '#/components/schemas/DeletedProfilesItemsResponse'
+            $ref: '#/components/schemas/ProfileItem'
+        timestamp:
+          type: integer
+        saved_by:
+          oneOf:
+          - $ref: '#/components/schemas/MinimalUser'
+          - type: 'null'
+        kind:
+          $ref: '#/components/schemas/ProfileVersionKind'
+        last_set:
+          type:
+          - integer
+          - 'null'
       required:
-      - count
-      - results
+      - id_list
+      - items
+      - kind
+      - last_set
+      - make_persistent
+      - name
+      - saved_by
+      - timestamp
+    ProfileDraftSavedResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        kind:
+          $ref: '#/components/schemas/ProfileVersionKind'
+        timestamp:
+          type: integer
+        last_set:
+          type: integer
+      required:
+      - id
+      - kind
+      - last_set
+      - timestamp
+    MifluzRate:
+      type: object
+      properties:
+        feed_id:
+          type: string
+          maxLength: 3
+        feed_name:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        maxrate:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        actual_rate:
+          type: number
+          format: double
+          readOnly: true
+        rate_used:
+          type: number
+          format: double
+          readOnly: true
+      required:
+      - actual_rate
+      - feed_id
+      - feed_name
+      - maxrate
+      - rate_used
+    ProfileDraft:
+      type: object
+      description: 'Write payload for saving a profile draft.
+
+
+        A draft holds search lines only; name, parent, folder and trend settings
+
+        are not part of it and any such keys in the body are ignored. Line shape
+
+        is validated, search syntax is not; full validation happens when the
+
+        draft is published through the normal update endpoint.'
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProfileItem'
+      required:
+      - items
+    ProfileSort:
+      type: object
+      properties:
+        parent:
+          type: integer
+        profileId:
+          type: integer
+        position:
+          type: integer
+          default: 9999
+      required:
+      - parent
+      - profileId
+    ProfileItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        searchline:
+          $ref: '#/components/schemas/SearchLine'
+        linemode:
+          $ref: '#/components/schemas/LinemodeEnum'
+        searchmode:
+          type: string
+          writeOnly: true
+      required:
+      - linemode
+      - searchline
+      - searchmode
+    ProfileDependenciesResponse:
+      type: object
+      properties:
+        profiles:
+          type: array
+          items:
+            type: integer
+        alerts:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlertProfileDependencies'
+        feeds:
+          type: array
+          items:
+            $ref: '#/components/schemas/FeedProfileDependencies'
+        parent:
+          type: boolean
+        statistics:
+          type: array
+          items:
+            type: integer
+      required:
+      - alerts
+      - feeds
+      - parent
+      - profiles
+      - statistics
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+      - message
+    ProfileUnpersistResponse:
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+      - message
+    UUIDCommaSeparatedList:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+      required:
+      - id
+      - name
+    ProfileWatchRequest:
+      type: object
+      properties:
+        day:
+          type: integer
+        from_day:
+          type: integer
+        readership:
+          type: boolean
+    OTBRule:
+      type: object
+      properties:
+        id_rule:
+          type: integer
+        startvalue:
+          type: integer
+        header:
+          type: string
+        description:
+          type: string
+      required:
+      - id_rule
+      - startvalue
     ProfileDetail:
       type: object
       properties:
@@ -1352,63 +1362,6 @@ components:
       - trend_preset
       - type
       - url
-    MifluzRate:
-      type: object
-      properties:
-        feed_id:
-          type: string
-          maxLength: 3
-        feed_name:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-        maxrate:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-        actual_rate:
-          type: number
-          format: double
-          readOnly: true
-        rate_used:
-          type: number
-          format: double
-          readOnly: true
-      required:
-      - actual_rate
-      - feed_id
-      - feed_name
-      - maxrate
-      - rate_used
-    AlertProfileDependencies:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-      required:
-      - id
-      - name
-    ProfileWatchRequest:
-      type: object
-      properties:
-        day:
-          type: integer
-        from_day:
-          type: integer
-        readership:
-          type: boolean
-    PersistentBackfill:
-      type: object
-      properties:
-        start_time:
-          type: integer
-        end_time:
-          type: integer
-      required:
-      - start_time
     SearchLineFilter:
       type: object
       properties:
@@ -1418,6 +1371,20 @@ components:
           type: string
       required:
       - type
+    OTBList:
+      type: object
+      properties:
+        id_rule:
+          type: integer
+        startvalue:
+          type: integer
+        header:
+          type: string
+        description:
+          type: string
+      required:
+      - id_rule
+      - startvalue
   securitySchemes:
     JWT:
       type: apiKey
@@ -1438,6 +1405,3 @@ components:
       in: header
       name: Authorization
       description: Token-based authentication with required prefix "Token"
-x-refined-from:
-- opoint-openapi-original.yml
-- opoint-openapi.yml

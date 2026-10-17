@@ -2,7 +2,6 @@ openapi: 3.2.0
 info:
   title: Opoint Tracking API
   version: 1.0.0
-  description: 'Operations tagged tracking across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.opoint.com
 tags:
@@ -40,8 +39,6 @@ paths:
           description: Permissions denied
         '500':
           description: Internal server error
-    servers:
-    - url: https://api.opoint.com
   /tracking/export/:
     post:
       operationId: tracking_export_create
@@ -72,8 +69,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/TrackingExportResponse'
           description: ''
-    servers:
-    - url: https://api.opoint.com
   /tracking/info/:
     get:
       operationId: tracking_info_retrieve
@@ -92,8 +87,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/TrackingInfoResponse'
           description: ''
-    servers:
-    - url: https://api.opoint.com
   /tracking/search/:
     post:
       operationId: tracking_search_create
@@ -149,10 +142,41 @@ paths:
           description: Invalid request or missing articles
         '500':
           description: Internal server error
-    servers:
-    - url: https://api.opoint.com
 components:
   schemas:
+    SearchLine:
+      type: object
+      properties:
+        searchterm:
+          type: string
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchLineFilter'
+    TrackingInfoResponse:
+      type: object
+      properties:
+        tracked_articles_basket:
+          oneOf:
+          - $ref: '#/components/schemas/TrackingInfoBasket'
+          - type: 'null'
+        matched_articles_basket:
+          oneOf:
+          - $ref: '#/components/schemas/TrackingInfoBasket'
+          - type: 'null'
+      required:
+      - matched_articles_basket
+      - tracked_articles_basket
+    TrackingInfoBasket:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+      required:
+      - id
+      - name
     TemplateTrackingExport:
       type: object
       description: Serializer for tracking exports, which are always Excel types
@@ -185,29 +209,41 @@ components:
           maxLength: 128
       required:
       - title
-    TrackingInfoResponse:
+    PartnerArticlesSearchRequest:
       type: object
       properties:
-        tracked_articles_basket:
-          oneOf:
-          - $ref: '#/components/schemas/TrackingInfoBasket'
-          - type: 'null'
-        matched_articles_basket:
-          oneOf:
-          - $ref: '#/components/schemas/TrackingInfoBasket'
-          - type: 'null'
-      required:
-      - matched_articles_basket
-      - tracked_articles_basket
-    SearchLine:
-      type: object
-      properties:
-        searchterm:
-          type: string
-        filters:
+        partner_article_ids:
           type: array
           items:
-            $ref: '#/components/schemas/SearchLineFilter'
+            type: string
+            maxLength: 128
+      required:
+      - partner_article_ids
+    ProfileItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        searchline:
+          $ref: '#/components/schemas/SearchLine'
+        linemode:
+          $ref: '#/components/schemas/LinemodeEnum'
+        searchmode:
+          type: string
+          writeOnly: true
+      required:
+      - linemode
+      - searchline
+      - searchmode
+    SearchLineFilter:
+      type: object
+      properties:
+        type:
+          type: string
+        id:
+          type: string
+      required:
+      - type
     PartnerArticleRequest:
       type: object
       properties:
@@ -247,42 +283,6 @@ components:
           type: integer
       required:
       - export_id
-    TrackingInfoBasket:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-      required:
-      - id
-      - name
-    PartnerArticlesSearchRequest:
-      type: object
-      properties:
-        partner_article_ids:
-          type: array
-          items:
-            type: string
-            maxLength: 128
-      required:
-      - partner_article_ids
-    ProfileItem:
-      type: object
-      properties:
-        id:
-          type: integer
-        searchline:
-          $ref: '#/components/schemas/SearchLine'
-        linemode:
-          $ref: '#/components/schemas/LinemodeEnum'
-        searchmode:
-          type: string
-          writeOnly: true
-      required:
-      - linemode
-      - searchline
-      - searchmode
     LinemodeEnum:
       enum:
       - R
@@ -294,15 +294,6 @@ components:
         * `O` - Optional
 
         * `E` - Exclude'
-    SearchLineFilter:
-      type: object
-      properties:
-        type:
-          type: string
-        id:
-          type: string
-      required:
-      - type
   securitySchemes:
     JWT:
       type: apiKey
@@ -323,6 +314,3 @@ components:
       in: header
       name: Authorization
       description: Token-based authentication with required prefix "Token"
-x-refined-from:
-- opoint-openapi-original.yml
-- opoint-openapi.yml

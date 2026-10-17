@@ -2,7 +2,6 @@ openapi: 3.2.0
 info:
   title: Opoint Invite API
   version: 1.0.0
-  description: 'Operations tagged invite across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.opoint.com
 tags:
@@ -119,8 +118,6 @@ paths:
           description: Hit the max users invited limit (NUM_USER_INVITES attribute)
       summary: Invite direct create
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /invite/direct/{token}/:
     get:
       operationId: invite_direct_retrieve
@@ -197,8 +194,6 @@ paths:
           description: Invitation has already been accepted
       summary: Invite direct destroy
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /invite/direct/{token}/accept/:
     post:
       operationId: invite_direct_accept_create
@@ -237,8 +232,6 @@ paths:
           description: ''
       summary: Invite direct accept create
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /invite/open/:
     get:
       operationId: invite_open_list
@@ -323,8 +316,6 @@ paths:
           description: Hit the max users invited limit (NUM_USER_INVITES attribute)
       summary: Invite open create
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /invite/open/{token}/:
     get:
       operationId: invite_open_retrieve
@@ -458,8 +449,6 @@ paths:
           description: No response body
       summary: Invite open destroy
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /invite/open/{token}/accept/:
     post:
       operationId: invite_open_accept_create
@@ -498,122 +487,19 @@ paths:
           description: ''
       summary: Invite open accept create
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
 components:
   schemas:
-    SingleUserInvitePaginated:
-      type: object
-      properties:
-        count:
-          type: integer
-        next:
-          type:
-          - string
-          - 'null'
-        previous:
-          type:
-          - string
-          - 'null'
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/SingleUserInvitation'
-      required:
-      - count
-      - next
-      - previous
-      - results
-    PatchedMultiUserInvitation:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        token:
-          type: string
-          default: ''
-        url:
-          type: string
-          default: ''
-        owner:
-          type: integer
-          description: The parent user in the tree when user is created
-        sent:
-          type: integer
-          readOnly: true
-        expires:
-          type: integer
-          readOnly: true
-        active:
-          type: boolean
-        usable:
-          type: boolean
-          readOnly: true
-        reason:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-    MultiUserInvitation:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        token:
-          type: string
-          default: ''
-        url:
-          type: string
-          default: ''
-        owner:
-          type: integer
-          description: The parent user in the tree when user is created
-        sent:
-          type: integer
-          readOnly: true
-        expires:
-          type: integer
-          readOnly: true
-        active:
-          type: boolean
-        usable:
-          type: boolean
-          readOnly: true
-        reason:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-      required:
-      - expires
-      - id
-      - owner
-      - reason
-      - sent
-      - usable
-    InviteDirectPostResponseStatusEnum:
+    InviteDirectPostResponseChildStatusEnum:
       enum:
-      - SUCCESS
-      - PARTIAL
+      - SENT
+      - ALREADY_INVITED
       - FAILED
       type: string
-      description: '* `SUCCESS` - SUCCESS
+      description: '* `SENT` - SENT
 
-        * `PARTIAL` - PARTIAL
+        * `ALREADY_INVITED` - ALREADY_INVITED
 
         * `FAILED` - FAILED'
-    invite_direct_post_response_child:
-      type: object
-      properties:
-        email:
-          type: string
-        status:
-          $ref: '#/components/schemas/InviteDirectPostResponseChildStatusEnum'
-      required:
-      - email
-      - status
     SingleUserInvitation:
       type: object
       properties:
@@ -672,20 +558,97 @@ components:
       - role
       - token
       - usable
-    SingleUserInvitationStatusEnum:
-      enum:
-      - 0
-      - 1
-      - 2
-      - 3
-      type: integer
-      description: '* `0` - Failed
-
-        * `1` - Pending
-
-        * `2` - Accepted
-
-        * `3` - Expired'
+    MultiUserInvitation:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        token:
+          type: string
+          default: ''
+        url:
+          type: string
+          default: ''
+        owner:
+          type: integer
+          description: The parent user in the tree when user is created
+        sent:
+          type: integer
+          readOnly: true
+        expires:
+          type: integer
+          readOnly: true
+        active:
+          type: boolean
+        usable:
+          type: boolean
+          readOnly: true
+        reason:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+      required:
+      - expires
+      - id
+      - owner
+      - reason
+      - sent
+      - usable
+    PatchedMultiUserInvitation:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        token:
+          type: string
+          default: ''
+        url:
+          type: string
+          default: ''
+        owner:
+          type: integer
+          description: The parent user in the tree when user is created
+        sent:
+          type: integer
+          readOnly: true
+        expires:
+          type: integer
+          readOnly: true
+        active:
+          type: boolean
+        usable:
+          type: boolean
+          readOnly: true
+        reason:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+    SingleUserInvitePaginated:
+      type: object
+      properties:
+        count:
+          type: integer
+        next:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SingleUserInvitation'
+      required:
+      - count
+      - next
+      - previous
+      - results
     MultiUserInvitePaginated:
       type: object
       properties:
@@ -708,18 +671,6 @@ components:
       - next
       - previous
       - results
-    invite_direct_post_response:
-      type: object
-      properties:
-        status:
-          $ref: '#/components/schemas/InviteDirectPostResponseStatusEnum'
-        invites:
-          type: array
-          items:
-            $ref: '#/components/schemas/invite_direct_post_response_child'
-      required:
-      - invites
-      - status
     invite_direct_post_request:
       type: object
       properties:
@@ -738,17 +689,53 @@ components:
       required:
       - email
       - owner
-    InviteDirectPostResponseChildStatusEnum:
+    SingleUserInvitationStatusEnum:
       enum:
-      - SENT
-      - ALREADY_INVITED
+      - 0
+      - 1
+      - 2
+      - 3
+      type: integer
+      description: '* `0` - Failed
+
+        * `1` - Pending
+
+        * `2` - Accepted
+
+        * `3` - Expired'
+    invite_direct_post_response_child:
+      type: object
+      properties:
+        email:
+          type: string
+        status:
+          $ref: '#/components/schemas/InviteDirectPostResponseChildStatusEnum'
+      required:
+      - email
+      - status
+    InviteDirectPostResponseStatusEnum:
+      enum:
+      - SUCCESS
+      - PARTIAL
       - FAILED
       type: string
-      description: '* `SENT` - SENT
+      description: '* `SUCCESS` - SUCCESS
 
-        * `ALREADY_INVITED` - ALREADY_INVITED
+        * `PARTIAL` - PARTIAL
 
         * `FAILED` - FAILED'
+    invite_direct_post_response:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/InviteDirectPostResponseStatusEnum'
+        invites:
+          type: array
+          items:
+            $ref: '#/components/schemas/invite_direct_post_response_child'
+      required:
+      - invites
+      - status
   securitySchemes:
     JWT:
       type: apiKey
@@ -769,6 +756,3 @@ components:
       in: header
       name: Authorization
       description: Token-based authentication with required prefix "Token"
-x-refined-from:
-- opoint-openapi-original.yml
-- opoint-openapi.yml

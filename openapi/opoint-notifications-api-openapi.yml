@@ -2,7 +2,6 @@ openapi: 3.2.0
 info:
   title: Opoint Notifications API
   version: 1.0.0
-  description: 'Operations tagged notifications across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.opoint.com
 tags:
@@ -71,8 +70,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/Notification'
           description: ''
-    servers:
-    - url: https://api.opoint.com
   /notifications/{id}/:
     get:
       operationId: notifications_retrieve
@@ -192,8 +189,6 @@ paths:
       responses:
         '204':
           description: No response body
-    servers:
-    - url: https://api.opoint.com
   /notifications/alert-count/:
     get:
       operationId: notifications_alert_count_retrieve
@@ -229,8 +224,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/AlertCountResponse'
           description: ''
-    servers:
-    - url: https://api.opoint.com
 components:
   schemas:
     NotificationFieldReport:
@@ -248,43 +241,12 @@ components:
       required:
       - type
       - value
-    BaseReport:
-      type: object
-      properties:
-        id:
-          type: integer
-        download:
-          type: string
-          readOnly: true
-        title:
-          type: string
-        status:
-          type: integer
-          readOnly: true
-        timeFinished:
-          type: integer
-        type:
-          type: integer
-          readOnly: true
-        articles:
-          type: integer
-          readOnly: true
-        timestampFrom:
-          type: integer
-          readOnly: true
-        timestampTo:
-          type: integer
-          readOnly: true
-      required:
-      - articles
-      - download
-      - id
-      - status
-      - timeFinished
-      - timestampFrom
-      - timestampTo
-      - title
-      - type
+    NotificationFieldValue:
+      oneOf:
+      - $ref: '#/components/schemas/NotificationFieldExport'
+      - $ref: '#/components/schemas/NotificationFieldReport'
+      - $ref: '#/components/schemas/NotificationFieldTrackingExport'
+      - $ref: '#/components/schemas/NotificationFieldSiteExport'
     NotificationFieldSiteExport:
       type: object
       description: 'Single purpose serializer: Servers only to correctly describe a NotificationRelatedField field
@@ -338,84 +300,6 @@ components:
       - timestampTo
       - title
       - type
-    NotificationFieldTrackingExport:
-      type: object
-      description: 'Single purpose serializer: Servers only to correctly describe a NotificationRelatedField field
-
-        where the value is ReportSerializer.'
-      properties:
-        type:
-          type: string
-        value:
-          oneOf:
-          - $ref: '#/components/schemas/BaseReport'
-          - type: 'null'
-      required:
-      - type
-      - value
-    NotificationFieldExport:
-      type: object
-      description: 'Single purpose serializer: Servers only to correctly describe a NotificationRelatedField field
-
-        where the value is ExportSerializer.'
-      properties:
-        type:
-          type: string
-        value:
-          oneOf:
-          - $ref: '#/components/schemas/Export'
-          - type: 'null'
-      required:
-      - type
-      - value
-    NotificationFieldValue:
-      oneOf:
-      - $ref: '#/components/schemas/NotificationFieldExport'
-      - $ref: '#/components/schemas/NotificationFieldReport'
-      - $ref: '#/components/schemas/NotificationFieldTrackingExport'
-      - $ref: '#/components/schemas/NotificationFieldSiteExport'
-    ListNotifications:
-      type: object
-      description: Serves for describing the /notifications response. forced_singular_serializer can't work with inline_serializer
-      properties:
-        count:
-          type: integer
-        next:
-          type:
-          - string
-          - 'null'
-        previous:
-          type:
-          - string
-          - 'null'
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Notification'
-      required:
-      - count
-      - next
-      - previous
-      - results
-    Notification:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        title:
-          type: string
-          maxLength: 255
-        read:
-          type: boolean
-          default: false
-        object:
-          oneOf:
-          - $ref: '#/components/schemas/NotificationFieldValue'
-          - type: 'null'
-      required:
-      - id
-      - title
     Report:
       type: object
       properties:
@@ -459,6 +343,29 @@ components:
       - timestampTo
       - title
       - type
+    ListNotifications:
+      type: object
+      description: Serves for describing the /notifications response. forced_singular_serializer can't work with inline_serializer
+      properties:
+        count:
+          type: integer
+        next:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Notification'
+      required:
+      - count
+      - next
+      - previous
+      - results
     PatchedNotification:
       type: object
       properties:
@@ -475,6 +382,21 @@ components:
           oneOf:
           - $ref: '#/components/schemas/NotificationFieldValue'
           - type: 'null'
+    NotificationFieldExport:
+      type: object
+      description: 'Single purpose serializer: Servers only to correctly describe a NotificationRelatedField field
+
+        where the value is ExportSerializer.'
+      properties:
+        type:
+          type: string
+        value:
+          oneOf:
+          - $ref: '#/components/schemas/Export'
+          - type: 'null'
+      required:
+      - type
+      - value
     AlertCountResponse:
       type: object
       properties:
@@ -482,6 +404,77 @@ components:
           type: integer
       required:
       - count
+    NotificationFieldTrackingExport:
+      type: object
+      description: 'Single purpose serializer: Servers only to correctly describe a NotificationRelatedField field
+
+        where the value is ReportSerializer.'
+      properties:
+        type:
+          type: string
+        value:
+          oneOf:
+          - $ref: '#/components/schemas/BaseReport'
+          - type: 'null'
+      required:
+      - type
+      - value
+    Notification:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
+          maxLength: 255
+        read:
+          type: boolean
+          default: false
+        object:
+          oneOf:
+          - $ref: '#/components/schemas/NotificationFieldValue'
+          - type: 'null'
+      required:
+      - id
+      - title
+    BaseReport:
+      type: object
+      properties:
+        id:
+          type: integer
+        download:
+          type: string
+          readOnly: true
+        title:
+          type: string
+        status:
+          type: integer
+          readOnly: true
+        timeFinished:
+          type: integer
+        type:
+          type: integer
+          readOnly: true
+        articles:
+          type: integer
+          readOnly: true
+        timestampFrom:
+          type: integer
+          readOnly: true
+        timestampTo:
+          type: integer
+          readOnly: true
+      required:
+      - articles
+      - download
+      - id
+      - status
+      - timeFinished
+      - timestampFrom
+      - timestampTo
+      - title
+      - type
   securitySchemes:
     JWT:
       type: apiKey
@@ -502,6 +495,3 @@ components:
       in: header
       name: Authorization
       description: Token-based authentication with required prefix "Token"
-x-refined-from:
-- opoint-openapi-original.yml
-- opoint-openapi.yml

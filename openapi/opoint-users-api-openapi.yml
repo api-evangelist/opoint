@@ -2,7 +2,6 @@ openapi: 3.2.0
 info:
   title: Opoint Users API
   version: 1.0.0
-  description: 'Operations tagged users across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.opoint.com
 tags:
@@ -41,8 +40,6 @@ paths:
           description: ''
       summary: Users currency list
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /users/impersonation_targets/:
     get:
       operationId: users_impersonation_targets_list
@@ -117,8 +114,6 @@ paths:
                 items:
                   $ref: '#/components/schemas/ImpersonationTarget'
           description: ''
-    servers:
-    - url: https://api.opoint.com
   /users/management/{id_user}/:
     get:
       operationId: users_management_retrieve
@@ -181,8 +176,6 @@ paths:
           description: ''
       summary: Users management partial update
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /users/management/{id_user}/alerts/:
     get:
       operationId: users_management_alerts_list
@@ -250,8 +243,6 @@ paths:
           description: Successfully updated subscriptions
         '404':
           description: One of the provided alert ids is invalid
-    servers:
-    - url: https://api.opoint.com
   /users/search/:
     get:
       operationId: users_search_list
@@ -283,22 +274,84 @@ paths:
           description: Required access not set
         '500':
           description: Access is incorrectly configured
-    servers:
-    - url: https://api.opoint.com
 components:
   schemas:
-    Currency:
+    PatchedDanishUser:
       type: object
       properties:
-        currency:
+        id_user:
+          type: integer
+          readOnly: true
+        username:
           type: string
-          maxLength: 3
+          readOnly: true
+        email:
+          type: string
+          readOnly: true
+        is_active:
+          type: boolean
+          description: Designates whether this user should be treated as active. Unselect this instead of deleting accounts.
+        owner:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        last_login:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          readOnly: true
+    OpointCustomer:
+      type: object
+      properties:
+        id_customer:
+          type: integer
+          readOnly: true
         name:
           type: string
+          description: Customers name
           maxLength: 255
+        partner:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
       required:
-      - currency
+      - id_customer
       - name
+      - partner
+    AlertSubscriptionDetail:
+      type: object
+      properties:
+        is_mail:
+          type: boolean
+          default: true
+        alert_id:
+          type: integer
+          minimum: 1
+        subscribe:
+          type: boolean
+      required:
+      - alert_id
+      - subscribe
+    ImpersonationTarget:
+      type: object
+      properties:
+        id_user:
+          type: integer
+          description: User id of impersonation target.
+        username:
+          type: string
+          description: Username of impersonation target.
+        self:
+          type: boolean
+          description: If the target is of self type, meaning it represents the logged in user in another context.
+        customer:
+          $ref: '#/components/schemas/OpointCustomer'
+      required:
+      - customer
+      - id_user
+      - self
+      - username
     OpointUser:
       type: object
       properties:
@@ -336,25 +389,6 @@ components:
       - customer
       - id_user
       - username
-    ImpersonationTarget:
-      type: object
-      properties:
-        id_user:
-          type: integer
-          description: User id of impersonation target.
-        username:
-          type: string
-          description: Username of impersonation target.
-        self:
-          type: boolean
-          description: If the target is of self type, meaning it represents the logged in user in another context.
-        customer:
-          $ref: '#/components/schemas/OpointCustomer'
-      required:
-      - customer
-      - id_user
-      - self
-      - username
     UserTypeField:
       type: object
       properties:
@@ -365,19 +399,6 @@ components:
       required:
       - name
       - value
-    AlertSubscription:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        is_subscribed:
-          type: boolean
-      required:
-      - id
-      - is_subscribed
-      - name
     DanishUser:
       type: object
       properties:
@@ -408,63 +429,31 @@ components:
       - id_user
       - last_login
       - username
-    OpointCustomer:
+    AlertSubscription:
       type: object
       properties:
-        id_customer:
+        id:
           type: integer
-          readOnly: true
         name:
           type: string
-          description: Customers name
-          maxLength: 255
-        partner:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
+        is_subscribed:
+          type: boolean
       required:
-      - id_customer
+      - id
+      - is_subscribed
       - name
-      - partner
-    PatchedDanishUser:
+    Currency:
       type: object
       properties:
-        id_user:
-          type: integer
-          readOnly: true
-        username:
+        currency:
           type: string
-          readOnly: true
-        email:
+          maxLength: 3
+        name:
           type: string
-          readOnly: true
-        is_active:
-          type: boolean
-          description: Designates whether this user should be treated as active. Unselect this instead of deleting accounts.
-        owner:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-        last_login:
-          type:
-          - string
-          - 'null'
-          format: date-time
-          readOnly: true
-    AlertSubscriptionDetail:
-      type: object
-      properties:
-        is_mail:
-          type: boolean
-          default: true
-        alert_id:
-          type: integer
-          minimum: 1
-        subscribe:
-          type: boolean
+          maxLength: 255
       required:
-      - alert_id
-      - subscribe
+      - currency
+      - name
   securitySchemes:
     JWT:
       type: apiKey
@@ -485,6 +474,3 @@ components:
       in: header
       name: Authorization
       description: Token-based authentication with required prefix "Token"
-x-refined-from:
-- opoint-openapi-original.yml
-- opoint-openapi.yml

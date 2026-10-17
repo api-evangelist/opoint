@@ -2,7 +2,6 @@ openapi: 3.2.0
 info:
   title: Opoint Analytics API
   version: 1.0.0
-  description: 'Operations tagged analytics across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.opoint.com
 tags:
@@ -133,8 +132,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/data'
           description: Server Error
-    servers:
-    - url: https://api.opoint.com
   /analytics/coding-events:
     get:
       operationId: analytics_coding_events_list
@@ -186,8 +183,6 @@ paths:
           description: ''
       summary: Analytics coding events create
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /analytics/report-categories:
     get:
       operationId: analytics_report_categories_list
@@ -208,8 +203,6 @@ paths:
                 items:
                   $ref: '#/components/schemas/ReportCatgeory'
           description: ''
-    servers:
-    - url: https://api.opoint.com
   /analytics/reports:
     get:
       operationId: analytics_reports_list
@@ -272,8 +265,6 @@ paths:
           description: ''
       summary: Analytics reports create
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /analytics/reports/{id}:
     get:
       operationId: analytics_reports_retrieve
@@ -385,8 +376,6 @@ paths:
           description: Report is not active
         '404':
           description: Report not found
-    servers:
-    - url: https://api.opoint.com
   /analytics/reports/{report_id}/topics:
     get:
       operationId: analytics_reports_topics_list
@@ -458,8 +447,6 @@ paths:
           description: ''
       summary: Analytics reports topics create
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /analytics/reports/statistics:
     get:
       operationId: analytics_reports_statistics_retrieve
@@ -496,8 +483,6 @@ paths:
           description: Response contained not result
         '400':
           description: Missing parameters or wrong order
-    servers:
-    - url: https://api.opoint.com
   /analytics/scoring-variables:
     get:
       operationId: analytics_scoring_variables_list
@@ -554,8 +539,6 @@ paths:
           description: ''
       summary: Analytics scoring variables create
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /analytics/scoring-variables/{id}:
     get:
       operationId: analytics_scoring_variables_retrieve
@@ -676,8 +659,6 @@ paths:
           description: Not active
         '404':
           description: Not found
-    servers:
-    - url: https://api.opoint.com
   /analytics/topic-scoring-variable:
     post:
       operationId: analytics_topic_scoring_variable_create
@@ -709,8 +690,6 @@ paths:
           description: ''
       summary: Analytics topic scoring variable create
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /analytics/topics:
     get:
       operationId: analytics_topics_list
@@ -771,8 +750,6 @@ paths:
           description: ''
       summary: Analytics topics create
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /analytics/topics/{id}:
     get:
       operationId: analytics_topics_retrieve
@@ -893,8 +870,6 @@ paths:
               schema:
                 type: string
           description: ''
-    servers:
-    - url: https://api.opoint.com
   /analytics/topics/{id}/queries/:
     get:
       operationId: analytics_topics_queries_list
@@ -962,8 +937,6 @@ paths:
           description: Invalid request body
         '404':
           description: Topic not found
-    servers:
-    - url: https://api.opoint.com
   /analytics/topics/{id}/queries/{id_item}/:
     get:
       operationId: analytics_topics_queries_retrieve
@@ -1072,8 +1045,6 @@ paths:
           description: Topic query was removed
         '404':
           description: Topic or query not found
-    servers:
-    - url: https://api.opoint.com
   /analytics/topics/{id}/scoring-variable/{variable_id}:
     put:
       operationId: analytics_topics_scoring_variable_update
@@ -1145,8 +1116,6 @@ paths:
           description: Not found
         '204':
           description: Not found
-    servers:
-    - url: https://api.opoint.com
   /analytics/variable-values:
     get:
       operationId: analytics_variable_values_list
@@ -1203,8 +1172,6 @@ paths:
           description: ''
       summary: Analytics variable values create
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /analytics/variable-values-chains:
     get:
       operationId: analytics_variable_values_chains_list
@@ -1254,8 +1221,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/CodingEvent'
           description: Created
-    servers:
-    - url: https://api.opoint.com
   /analytics/variable-values-chains/{parentId}/{childId}:
     put:
       operationId: analytics_variable_values_chains_update
@@ -1322,8 +1287,6 @@ paths:
           description: Chain not found
         '200':
           description: Success
-    servers:
-    - url: https://api.opoint.com
   /analytics/variable-values/{id}:
     get:
       operationId: analytics_variable_values_retrieve
@@ -1441,8 +1404,6 @@ paths:
           description: Not active
         '404':
           description: Not Found
-    servers:
-    - url: https://api.opoint.com
   /analytics/variable-values/{id}/queries/{id_item}/:
     get:
       operationId: analytics_variable_values_queries_retrieve
@@ -1551,8 +1512,6 @@ paths:
           description: Topic query was removed
         '404':
           description: Topic or query not found
-    servers:
-    - url: https://api.opoint.com
   /analytics/variable-values/{value_id}/queries/:
     get:
       operationId: analytics_variable_values_queries_list
@@ -1620,10 +1579,93 @@ paths:
           description: Invalid request body
         '404':
           description: Variable Value not found
-    servers:
-    - url: https://api.opoint.com
 components:
   schemas:
+    SearchLine:
+      type: object
+      properties:
+        searchterm:
+          type: string
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchLineFilter'
+    AnalyticsQuery:
+      type: object
+      properties:
+        url:
+          type: string
+          readOnly: true
+        id_item:
+          type: integer
+          readOnly: true
+        max_age:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        rate:
+          type: number
+          format: double
+        rate_last_updated:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        max_rate:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        last_set:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+      required:
+      - id_item
+      - url
+    PatchedVariableValues:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        value:
+          type: string
+          maxLength: 511
+        isActive:
+          type: boolean
+          default: true
+        displayGroup:
+          type: integer
+          maximum: 254
+          minimum: 0
+        variableId:
+          type: integer
+    AnalyticQueryItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        searchline:
+          $ref: '#/components/schemas/SearchLine'
+        linemode:
+          $ref: '#/components/schemas/LinemodeEnum'
+        searchmode:
+          type: string
+          writeOnly: true
+      required:
+      - linemode
+      - searchline
+      - searchmode
+    LinemodeEnum:
+      enum:
+      - R
+      - O
+      - E
+      type: string
+      description: '* `R` - Required
+
+        * `O` - Optional
+
+        * `E` - Exclude'
     AnalyticQueryDetails:
       type: object
       properties:
@@ -1663,34 +1705,7 @@ components:
       - id_item
       - topic_name
       - url
-    SearchLine:
-      type: object
-      properties:
-        searchterm:
-          type: string
-        filters:
-          type: array
-          items:
-            $ref: '#/components/schemas/SearchLineFilter'
-    TopicScoringVariables:
-      type: object
-      properties:
-        topicId:
-          type: integer
-        variableId:
-          type: integer
-      required:
-      - topicId
-      - variableId
-    ScoringScaleEnum:
-      enum:
-      - 3
-      - 5
-      type: integer
-      description: '* `3` - ThreeLevel
-
-        * `5` - FiveLevel'
-    TopicUpdate:
+    ScoringVariables:
       type: object
       properties:
         id:
@@ -1701,13 +1716,93 @@ components:
         name:
           type: string
           maxLength: 255
+        minSelectedValues:
+          type: integer
+          maximum: 254
+          minimum: 0
+        maxSelectedValues:
+          type: integer
+          maximum: 254
+          minimum: 1
         isActive:
           type: boolean
           default: true
+        displayType:
+          allOf:
+          - $ref: '#/components/schemas/DisplayTypeEnum'
+          minimum: 0
+          maximum: 4294967295
+        displayOrder:
+          type: integer
+          maximum: 254
+          minimum: 0
+      required:
+      - displayOrder
+      - id
+      - maxSelectedValues
+      - minSelectedValues
+      - name
+      - reportId
+    AnalyticsError:
+      type: object
+      properties:
+        details:
+          type: string
+      required:
+      - details
+    ReportCatgeory:
+      type: object
+      properties:
+        id:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+      required:
+      - id
+      - name
+    DisplayTypeEnum:
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+      type: integer
+      description: '* `1` - ComboBox
+
+        * `2` - AutoSuggestComboBox
+
+        * `3` - ListBox
+
+        * `4` - AutoSuggestListBox'
+    Topic:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        startDate:
+          type: string
+          format: date-time
+          default: '2026-10-08T00:59:56.598307+02:00'
         autoApprove:
           type: boolean
         articlesCanBeApproved:
           type: boolean
+        isActive:
+          type: boolean
+          default: true
         parentTopicId:
           type:
           - integer
@@ -1731,66 +1826,31 @@ components:
           - string
           - 'null'
           format: date-time
-        scoringVariables:
-          type: array
-          items:
-            $ref: '#/components/schemas/ScoringVariables'
+        reportId:
+          type: integer
       required:
       - articlesCanBeApproved
       - autoApprove
       - displayOrder
       - id
       - name
-    AnalyticsQuery:
+    data:
       type: object
       properties:
-        url:
+        data:
           type: string
-          readOnly: true
-        id_item:
-          type: integer
-          readOnly: true
-        max_age:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-        rate:
-          type: number
-          format: double
-        rate_last_updated:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-        max_rate:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-        last_set:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
       required:
-      - id_item
-      - url
-    ReportStatistics:
+      - data
+    TopicScoringVariables:
       type: object
       properties:
-        id:
+        topicId:
           type: integer
-        name:
-          type: string
-        category:
-          type: string
-        unprocessed:
-          type: integer
-        uncalculated:
+        variableId:
           type: integer
       required:
-      - category
-      - id
-      - name
-      - uncalculated
-      - unprocessed
+      - topicId
+      - variableId
     ArticleReference:
       type: object
       properties:
@@ -1886,39 +1946,231 @@ components:
       - timestamp
       - topicId
       - wordCount
-    ReportCatgeory:
+    PatchedScoringVariableDetails:
       type: object
       properties:
         id:
           type: integer
-          maximum: 4294967295
-          minimum: 0
-          format: int64
+          readOnly: true
+        reportId:
+          type: integer
         name:
           type: string
           maxLength: 255
-        description:
+        minSelectedValues:
+          type: integer
+          maximum: 254
+          minimum: 0
+        maxSelectedValues:
+          type: integer
+          maximum: 254
+          minimum: 1
+        isActive:
+          type: boolean
+        displayType:
+          allOf:
+          - $ref: '#/components/schemas/DisplayTypeEnum'
+          minimum: 0
+          maximum: 4294967295
+        displayOrder:
+          type: integer
+          maximum: 254
+          minimum: 0
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/VariableValues'
+    TopicUpdate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        reportId:
+          type: integer
+        name:
+          type: string
+          maxLength: 255
+        isActive:
+          type: boolean
+          default: true
+        autoApprove:
+          type: boolean
+        articlesCanBeApproved:
+          type: boolean
+        parentTopicId:
+          type:
+          - integer
+          - 'null'
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        displayOrder:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        defaultTopicId:
+          type:
+          - integer
+          - 'null'
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        deleted:
           type:
           - string
           - 'null'
-          maxLength: 255
+          format: date-time
+        scoringVariables:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScoringVariables'
       required:
+      - articlesCanBeApproved
+      - autoApprove
+      - displayOrder
       - id
       - name
-    DisplayTypeEnum:
+    ReportStatistics:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        category:
+          type: string
+        unprocessed:
+          type: integer
+        uncalculated:
+          type: integer
+      required:
+      - category
+      - id
+      - name
+      - uncalculated
+      - unprocessed
+    VariableValues:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        value:
+          type: string
+          maxLength: 511
+        isActive:
+          type: boolean
+          default: true
+        displayGroup:
+          type: integer
+          maximum: 254
+          minimum: 0
+        variableId:
+          type: integer
+      required:
+      - displayGroup
+      - id
+      - value
+      - variableId
+    PatchedTopicUpdate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        reportId:
+          type: integer
+        name:
+          type: string
+          maxLength: 255
+        isActive:
+          type: boolean
+          default: true
+        autoApprove:
+          type: boolean
+        articlesCanBeApproved:
+          type: boolean
+        parentTopicId:
+          type:
+          - integer
+          - 'null'
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        displayOrder:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        defaultTopicId:
+          type:
+          - integer
+          - 'null'
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        deleted:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        scoringVariables:
+          type: array
+          items:
+            $ref: '#/components/schemas/ScoringVariables'
+    ScoringScaleEnum:
       enum:
-      - 1
-      - 2
       - 3
-      - 4
+      - 5
       type: integer
-      description: '* `1` - ComboBox
+      description: '* `3` - ThreeLevel
 
-        * `2` - AutoSuggestComboBox
-
-        * `3` - ListBox
-
-        * `4` - AutoSuggestListBox'
+        * `5` - FiveLevel'
+    CodingEvent:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        topicId:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        id_site:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        id_article:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        id_user:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        machineName:
+          type: string
+          maxLength: 255
+        timestamp:
+          type: string
+          format: date-time
+        actionId:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+      required:
+      - actionId
+      - id
+      - id_article
+      - id_site
+      - id_user
+      - machineName
+      - timestamp
+      - topicId
     AnalyticsReport:
       type: object
       properties:
@@ -1998,321 +2250,6 @@ components:
       - name
       - scoringScale
       - topics
-    PatchedTopicUpdate:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        reportId:
-          type: integer
-        name:
-          type: string
-          maxLength: 255
-        isActive:
-          type: boolean
-          default: true
-        autoApprove:
-          type: boolean
-        articlesCanBeApproved:
-          type: boolean
-        parentTopicId:
-          type:
-          - integer
-          - 'null'
-          maximum: 4294967295
-          minimum: 0
-          format: int64
-        displayOrder:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-        defaultTopicId:
-          type:
-          - integer
-          - 'null'
-          maximum: 4294967295
-          minimum: 0
-          format: int64
-        deleted:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        scoringVariables:
-          type: array
-          items:
-            $ref: '#/components/schemas/ScoringVariables'
-    LinemodeEnum:
-      enum:
-      - R
-      - O
-      - E
-      type: string
-      description: '* `R` - Required
-
-        * `O` - Optional
-
-        * `E` - Exclude'
-    AnalyticsError:
-      type: object
-      properties:
-        details:
-          type: string
-      required:
-      - details
-    VariableValuesChains:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        parentvalueid:
-          type: integer
-        childvalueid:
-          type: integer
-      required:
-      - childvalueid
-      - id
-      - parentvalueid
-    AnalyticQueryItem:
-      type: object
-      properties:
-        id:
-          type: integer
-        searchline:
-          $ref: '#/components/schemas/SearchLine'
-        linemode:
-          $ref: '#/components/schemas/LinemodeEnum'
-        searchmode:
-          type: string
-          writeOnly: true
-      required:
-      - linemode
-      - searchline
-      - searchmode
-    ScoringVariableDetails:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        reportId:
-          type: integer
-        name:
-          type: string
-          maxLength: 255
-        minSelectedValues:
-          type: integer
-          maximum: 254
-          minimum: 0
-        maxSelectedValues:
-          type: integer
-          maximum: 254
-          minimum: 1
-        isActive:
-          type: boolean
-        displayType:
-          allOf:
-          - $ref: '#/components/schemas/DisplayTypeEnum'
-          minimum: 0
-          maximum: 4294967295
-        displayOrder:
-          type: integer
-          maximum: 254
-          minimum: 0
-        values:
-          type: array
-          items:
-            $ref: '#/components/schemas/VariableValues'
-      required:
-      - displayOrder
-      - id
-      - isActive
-      - maxSelectedValues
-      - minSelectedValues
-      - name
-      - reportId
-    PatchedVariableValues:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        value:
-          type: string
-          maxLength: 511
-        isActive:
-          type: boolean
-          default: true
-        displayGroup:
-          type: integer
-          maximum: 254
-          minimum: 0
-        variableId:
-          type: integer
-    VariableValues:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        value:
-          type: string
-          maxLength: 511
-        isActive:
-          type: boolean
-          default: true
-        displayGroup:
-          type: integer
-          maximum: 254
-          minimum: 0
-        variableId:
-          type: integer
-      required:
-      - displayGroup
-      - id
-      - value
-      - variableId
-    PatchedScoringVariableDetails:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        reportId:
-          type: integer
-        name:
-          type: string
-          maxLength: 255
-        minSelectedValues:
-          type: integer
-          maximum: 254
-          minimum: 0
-        maxSelectedValues:
-          type: integer
-          maximum: 254
-          minimum: 1
-        isActive:
-          type: boolean
-        displayType:
-          allOf:
-          - $ref: '#/components/schemas/DisplayTypeEnum'
-          minimum: 0
-          maximum: 4294967295
-        displayOrder:
-          type: integer
-          maximum: 254
-          minimum: 0
-        values:
-          type: array
-          items:
-            $ref: '#/components/schemas/VariableValues'
-    PatchedReportUpdate:
-      type: object
-      properties:
-        name:
-          type: string
-          maxLength: 255
-        description:
-          type:
-          - string
-          - 'null'
-          maxLength: 255
-        active:
-          type: boolean
-          default: true
-        id_user:
-          type: integer
-          maximum: 4294967295
-          minimum: 0
-          format: int64
-        scoringScale:
-          allOf:
-          - $ref: '#/components/schemas/ScoringScaleEnum'
-          minimum: 0
-          maximum: 4294967295
-        scoredFields:
-          type:
-          - integer
-          - 'null'
-          maximum: 65535
-          minimum: 0
-        nPrinting:
-          type: boolean
-        topicDisplayName:
-          type: string
-          maxLength: 255
-        topicDisplayType:
-          allOf:
-          - $ref: '#/components/schemas/DisplayTypeEnum'
-          minimum: 0
-          maximum: 4294967295
-        topicMinSelectedValues:
-          type: integer
-          maximum: 254
-          minimum: 0
-        topicMaxSelectedValues:
-          type: integer
-          maximum: 254
-          minimum: 1
-        categoryId:
-          type: integer
-          maximum: 4294967295
-          minimum: 0
-          format: int64
-    data:
-      type: object
-      properties:
-        data:
-          type: string
-      required:
-      - data
-    CodingEvent:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        topicId:
-          type: integer
-          maximum: 4294967295
-          minimum: 0
-          format: int64
-        id_site:
-          type: integer
-          maximum: 4294967295
-          minimum: 0
-          format: int64
-        id_article:
-          type: integer
-          maximum: 4294967295
-          minimum: 0
-          format: int64
-        id_user:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-        machineName:
-          type: string
-          maxLength: 255
-        timestamp:
-          type: string
-          format: date-time
-        actionId:
-          type: integer
-          maximum: 4294967295
-          minimum: 0
-          format: int64
-      required:
-      - actionId
-      - id
-      - id_article
-      - id_site
-      - id_user
-      - machineName
-      - timestamp
-      - topicId
     ReportUpdate:
       type: object
       properties:
@@ -2374,58 +2311,16 @@ components:
       - scoringScale
       - topicMaxSelectedValues
       - topicMinSelectedValues
-    Topic:
+    SearchLineFilter:
       type: object
       properties:
+        type:
+          type: string
         id:
-          type: integer
-          readOnly: true
-        name:
           type: string
-          maxLength: 255
-        startDate:
-          type: string
-          format: date-time
-          default: '2026-10-08T00:59:56.598307+02:00'
-        autoApprove:
-          type: boolean
-        articlesCanBeApproved:
-          type: boolean
-        isActive:
-          type: boolean
-          default: true
-        parentTopicId:
-          type:
-          - integer
-          - 'null'
-          maximum: 4294967295
-          minimum: 0
-          format: int64
-        displayOrder:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-        defaultTopicId:
-          type:
-          - integer
-          - 'null'
-          maximum: 4294967295
-          minimum: 0
-          format: int64
-        deleted:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        reportId:
-          type: integer
       required:
-      - articlesCanBeApproved
-      - autoApprove
-      - displayOrder
-      - id
-      - name
-    ScoringVariables:
+      - type
+    ScoringVariableDetails:
       type: object
       properties:
         id:
@@ -2446,7 +2341,6 @@ components:
           minimum: 1
         isActive:
           type: boolean
-          default: true
         displayType:
           allOf:
           - $ref: '#/components/schemas/DisplayTypeEnum'
@@ -2456,22 +2350,85 @@ components:
           type: integer
           maximum: 254
           minimum: 0
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/VariableValues'
       required:
       - displayOrder
       - id
+      - isActive
       - maxSelectedValues
       - minSelectedValues
       - name
       - reportId
-    SearchLineFilter:
+    PatchedReportUpdate:
       type: object
       properties:
-        type:
+        name:
           type: string
+          maxLength: 255
+        description:
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+        active:
+          type: boolean
+          default: true
+        id_user:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        scoringScale:
+          allOf:
+          - $ref: '#/components/schemas/ScoringScaleEnum'
+          minimum: 0
+          maximum: 4294967295
+        scoredFields:
+          type:
+          - integer
+          - 'null'
+          maximum: 65535
+          minimum: 0
+        nPrinting:
+          type: boolean
+        topicDisplayName:
+          type: string
+          maxLength: 255
+        topicDisplayType:
+          allOf:
+          - $ref: '#/components/schemas/DisplayTypeEnum'
+          minimum: 0
+          maximum: 4294967295
+        topicMinSelectedValues:
+          type: integer
+          maximum: 254
+          minimum: 0
+        topicMaxSelectedValues:
+          type: integer
+          maximum: 254
+          minimum: 1
+        categoryId:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+    VariableValuesChains:
+      type: object
+      properties:
         id:
-          type: string
+          type: integer
+          readOnly: true
+        parentvalueid:
+          type: integer
+        childvalueid:
+          type: integer
       required:
-      - type
+      - childvalueid
+      - id
+      - parentvalueid
   securitySchemes:
     JWT:
       type: apiKey
@@ -2492,6 +2449,3 @@ components:
       in: header
       name: Authorization
       description: Token-based authentication with required prefix "Token"
-x-refined-from:
-- opoint-openapi-original.yml
-- opoint-openapi.yml

@@ -2,7 +2,6 @@ openapi: 3.2.0
 info:
   title: Opoint Trends API
   version: 1.0.0
-  description: 'Operations tagged trends across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.opoint.com
 tags:
@@ -29,8 +28,6 @@ paths:
           description: ''
       summary: Trends preset list
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /trends/preset/{id}/:
     get:
       operationId: trends_preset_retrieve
@@ -57,8 +54,6 @@ paths:
           description: ''
       summary: Trends preset retrieve
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /trends/profile/{profile_id}/:
     query:
       operationId: trends_profile_query
@@ -151,8 +146,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/TrendResponseSerializerv2'
           description: success
-    servers:
-    - url: https://api.opoint.com
   /trends/search/:
     query:
       operationId: trends_search_query
@@ -229,8 +222,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/TrendResponseSerializerv2'
           description: success
-    servers:
-    - url: https://api.opoint.com
   /trends/v2/:
     query:
       operationId: trends_v2_query
@@ -307,10 +298,37 @@ paths:
               schema:
                 $ref: '#/components/schemas/TrendResponseSerializerv2'
           description: success
-    servers:
-    - url: https://api.opoint.com
 components:
   schemas:
+    TrendExpressions:
+      type: object
+      properties:
+        expressions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProfileItem'
+      required:
+      - expressions
+    LinemodeEnum:
+      enum:
+      - R
+      - O
+      - E
+      type: string
+      description: '* `R` - Required
+
+        * `O` - Optional
+
+        * `E` - Exclude'
+    SearchLine:
+      type: object
+      properties:
+        searchterm:
+          type: string
+        filters:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchLineFilter'
     TrendEpochSerializerv2:
       type: object
       properties:
@@ -326,129 +344,6 @@ components:
       - articles
       - frequency
       - timestamp
-    ArticleIdsSerializerv2:
-      type: object
-      properties:
-        id_site:
-          type: integer
-        id_article:
-          type: integer
-      required:
-      - id_article
-      - id_site
-    TrendExpressions:
-      type: object
-      properties:
-        expressions:
-          type: array
-          items:
-            $ref: '#/components/schemas/ProfileItem'
-      required:
-      - expressions
-    SearchLine:
-      type: object
-      properties:
-        searchterm:
-          type: string
-        filters:
-          type: array
-          items:
-            $ref: '#/components/schemas/SearchLineFilter'
-    ProfileItem:
-      type: object
-      properties:
-        id:
-          type: integer
-        searchline:
-          $ref: '#/components/schemas/SearchLine'
-        linemode:
-          $ref: '#/components/schemas/LinemodeEnum'
-        searchmode:
-          type: string
-          writeOnly: true
-      required:
-      - linemode
-      - searchline
-      - searchmode
-    TrendPreset:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        name:
-          type: string
-          maxLength: 255
-        params: {}
-      required:
-      - id
-      - name
-      - params
-    SearchLineFilter:
-      type: object
-      properties:
-        type:
-          type: string
-        id:
-          type: string
-      required:
-      - type
-    LinemodeEnum:
-      enum:
-      - R
-      - O
-      - E
-      type: string
-      description: '* `R` - Required
-
-        * `O` - Optional
-
-        * `E` - Exclude'
-    TrendPhraseSerializerv2:
-      type: object
-      properties:
-        search_term:
-          type: string
-        display_name:
-          type: string
-      required:
-      - display_name
-      - search_term
-    Interval:
-      type: object
-      properties:
-        start:
-          type: integer
-        end:
-          type: integer
-      required:
-      - end
-      - start
-    TrendResponseSerializerv2:
-      type: object
-      properties:
-        time_step:
-          type: integer
-          description: Number of seconds in each window the timeframe was divided into
-        first_timestamp:
-          type: integer
-        last_timestamp:
-          type: integer
-        trends:
-          type: array
-          items:
-            $ref: '#/components/schemas/TrendEntrySerializerv2'
-        epoch_articles:
-          type: array
-          items:
-            type: integer
-          description: The number of articles in each time_step
-      required:
-      - epoch_articles
-      - first_timestamp
-      - last_timestamp
-      - time_step
-      - trends
     TrendEntrySerializerv2:
       type: object
       properties:
@@ -480,6 +375,100 @@ components:
       - phrase
       - significance
       - timestamp
+    TrendResponseSerializerv2:
+      type: object
+      properties:
+        time_step:
+          type: integer
+          description: Number of seconds in each window the timeframe was divided into
+        first_timestamp:
+          type: integer
+        last_timestamp:
+          type: integer
+        trends:
+          type: array
+          items:
+            $ref: '#/components/schemas/TrendEntrySerializerv2'
+        epoch_articles:
+          type: array
+          items:
+            type: integer
+          description: The number of articles in each time_step
+      required:
+      - epoch_articles
+      - first_timestamp
+      - last_timestamp
+      - time_step
+      - trends
+    ProfileItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        searchline:
+          $ref: '#/components/schemas/SearchLine'
+        linemode:
+          $ref: '#/components/schemas/LinemodeEnum'
+        searchmode:
+          type: string
+          writeOnly: true
+      required:
+      - linemode
+      - searchline
+      - searchmode
+    SearchLineFilter:
+      type: object
+      properties:
+        type:
+          type: string
+        id:
+          type: string
+      required:
+      - type
+    TrendPreset:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        params: {}
+      required:
+      - id
+      - name
+      - params
+    TrendPhraseSerializerv2:
+      type: object
+      properties:
+        search_term:
+          type: string
+        display_name:
+          type: string
+      required:
+      - display_name
+      - search_term
+    Interval:
+      type: object
+      properties:
+        start:
+          type: integer
+        end:
+          type: integer
+      required:
+      - end
+      - start
+    ArticleIdsSerializerv2:
+      type: object
+      properties:
+        id_site:
+          type: integer
+        id_article:
+          type: integer
+      required:
+      - id_article
+      - id_site
   securitySchemes:
     JWT:
       type: apiKey
@@ -500,6 +489,3 @@ components:
       in: header
       name: Authorization
       description: Token-based authentication with required prefix "Token"
-x-refined-from:
-- opoint-openapi-original.yml
-- opoint-openapi.yml

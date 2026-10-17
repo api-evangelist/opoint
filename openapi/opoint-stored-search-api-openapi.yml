@@ -2,7 +2,6 @@ openapi: 3.2.0
 info:
   title: Opoint stored search API
   version: 1.0.0
-  description: 'Operations tagged stored search across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.opoint.com
 tags:
@@ -72,8 +71,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/StoredSearchDetail'
           description: ''
-    servers:
-    - url: https://api.opoint.com
   /storedsearch/{id}/:
     get:
       operationId: storedsearch_retrieve
@@ -194,8 +191,6 @@ paths:
       responses:
         '204':
           description: No response body
-    servers:
-    - url: https://api.opoint.com
   /storedsearch/create_many/:
     post:
       operationId: storedsearch_create_many_create
@@ -235,8 +230,6 @@ paths:
                 items:
                   $ref: '#/components/schemas/StoredSearchDetail'
           description: ''
-    servers:
-    - url: https://api.opoint.com
   /storedsearch/feed/:
     get:
       operationId: storedsearch_feed_retrieve
@@ -330,36 +323,72 @@ paths:
           description: Invalid parameter or interval out of range
         '429':
           description: to_time is in the future
-    servers:
-    - url: https://api.opoint.com
 components:
   schemas:
-    EntitiesSchema:
+    TopicSchema:
       type: object
       properties:
-        location:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntitySchema'
-        organization:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntitySchema'
-        person:
-          type: array
-          items:
-            $ref: '#/components/schemas/EntitySchema'
-    SentimentEnum:
-      enum:
-      - Positive
-      - Negative
-      - Neutral
-      type: string
-      description: '* `Positive` - Positive
-
-        * `Negative` - Negative
-
-        * `Neutral` - Neutral'
+        id:
+          type: integer
+          description: Subject id.
+        text:
+          type: string
+          description: Subject name.
+        linktype_max:
+          type: integer
+        linktype_now:
+          type: integer
+        metacat:
+          type: integer
+          description: Meta category, an integer representing the type of the subject.
+        metacat_level:
+          type: integer
+          description: Meta category abstraction level, ordered from 0 and up.
+      required:
+      - id
+      - text
+    LinkobSourceSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+        depth:
+          type: integer
+        name:
+          type: string
+        obs:
+          $ref: '#/components/schemas/ObservationSchema'
+    ListStateSchema:
+      type: object
+      properties:
+        id_list:
+          type: integer
+        state:
+          type: integer
+        state_name:
+          type: string
+      required:
+      - id_list
+      - state
+    MatchItemSchema:
+      type: object
+      properties:
+        rowspan:
+          type: integer
+        colspan:
+          type: integer
+        type:
+          type: string
+        color:
+          type: integer
+        active:
+          type: boolean
+        length:
+          type: integer
+        removed:
+          type: integer
+        text:
+          type: string
     MatchSchema:
       type: object
       properties:
@@ -377,100 +406,61 @@ components:
       - color
       - text
       - type
-    TopicsAndEntitiesSchema:
+    MatchTableSchema:
       type: object
       properties:
-        topics:
-          type: array
-          items:
-            $ref: '#/components/schemas/IptcTopicSchema'
-        entities:
-          $ref: '#/components/schemas/EntitiesSchema'
+        rows:
+          type: integer
+        cols:
+          type: integer
+        row:
+          $ref: '#/components/schemas/MatchTableRowSchema'
+    EntitySchema:
+      type: object
+      properties:
+        entity:
+          type: string
+        wikidata_id:
+          type: string
+        crunchbase:
+          type: string
+        permid:
+          type: string
+        lei:
+          type: string
+        figi:
+          type: string
         sentiment:
-          allOf:
-          - $ref: '#/components/schemas/SentimentEnum'
-          description: 'Overall sentiment of the article.
-
-
-            * `Positive` - Positive
-
-            * `Negative` - Negative
-
-            * `Neutral` - Neutral'
-        sentiment_score:
-          type: number
-          format: double
-          description: Aggregated sentiment score from -1.0 to 1.0.
-    SummarySchema:
+          type: string
+      required:
+      - entity
+    ScreenshotSchema:
       type: object
       properties:
+        id_type:
+          type: integer
+        width:
+          type: integer
+        height:
+          type: integer
         text:
           type: string
-        matches:
-          type: boolean
-          description: Whether search matches are highlighted in this field.
-        compare:
-          type: integer
-          description: Edit distance between compare_text parameter and the combined summary and body text.
-        truncated:
-          type: boolean
+          description: URL of the screenshot.
       required:
+      - height
+      - id_type
       - text
-    FirstSourceSchema:
+      - width
+    DebugLineSchema:
       type: object
       properties:
-        id:
-          type: integer
-        name:
-          type: string
-        sitename:
-          type: string
-        url:
-          type: string
-        siteurl:
-          type: string
-      required:
-      - id
-      - name
-      - sitename
-      - siteurl
-      - url
-    QuoteSchema:
-      type: object
-      properties:
-        matches:
-          type: boolean
-        text:
-          type: string
-      required:
-      - text
-    SiteReadershipSchema:
-      type: object
-      properties:
-        P:
-          type: number
-          format: double
-        value:
-          type: integer
-    Rfc822TimeSchema:
-      type: object
-      properties:
-        text:
-          type: string
-          description: RFC 822 formatted time.
-      required:
-      - text
-    ListStateSchema:
-      type: object
-      properties:
-        id_list:
-          type: integer
         state:
           type: integer
-        state_name:
+          description: 1 if the line had an error, 0 otherwise.
+        query:
           type: string
+          description: What the query was interpreted as, if the line had errors corrected.
       required:
-      - id_list
       - state
     SortGroupSchema:
       type: object
@@ -487,16 +477,40 @@ components:
           type: string
       required:
       - group
-    TextFieldSchema:
+    LocalTimeSchema:
       type: object
       properties:
         text:
           type: string
-        matches:
-          type: boolean
-          description: Whether search matches are highlighted in this field.
+          description: ISO 8601 formatted time.
+        GMT:
+          type: integer
       required:
+      - GMT
       - text
+    SourceSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        sitename:
+          type: string
+        url:
+          type: string
+        siteurl:
+          type: string
+        linktype_max:
+          type: integer
+        linktype_now:
+          type: integer
+      required:
+      - id
+      - name
+      - sitename
+      - siteurl
+      - url
     PdfFileSchema:
       type: object
       properties:
@@ -512,21 +526,161 @@ components:
       - all
       - args
       - pdf_parts
-    SearchResultSchema:
+    UserCommentsSchema:
       type: object
-      description: 'Top-level search result wrapper.
-
-
-        The searchresult field contains either a successful SearchResponse
-
-        or a SearchError.'
       properties:
-        searchresult:
-          allOf:
-          - $ref: '#/components/schemas/SearchResponseSchema'
-          description: The search result. Contains either a successful response with documents, or an error.
+        count:
+          type: integer
+        usercomment:
+          type: array
+          items:
+            $ref: '#/components/schemas/UserCommentSchema'
       required:
-      - searchresult
+      - count
+    ArticleMediaSchema:
+      type: object
+      properties:
+        url:
+          type: string
+        localurl:
+          type: string
+        thumbnail:
+          type: string
+        text:
+          type: string
+    QuoteSchema:
+      type: object
+      properties:
+        matches:
+          type: boolean
+        text:
+          type: string
+      required:
+      - text
+    SummarySchema:
+      type: object
+      properties:
+        text:
+          type: string
+        matches:
+          type: boolean
+          description: Whether search matches are highlighted in this field.
+        compare:
+          type: integer
+          description: Edit distance between compare_text parameter and the combined summary and body text.
+        truncated:
+          type: boolean
+      required:
+      - text
+    InternalSearchReplySchema:
+      type: object
+      properties:
+        id_site:
+          type: integer
+        id_article:
+          type: integer
+        text:
+          type: string
+      required:
+      - id_article
+      - id_site
+      - text
+    SentimentEnum:
+      enum:
+      - Positive
+      - Negative
+      - Neutral
+      type: string
+      description: '* `Positive` - Positive
+
+        * `Negative` - Negative
+
+        * `Neutral` - Neutral'
+    TranslatedHeaderSchema:
+      type: object
+      properties:
+        text:
+          type: string
+        matches:
+          type: boolean
+          description: Whether search matches are highlighted in this field.
+        language:
+          type: string
+      required:
+      - text
+    MatchTableRowSchema:
+      type: object
+      properties:
+        match_item:
+          $ref: '#/components/schemas/MatchItemSchema'
+    IdenticalDocumentsSchema:
+      type: object
+      properties:
+        cnt:
+          type: integer
+        document:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+      required:
+      - cnt
+    AlmostIdenticalSchema:
+      type: object
+      properties:
+        id_site:
+          type: integer
+        id_article:
+          type: integer
+        sim:
+          type: integer
+          description: Similarity score. Higher is more similar.
+      required:
+      - id_article
+      - id_site
+      - sim
+    SearchMatchSchema:
+      type: object
+      properties:
+        type:
+          type: string
+        color:
+          type: integer
+        text:
+          type: string
+    PatchedStoredSearchPatch:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        search:
+          type: string
+        last_new_article:
+          type: integer
+          readOnly: true
+        access_group:
+          $ref: '#/components/schemas/AccessGroupSchema'
+        max_age:
+          type: integer
+          default: 345600
+        get_old_articles:
+          type: boolean
+          default: false
+        use_syndicates:
+          type: boolean
+    ArticleImagesSchema:
+      type: object
+      properties:
+        count:
+          type: integer
+        articleimage:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArticleImageSchema'
+      required:
+      - articleimage
+      - count
     UserCommentSchema:
       type: object
       properties:
@@ -566,135 +720,14 @@ components:
       - signature
       - timestamp
       - username
-    DebugLineSchema:
+    SiteReadershipSchema:
       type: object
       properties:
-        state:
+        P:
+          type: number
+          format: double
+        value:
           type: integer
-          description: 1 if the line had an error, 0 otherwise.
-        query:
-          type: string
-          description: What the query was interpreted as, if the line had errors corrected.
-      required:
-      - state
-    BodySchema:
-      type: object
-      properties:
-        text:
-          type: string
-        matches:
-          type: boolean
-          description: Whether search matches are highlighted in this field.
-        readmore:
-          type: boolean
-        truncated:
-          type: boolean
-      required:
-      - text
-    StoredSearch:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        search:
-          type: string
-        last_new_article:
-          type: integer
-          readOnly: true
-        max_age:
-          type: integer
-          default: 345600
-        get_old_articles:
-          type: boolean
-          default: false
-        use_syndicates:
-          type: boolean
-      required:
-      - id
-      - last_new_article
-      - search
-    AlmostIdenticalSchema:
-      type: object
-      properties:
-        id_site:
-          type: integer
-        id_article:
-          type: integer
-        sim:
-          type: integer
-          description: Similarity score. Higher is more similar.
-      required:
-      - id_article
-      - id_site
-      - sim
-    TranslatedHeaderSchema:
-      type: object
-      properties:
-        text:
-          type: string
-        matches:
-          type: boolean
-          description: Whether search matches are highlighted in this field.
-        language:
-          type: string
-      required:
-      - text
-    PatchedStoredSearchPatch:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        search:
-          type: string
-        last_new_article:
-          type: integer
-          readOnly: true
-        access_group:
-          $ref: '#/components/schemas/AccessGroupSchema'
-        max_age:
-          type: integer
-          default: 345600
-        get_old_articles:
-          type: boolean
-          default: false
-        use_syndicates:
-          type: boolean
-    LocalTimeSchema:
-      type: object
-      properties:
-        text:
-          type: string
-          description: ISO 8601 formatted time.
-        GMT:
-          type: integer
-      required:
-      - GMT
-      - text
-    ObservationSchema:
-      type: object
-      description: Single link observation.
-      properties:
-        level:
-          type: string
-        images:
-          type: object
-          additionalProperties: {}
-    ShortFieldSchema:
-      type: object
-      properties:
-        text:
-          type: string
-        matches:
-          type: boolean
-          description: Whether search matches are highlighted in this field.
-        length:
-          type: integer
-        removed:
-          type: integer
-      required:
-      - text
     ArticleReadershipSchema:
       type: object
       properties:
@@ -723,6 +756,359 @@ components:
         StdExpectedP:
           type: number
           format: double
+    Rfc822TimeSchema:
+      type: object
+      properties:
+        text:
+          type: string
+          description: RFC 822 formatted time.
+      required:
+      - text
+    EntitiesSchema:
+      type: object
+      properties:
+        location:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntitySchema'
+        organization:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntitySchema'
+        person:
+          type: array
+          items:
+            $ref: '#/components/schemas/EntitySchema'
+    SearchResponseSchema:
+      type: object
+      description: Successful search response from searchd.
+      properties:
+        documents:
+          type: integer
+          description: Number of documents in the result.
+        document:
+          type: array
+          items:
+            $ref: '#/components/schemas/DocumentSchema'
+          description: Articles matching the search.
+        debug:
+          $ref: '#/components/schemas/DebugSchema'
+        first_timestamp:
+          type: integer
+          description: Unix timestamp of the newest matching document in the response.
+        last_timestamp:
+          type: integer
+          description: Unix timestamp of the oldest matching document in the response.
+        context:
+          type: string
+          description: Pagination cursor. Pass to the context parameter to fetch the next page. Empty string means no more results.
+        search_start:
+          type: integer
+          description: Unix timestamp a new search can start from to get newer content. Can be passed as the oldest parameter.
+        range_count:
+          type: integer
+          description: Estimate of total matching documents in the range.
+        range_start:
+          type: integer
+        range_end:
+          type: integer
+          description: 0 means the end of the range is now.
+        count:
+          type: integer
+        cacheage:
+          type: integer
+        cputime:
+          type: integer
+        host:
+          type: string
+          description: Server having processed the request.
+        compiledate:
+          type: string
+        branch:
+          type: string
+        notimeout:
+          type: boolean
+        wikinames:
+          type: object
+          additionalProperties: {}
+          description: Mapping of entity ids to entity names.
+        wikidescriptions:
+          type: object
+          additionalProperties: {}
+          description: Mapping of entity ids to entity descriptions.
+        search_matches:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchMatchSchema'
+        matches_table:
+          $ref: '#/components/schemas/MatchTableSchema'
+        watch_id:
+          type: integer
+          description: Id of watch process.
+        sort_groups:
+          $ref: '#/components/schemas/SortGroupSchema'
+        covered:
+          type: integer
+        next_from:
+          type: integer
+      required:
+      - document
+      - documents
+      - first_timestamp
+      - last_timestamp
+    DebugSchema:
+      type: object
+      properties:
+        count:
+          type: integer
+        lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/DebugLineSchema'
+    SimilarwebSchema:
+      type: object
+      properties:
+        domain:
+          type: string
+        mvisit:
+          type: integer
+          description: Monthly visits.
+        unique_mobile_visits:
+          type: integer
+        unique_desktop_visits:
+          type: integer
+        page_per_visit:
+          type: number
+          format: double
+        bounce_rate:
+          type: number
+          format: double
+        time_on_site:
+          type: number
+          format: double
+          description: Average time on site per visit, in seconds.
+        category:
+          type: string
+        category_rank:
+          type: integer
+        sanitize:
+          type: number
+          format: double
+        readership:
+          $ref: '#/components/schemas/SiteReadershipSchema'
+        article_readership:
+          $ref: '#/components/schemas/ArticleReadershipSchema'
+    ObservationSchema:
+      type: object
+      description: Single link observation.
+      properties:
+        level:
+          type: string
+        images:
+          type: object
+          additionalProperties: {}
+    AccessInfoSchema:
+      type: object
+      properties:
+        name:
+          type: string
+        enabled:
+          type: boolean
+        value:
+          type: integer
+      required:
+      - enabled
+      - name
+      - value
+    SiteRankSchema:
+      type: object
+      properties:
+        rank_global:
+          type: integer
+        rank_country:
+          type: integer
+    StoredSearch:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        search:
+          type: string
+        last_new_article:
+          type: integer
+          readOnly: true
+        max_age:
+          type: integer
+          default: 345600
+        get_old_articles:
+          type: boolean
+          default: false
+        use_syndicates:
+          type: boolean
+      required:
+      - id
+      - last_new_article
+      - search
+    TagSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+        is_owner:
+          type: integer
+        sent:
+          type: integer
+        set:
+          type: integer
+        equal_sent:
+          type: integer
+      required:
+      - equal_sent
+      - id
+      - is_owner
+      - sent
+      - set
+    TextFieldSchema:
+      type: object
+      properties:
+        text:
+          type: string
+        matches:
+          type: boolean
+          description: Whether search matches are highlighted in this field.
+      required:
+      - text
+    QuotesSchema:
+      type: object
+      properties:
+        quote:
+          $ref: '#/components/schemas/QuoteSchema'
+    StoredSearchPatch:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        search:
+          type: string
+        last_new_article:
+          type: integer
+          readOnly: true
+        access_group:
+          $ref: '#/components/schemas/AccessGroupSchema'
+        max_age:
+          type: integer
+          default: 345600
+        get_old_articles:
+          type: boolean
+          default: false
+        use_syndicates:
+          type: boolean
+      required:
+      - id
+      - last_new_article
+    FirstSourceSchema:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        sitename:
+          type: string
+        url:
+          type: string
+        siteurl:
+          type: string
+      required:
+      - id
+      - name
+      - sitename
+      - siteurl
+      - url
+    MediaTypeSchema:
+      type: object
+      properties:
+        timemap:
+          type: boolean
+        duration:
+          type: integer
+          description: Length of timemap in seconds.
+        clip:
+          type: boolean
+        hastext:
+          type: boolean
+        haslogo:
+          type: boolean
+        paywall:
+          type: boolean
+          description: Whether article was fetched from behind a paywall.
+        fulltext:
+          type: boolean
+        text:
+          type: string
+      required:
+      - clip
+      - fulltext
+      - haslogo
+      - hastext
+      - paywall
+      - text
+      - timemap
+    StoredSearchDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        search:
+          type: string
+        last_new_article:
+          type: integer
+          readOnly: true
+        access_group:
+          $ref: '#/components/schemas/AccessGroupSchema'
+        max_age:
+          type: integer
+          default: 345600
+        get_old_articles:
+          type: boolean
+          default: false
+        use_syndicates:
+          type: boolean
+      required:
+      - id
+      - last_new_article
+      - search
+    BodySchema:
+      type: object
+      properties:
+        text:
+          type: string
+        matches:
+          type: boolean
+          description: Whether search matches are highlighted in this field.
+        readmore:
+          type: boolean
+        truncated:
+          type: boolean
+      required:
+      - text
+    ShortFieldSchema:
+      type: object
+      properties:
+        text:
+          type: string
+        matches:
+          type: boolean
+          description: Whether search matches are highlighted in this field.
+        length:
+          type: integer
+        removed:
+          type: integer
+      required:
+      - text
     AccessGroupSchema:
       type: object
       properties:
@@ -742,6 +1128,86 @@ components:
       - access_groups
       - sites
       - sources
+    HeaderSchema:
+      type: object
+      properties:
+        text:
+          type: string
+        matches:
+          type: boolean
+          description: Whether search matches are highlighted in this field.
+        compare:
+          type: integer
+          description: Edit distance between compare_header parameter and the header text.
+      required:
+      - text
+    SearchResultSchema:
+      type: object
+      description: 'Top-level search result wrapper.
+
+
+        The searchresult field contains either a successful SearchResponse
+
+        or a SearchError.'
+      properties:
+        searchresult:
+          allOf:
+          - $ref: '#/components/schemas/SearchResponseSchema'
+          description: The search result. Contains either a successful response with documents, or an error.
+      required:
+      - searchresult
+    PdfPartSchema:
+      type: object
+      properties:
+        pages:
+          type: integer
+        args:
+          type: string
+        text:
+          type: string
+      required:
+      - args
+      - pages
+      - text
+    TopicsAndEntitiesSchema:
+      type: object
+      properties:
+        topics:
+          type: array
+          items:
+            $ref: '#/components/schemas/IptcTopicSchema'
+        entities:
+          $ref: '#/components/schemas/EntitiesSchema'
+        sentiment:
+          allOf:
+          - $ref: '#/components/schemas/SentimentEnum'
+          description: 'Overall sentiment of the article.
+
+
+            * `Positive` - Positive
+
+            * `Negative` - Negative
+
+            * `Neutral` - Neutral'
+        sentiment_score:
+          type: number
+          format: double
+          description: Aggregated sentiment score from -1.0 to 1.0.
+    LanguageSchema:
+      type: object
+      properties:
+        encoding:
+          type: string
+        text:
+          type: string
+      required:
+      - encoding
+      - text
+    SourcesSchema:
+      type: object
+      properties:
+        source:
+          $ref: '#/components/schemas/SourceSchema'
     DocumentSchema:
       type: object
       description: A single article/document in the search response.
@@ -901,349 +1367,6 @@ components:
       - stimestamp
       - stimestamp_index
       - unix_timestamp
-    SimilarwebSchema:
-      type: object
-      properties:
-        domain:
-          type: string
-        mvisit:
-          type: integer
-          description: Monthly visits.
-        unique_mobile_visits:
-          type: integer
-        unique_desktop_visits:
-          type: integer
-        page_per_visit:
-          type: number
-          format: double
-        bounce_rate:
-          type: number
-          format: double
-        time_on_site:
-          type: number
-          format: double
-          description: Average time on site per visit, in seconds.
-        category:
-          type: string
-        category_rank:
-          type: integer
-        sanitize:
-          type: number
-          format: double
-        readership:
-          $ref: '#/components/schemas/SiteReadershipSchema'
-        article_readership:
-          $ref: '#/components/schemas/ArticleReadershipSchema'
-    InternalSearchReplySchema:
-      type: object
-      properties:
-        id_site:
-          type: integer
-        id_article:
-          type: integer
-        text:
-          type: string
-      required:
-      - id_article
-      - id_site
-      - text
-    SiteRankSchema:
-      type: object
-      properties:
-        rank_global:
-          type: integer
-        rank_country:
-          type: integer
-    MatchTableRowSchema:
-      type: object
-      properties:
-        match_item:
-          $ref: '#/components/schemas/MatchItemSchema'
-    MediaTypeSchema:
-      type: object
-      properties:
-        timemap:
-          type: boolean
-        duration:
-          type: integer
-          description: Length of timemap in seconds.
-        clip:
-          type: boolean
-        hastext:
-          type: boolean
-        haslogo:
-          type: boolean
-        paywall:
-          type: boolean
-          description: Whether article was fetched from behind a paywall.
-        fulltext:
-          type: boolean
-        text:
-          type: string
-      required:
-      - clip
-      - fulltext
-      - haslogo
-      - hastext
-      - paywall
-      - text
-      - timemap
-    MatchItemSchema:
-      type: object
-      properties:
-        rowspan:
-          type: integer
-        colspan:
-          type: integer
-        type:
-          type: string
-        color:
-          type: integer
-        active:
-          type: boolean
-        length:
-          type: integer
-        removed:
-          type: integer
-        text:
-          type: string
-    LinkobSourceSchema:
-      type: object
-      properties:
-        id:
-          type: integer
-        depth:
-          type: integer
-        name:
-          type: string
-        obs:
-          $ref: '#/components/schemas/ObservationSchema'
-    MatchTableSchema:
-      type: object
-      properties:
-        rows:
-          type: integer
-        cols:
-          type: integer
-        row:
-          $ref: '#/components/schemas/MatchTableRowSchema'
-    IdenticalDocumentsSchema:
-      type: object
-      properties:
-        cnt:
-          type: integer
-        document:
-          type: array
-          items:
-            type: object
-            additionalProperties: {}
-      required:
-      - cnt
-    EntitySchema:
-      type: object
-      properties:
-        entity:
-          type: string
-        wikidata_id:
-          type: string
-        crunchbase:
-          type: string
-        permid:
-          type: string
-        lei:
-          type: string
-        figi:
-          type: string
-        sentiment:
-          type: string
-      required:
-      - entity
-    LinkobsSchema:
-      type: object
-      properties:
-        cnt:
-          type: integer
-        source:
-          $ref: '#/components/schemas/LinkobSourceSchema'
-      required:
-      - cnt
-    SourceSchema:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        sitename:
-          type: string
-        url:
-          type: string
-        siteurl:
-          type: string
-        linktype_max:
-          type: integer
-        linktype_now:
-          type: integer
-      required:
-      - id
-      - name
-      - sitename
-      - siteurl
-      - url
-    LanguageSchema:
-      type: object
-      properties:
-        encoding:
-          type: string
-        text:
-          type: string
-      required:
-      - encoding
-      - text
-    StoredSearchDetail:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        search:
-          type: string
-        last_new_article:
-          type: integer
-          readOnly: true
-        access_group:
-          $ref: '#/components/schemas/AccessGroupSchema'
-        max_age:
-          type: integer
-          default: 345600
-        get_old_articles:
-          type: boolean
-          default: false
-        use_syndicates:
-          type: boolean
-      required:
-      - id
-      - last_new_article
-      - search
-    DebugSchema:
-      type: object
-      properties:
-        count:
-          type: integer
-        lines:
-          type: array
-          items:
-            $ref: '#/components/schemas/DebugLineSchema'
-    SearchMatchSchema:
-      type: object
-      properties:
-        type:
-          type: string
-        color:
-          type: integer
-        text:
-          type: string
-    AccessInfoSchema:
-      type: object
-      properties:
-        name:
-          type: string
-        enabled:
-          type: boolean
-        value:
-          type: integer
-      required:
-      - enabled
-      - name
-      - value
-    SearchResponseSchema:
-      type: object
-      description: Successful search response from searchd.
-      properties:
-        documents:
-          type: integer
-          description: Number of documents in the result.
-        document:
-          type: array
-          items:
-            $ref: '#/components/schemas/DocumentSchema'
-          description: Articles matching the search.
-        debug:
-          $ref: '#/components/schemas/DebugSchema'
-        first_timestamp:
-          type: integer
-          description: Unix timestamp of the newest matching document in the response.
-        last_timestamp:
-          type: integer
-          description: Unix timestamp of the oldest matching document in the response.
-        context:
-          type: string
-          description: Pagination cursor. Pass to the context parameter to fetch the next page. Empty string means no more results.
-        search_start:
-          type: integer
-          description: Unix timestamp a new search can start from to get newer content. Can be passed as the oldest parameter.
-        range_count:
-          type: integer
-          description: Estimate of total matching documents in the range.
-        range_start:
-          type: integer
-        range_end:
-          type: integer
-          description: 0 means the end of the range is now.
-        count:
-          type: integer
-        cacheage:
-          type: integer
-        cputime:
-          type: integer
-        host:
-          type: string
-          description: Server having processed the request.
-        compiledate:
-          type: string
-        branch:
-          type: string
-        notimeout:
-          type: boolean
-        wikinames:
-          type: object
-          additionalProperties: {}
-          description: Mapping of entity ids to entity names.
-        wikidescriptions:
-          type: object
-          additionalProperties: {}
-          description: Mapping of entity ids to entity descriptions.
-        search_matches:
-          type: array
-          items:
-            $ref: '#/components/schemas/SearchMatchSchema'
-        matches_table:
-          $ref: '#/components/schemas/MatchTableSchema'
-        watch_id:
-          type: integer
-          description: Id of watch process.
-        sort_groups:
-          $ref: '#/components/schemas/SortGroupSchema'
-        covered:
-          type: integer
-        next_from:
-          type: integer
-      required:
-      - document
-      - documents
-      - first_timestamp
-      - last_timestamp
-    ArticleMediaSchema:
-      type: object
-      properties:
-        url:
-          type: string
-        localurl:
-          type: string
-        thumbnail:
-          type: string
-        text:
-          type: string
     IptcTopicSchema:
       type: object
       properties:
@@ -1261,113 +1384,6 @@ components:
       - label
       - mediatopic_id
       - score
-    ScreenshotSchema:
-      type: object
-      properties:
-        id_type:
-          type: integer
-        width:
-          type: integer
-        height:
-          type: integer
-        text:
-          type: string
-          description: URL of the screenshot.
-      required:
-      - height
-      - id_type
-      - text
-      - width
-    TopicSchema:
-      type: object
-      properties:
-        id:
-          type: integer
-          description: Subject id.
-        text:
-          type: string
-          description: Subject name.
-        linktype_max:
-          type: integer
-        linktype_now:
-          type: integer
-        metacat:
-          type: integer
-          description: Meta category, an integer representing the type of the subject.
-        metacat_level:
-          type: integer
-          description: Meta category abstraction level, ordered from 0 and up.
-      required:
-      - id
-      - text
-    PdfPartSchema:
-      type: object
-      properties:
-        pages:
-          type: integer
-        args:
-          type: string
-        text:
-          type: string
-      required:
-      - args
-      - pages
-      - text
-    TagSchema:
-      type: object
-      properties:
-        id:
-          type: integer
-        is_owner:
-          type: integer
-        sent:
-          type: integer
-        set:
-          type: integer
-        equal_sent:
-          type: integer
-      required:
-      - equal_sent
-      - id
-      - is_owner
-      - sent
-      - set
-    HeaderSchema:
-      type: object
-      properties:
-        text:
-          type: string
-        matches:
-          type: boolean
-          description: Whether search matches are highlighted in this field.
-        compare:
-          type: integer
-          description: Edit distance between compare_header parameter and the header text.
-      required:
-      - text
-    ArticleImagesSchema:
-      type: object
-      properties:
-        count:
-          type: integer
-        articleimage:
-          type: array
-          items:
-            $ref: '#/components/schemas/ArticleImageSchema'
-      required:
-      - articleimage
-      - count
-    UserCommentsSchema:
-      type: object
-      properties:
-        count:
-          type: integer
-        usercomment:
-          type: array
-          items:
-            $ref: '#/components/schemas/UserCommentSchema'
-      required:
-      - count
     ArticleImageSchema:
       type: object
       properties:
@@ -1375,40 +1391,15 @@ components:
           type: string
         caption:
           $ref: '#/components/schemas/TextFieldSchema'
-    QuotesSchema:
+    LinkobsSchema:
       type: object
       properties:
-        quote:
-          $ref: '#/components/schemas/QuoteSchema'
-    SourcesSchema:
-      type: object
-      properties:
+        cnt:
+          type: integer
         source:
-          $ref: '#/components/schemas/SourceSchema'
-    StoredSearchPatch:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        search:
-          type: string
-        last_new_article:
-          type: integer
-          readOnly: true
-        access_group:
-          $ref: '#/components/schemas/AccessGroupSchema'
-        max_age:
-          type: integer
-          default: 345600
-        get_old_articles:
-          type: boolean
-          default: false
-        use_syndicates:
-          type: boolean
+          $ref: '#/components/schemas/LinkobSourceSchema'
       required:
-      - id
-      - last_new_article
+      - cnt
   securitySchemes:
     JWT:
       type: apiKey
@@ -1429,6 +1420,3 @@ components:
       in: header
       name: Authorization
       description: Token-based authentication with required prefix "Token"
-x-refined-from:
-- opoint-openapi-original.yml
-- opoint-openapi.yml

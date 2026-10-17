@@ -2,7 +2,6 @@ openapi: 3.2.0
 info:
   title: Opoint Sites API
   version: 1.0.0
-  description: 'Operations tagged sites across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.opoint.com
 tags:
@@ -53,8 +52,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/SitesListPaginated'
           description: ''
-    servers:
-    - url: https://api.opoint.com
   /sites/{id_site}:
     get:
       operationId: sites_retrieve
@@ -233,8 +230,6 @@ paths:
                       licence_enforce_report: 64
                   summary: Site and source detail PATCH response example
           description: Site's settings changed
-    servers:
-    - url: https://api.opoint.com
   /sites/get-multiple:
     post:
       operationId: sites_get_multiple_create
@@ -269,8 +264,6 @@ paths:
           description: ''
       summary: Sites get multiple create
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /sites/reports/:
     post:
       operationId: sites_reports_create
@@ -319,8 +312,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/SiteSearchReportAsyncResponse'
           description: Report generation has been queued.
-    servers:
-    - url: https://api.opoint.com
   /sites/requests/:
     get:
       operationId: sites_requests_list
@@ -555,8 +546,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/SiteRequest'
           description: ''
-    servers:
-    - url: https://api.opoint.com
   /sites/requests/{id}/:
     get:
       operationId: sites_requests_retrieve
@@ -674,8 +663,6 @@ paths:
       responses:
         '204':
           description: No response body
-    servers:
-    - url: https://api.opoint.com
   /sites/requests/{id}/create-site/:
     post:
       operationId: sites_requests_create_site_create
@@ -713,8 +700,6 @@ paths:
           description: ''
       summary: Sites requests create site create
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /sites/requests/estimate-delivery:
     get:
       operationId: sites_requests_estimate_delivery_retrieve
@@ -742,8 +727,6 @@ paths:
       responses:
         '200':
           description: Array of ISO-8601 formatted dates representing the estimated deadlines.
-    servers:
-    - url: https://api.opoint.com
   /sites/requests/from-namemap/{id_namemap}/:
     post:
       operationId: sites_requests_from_namemap_create
@@ -781,8 +764,6 @@ paths:
           description: ''
       summary: Sites requests from namemap create
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /sites/requests/mapping-projects/:
     get:
       operationId: sites_requests_mapping_projects_retrieve
@@ -802,8 +783,6 @@ paths:
           description: ''
       summary: Sites requests mapping projects retrieve
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /sites/requests/requesters/:
     get:
       operationId: sites_requests_requesters_retrieve
@@ -823,8 +802,6 @@ paths:
           description: ''
       summary: Sites requests requesters retrieve
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /sites/requests/site-activity:
     get:
       operationId: sites_requests_site_activity_retrieve
@@ -846,8 +823,6 @@ paths:
       responses:
         '200':
           description: Array of active section counts, aligned with the requested ids.
-    servers:
-    - url: https://api.opoint.com
   /sites/search/:
     get:
       operationId: sites_search_retrieve
@@ -868,8 +843,6 @@ paths:
           description: ''
       summary: Sites search retrieve
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /sites/tags/:
     get:
       operationId: sites_tags_list
@@ -921,8 +894,6 @@ paths:
           description: ''
       summary: Sites tags create
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /sites/tags/{id}/:
     get:
       operationId: sites_tags_retrieve
@@ -1043,8 +1014,6 @@ paths:
           description: No response body
       summary: Sites tags destroy
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
   /sites/tags/{id}/{id_site}/:
     post:
       operationId: sites_tags_create_detail
@@ -1106,8 +1075,6 @@ paths:
           description: Site untagged
         '404':
           description: Site not found
-    servers:
-    - url: https://api.opoint.com
   /sites/tags/{id}/tag/:
     post:
       operationId: sites_tags_tag_create
@@ -1155,8 +1122,6 @@ paths:
                 items:
                   $ref: '#/components/schemas/SiteBasket'
           description: ''
-    servers:
-    - url: https://api.opoint.com
   /sites/tags/{id}/untag/:
     post:
       operationId: sites_tags_untag_create
@@ -1194,35 +1159,157 @@ paths:
               schema:
                 $ref: '#/components/schemas/SiteTagBulkUntagResult'
           description: ''
-    servers:
-    - url: https://api.opoint.com
 components:
   schemas:
-    SiteSearchReport:
+    SearchLine:
       type: object
-      description: 'Same request shape as a normal search (searchterm/expressions + params),
-
-        but always run in site-search mode and always over JSON.'
       properties:
-        params:
-          type: object
-          additionalProperties: {}
-          writeOnly: true
         searchterm:
           type: string
-        expressions:
+        filters:
           type: array
           items:
-            $ref: '#/components/schemas/ProfileItem'
-        use_raw_query:
-          type: boolean
-        default_search:
-          type: string
-        title:
-          type: string
-          maxLength: 128
+            $ref: '#/components/schemas/SearchLineFilter'
+    SiteSearchReportAsyncResponse:
+      type: object
+      properties:
+        report_id:
+          type: integer
       required:
-      - title
+      - report_id
+    SiteOptionsPatchRequest:
+      type: object
+      properties:
+        summarizer_param:
+          oneOf:
+          - $ref: '#/components/schemas/SummarizerParam'
+          - type: 'null'
+        max_archive_age:
+          type:
+          - integer
+          - 'null'
+        max_free_search_age:
+          type:
+          - integer
+          - 'null'
+    OpointCustomer:
+      type: object
+      properties:
+        id_customer:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          description: Customers name
+          maxLength: 255
+        partner:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+      required:
+      - id_customer
+      - name
+      - partner
+    SiteRequestCreate:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        url:
+          type: string
+          maxLength: 255
+        sitename:
+          type: string
+          maxLength: 255
+        country:
+          type: string
+          maxLength: 2
+        comment:
+          type:
+          - string
+          - 'null'
+        reference:
+          type: string
+          maxLength: 255
+        importance:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+        status:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        conclusion:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+        id_customer:
+          type:
+          - integer
+          - 'null'
+        mapping_project:
+          type:
+          - string
+          - 'null'
+        request_time:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        deadline:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        express:
+          type: boolean
+        billable:
+          type: boolean
+        id_site:
+          type:
+          - integer
+          - 'null'
+        tagged_by:
+          type:
+          - integer
+          - 'null'
+        otb_active:
+          type: boolean
+        servicepack_tier:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+      required:
+      - id
+    SiteId:
+      type: object
+      properties:
+        id_site:
+          type: integer
+          minimum: 1
+      required:
+      - id_site
+    SummarizerParam:
+      type: object
+      properties:
+        license:
+          $ref: '#/components/schemas/SummarizerParamField'
+        report_license:
+          $ref: '#/components/schemas/SummarizerParamField'
+        mail_license:
+          $ref: '#/components/schemas/SummarizerParamField'
+        share_license:
+          $ref: '#/components/schemas/SummarizerParamField'
+      required:
+      - license
+      - mail_license
+      - report_license
+      - share_license
     Site:
       type: object
       properties:
@@ -1235,15 +1322,16 @@ components:
       required:
       - id_site
       - name
-    SearchLine:
+    SiteAndSourceDetailResponse:
       type: object
       properties:
-        searchterm:
-          type: string
-        filters:
-          type: array
-          items:
-            $ref: '#/components/schemas/SearchLineFilter'
+        site_options:
+          $ref: '#/components/schemas/SiteDetail'
+        source_options:
+          $ref: '#/components/schemas/SourceDetail'
+      required:
+      - site_options
+      - source_options
     SiteList:
       type: object
       properties:
@@ -1284,15 +1372,34 @@ components:
       - name
       - sources
       - url
-    SiteIdList:
+    LinemodeEnum:
+      enum:
+      - R
+      - O
+      - E
+      type: string
+      description: '* `R` - Required
+
+        * `O` - Optional
+
+        * `E` - Exclude'
+    PatchedSiteAndSourceDetailRequest:
       type: object
       properties:
-        sites:
+        site_options:
+          $ref: '#/components/schemas/SiteOptionsPatchRequest'
+        source_options:
+          $ref: '#/components/schemas/SourceOptionsPatchRequest'
+    IdSiteList:
+      type: object
+      properties:
+        id_sites:
           type: array
           items:
-            $ref: '#/components/schemas/SiteId'
+            type: integer
+          writeOnly: true
       required:
-      - sites
+      - id_sites
     PatchedSiteRequest:
       type: object
       properties:
@@ -1394,132 +1501,37 @@ components:
           type: integer
           maximum: 2147483647
           minimum: -2147483648
-    SiteSearchReportAsyncResponse:
+    Source:
       type: object
       properties:
-        report_id:
-          type: integer
-      required:
-      - report_id
-    OpointCustomer:
-      type: object
-      properties:
-        id_customer:
+        id_source:
           type: integer
           readOnly: true
         name:
           type: string
-          description: Customers name
-          maxLength: 255
-        partner:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-      required:
-      - id_customer
-      - name
-      - partner
-    SiteOptionsPatchRequest:
-      type: object
-      properties:
-        summarizer_param:
-          oneOf:
-          - $ref: '#/components/schemas/SummarizerParam'
-          - type: 'null'
-        max_archive_age:
-          type:
-          - integer
-          - 'null'
-        max_free_search_age:
-          type:
-          - integer
-          - 'null'
-    SiteRequestCreate:
-      type: object
-      properties:
-        id:
-          type: integer
           readOnly: true
-        url:
-          type: string
-          maxLength: 255
-        sitename:
-          type: string
-          maxLength: 255
-        country:
-          type: string
-          maxLength: 2
-        comment:
-          type:
-          - string
-          - 'null'
-        reference:
-          type: string
-          maxLength: 255
-        importance:
-          type:
-          - integer
-          - 'null'
-          maximum: 2147483647
-          minimum: -2147483648
-        status:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-        conclusion:
-          type:
-          - integer
-          - 'null'
-          maximum: 2147483647
-          minimum: -2147483648
-        id_customer:
-          type:
-          - integer
-          - 'null'
-        mapping_project:
-          type:
-          - string
-          - 'null'
-        request_time:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        deadline:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        express:
-          type: boolean
-        billable:
-          type: boolean
-        id_site:
-          type:
-          - integer
-          - 'null'
-        tagged_by:
-          type:
-          - integer
-          - 'null'
-        otb_active:
-          type: boolean
-        servicepack_tier:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
       required:
-      - id
-    IdSiteList:
+      - id_source
+      - name
+    SitesListPaginated:
       type: object
       properties:
-        id_sites:
+        next:
+          type:
+          - string
+          - 'null'
+        previous:
+          type:
+          - string
+          - 'null'
+        results:
           type: array
           items:
-            type: integer
-          writeOnly: true
+            $ref: '#/components/schemas/SiteList'
       required:
-      - id_sites
+      - next
+      - previous
+      - results
     SummarizerParamField:
       type: object
       description: Serializer describing the SummarizerParamField
@@ -1552,247 +1564,6 @@ components:
       - created_at
       - site
       - tag
-    ProfileItem:
-      type: object
-      properties:
-        id:
-          type: integer
-        searchline:
-          $ref: '#/components/schemas/SearchLine'
-        linemode:
-          $ref: '#/components/schemas/LinemodeEnum'
-        searchmode:
-          type: string
-          writeOnly: true
-      required:
-      - linemode
-      - searchline
-      - searchmode
-    LinemodeEnum:
-      enum:
-      - R
-      - O
-      - E
-      type: string
-      description: '* `R` - Required
-
-        * `O` - Optional
-
-        * `E` - Exclude'
-    Source:
-      type: object
-      properties:
-        id_source:
-          type: integer
-          readOnly: true
-        name:
-          type: string
-          readOnly: true
-      required:
-      - id_source
-      - name
-    SiteId:
-      type: object
-      properties:
-        id_site:
-          type: integer
-          minimum: 1
-      required:
-      - id_site
-    SourceOptionsPatchRequest:
-      type: object
-      properties:
-        licence:
-          type: integer
-        licence_share:
-          type: integer
-        licence_mail:
-          type: integer
-        licence_report:
-          type: integer
-        licence_enforce:
-          type: integer
-        licence_enforce_share:
-          type: integer
-        licence_enforce_mail:
-          type: integer
-        licence_enforce_report:
-          type: integer
-    PatchedSiteTag:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        name:
-          type: string
-          maxLength: 255
-        color:
-          type: string
-          maxLength: 255
-        created_at:
-          type: string
-          format: date-time
-          readOnly: true
-        updated_at:
-          type: string
-          format: date-time
-          readOnly: true
-    PatchedSiteAndSourceDetailRequest:
-      type: object
-      properties:
-        site_options:
-          $ref: '#/components/schemas/SiteOptionsPatchRequest'
-        source_options:
-          $ref: '#/components/schemas/SourceOptionsPatchRequest'
-    SourceDetail:
-      type: object
-      properties:
-        id_source:
-          type: integer
-          readOnly: true
-        name:
-          type: string
-          readOnly: true
-        licence:
-          type: integer
-        licence_share:
-          type: integer
-        licence_mail:
-          type: integer
-        licence_report:
-          type: integer
-        licence_enforce:
-          type: integer
-        licence_enforce_share:
-          type: integer
-        licence_enforce_mail:
-          type: integer
-        licence_enforce_report:
-          type: integer
-      required:
-      - id_source
-      - licence
-      - licence_enforce
-      - licence_enforce_mail
-      - licence_enforce_report
-      - licence_enforce_share
-      - licence_mail
-      - licence_report
-      - licence_share
-      - name
-    SiteTagBulkUntagResult:
-      type: object
-      properties:
-        deleted:
-          type: integer
-      required:
-      - deleted
-    SimpleUser:
-      type: object
-      properties:
-        id_user:
-          type: integer
-          readOnly: true
-        username:
-          type: string
-          readOnly: true
-        customer:
-          type: string
-      required:
-      - customer
-      - id_user
-      - username
-    SummarizerParam:
-      type: object
-      properties:
-        license:
-          $ref: '#/components/schemas/SummarizerParamField'
-        report_license:
-          $ref: '#/components/schemas/SummarizerParamField'
-        mail_license:
-          $ref: '#/components/schemas/SummarizerParamField'
-        share_license:
-          $ref: '#/components/schemas/SummarizerParamField'
-      required:
-      - license
-      - mail_license
-      - report_license
-      - share_license
-    SiteTag:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        name:
-          type: string
-          maxLength: 255
-        color:
-          type: string
-          maxLength: 255
-        created_at:
-          type: string
-          format: date-time
-          readOnly: true
-        updated_at:
-          type: string
-          format: date-time
-          readOnly: true
-      required:
-      - color
-      - created_at
-      - id
-      - name
-      - updated_at
-    SiteAndSourceDetailResponse:
-      type: object
-      properties:
-        site_options:
-          $ref: '#/components/schemas/SiteDetail'
-        source_options:
-          $ref: '#/components/schemas/SourceDetail'
-      required:
-      - site_options
-      - source_options
-    SiteDetail:
-      type: object
-      properties:
-        id_site:
-          type: integer
-        id_agreement:
-          type:
-          - integer
-          - 'null'
-          readOnly: true
-        name:
-          type: string
-          readOnly: true
-        summarizer_param:
-          oneOf:
-          - $ref: '#/components/schemas/SummarizerParam'
-          - type: 'null'
-        max_archive_age:
-          type:
-          - integer
-          - 'null'
-        max_free_search_age:
-          type:
-          - integer
-          - 'null'
-        sources:
-          type: array
-          items:
-            $ref: '#/components/schemas/SourceDetail'
-          readOnly: true
-      required:
-      - id_agreement
-      - id_site
-      - max_archive_age
-      - max_free_search_age
-      - name
-      - sources
-      - summarizer_param
     SiteRequest:
       type: object
       properties:
@@ -1901,25 +1672,123 @@ components:
       - site
       - tagged_by
       - tagged_time
-    SitesListPaginated:
+    SiteIdList:
       type: object
       properties:
-        next:
-          type:
-          - string
-          - 'null'
-        previous:
-          type:
-          - string
-          - 'null'
-        results:
+        sites:
           type: array
           items:
-            $ref: '#/components/schemas/SiteList'
+            $ref: '#/components/schemas/SiteId'
       required:
-      - next
-      - previous
-      - results
+      - sites
+    SiteSearchReport:
+      type: object
+      description: 'Same request shape as a normal search (searchterm/expressions + params),
+
+        but always run in site-search mode and always over JSON.'
+      properties:
+        params:
+          type: object
+          additionalProperties: {}
+          writeOnly: true
+        searchterm:
+          type: string
+        expressions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProfileItem'
+        use_raw_query:
+          type: boolean
+        default_search:
+          type: string
+        title:
+          type: string
+          maxLength: 128
+      required:
+      - title
+    SiteTag:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        color:
+          type: string
+          maxLength: 255
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - color
+      - created_at
+      - id
+      - name
+      - updated_at
+    ProfileItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        searchline:
+          $ref: '#/components/schemas/SearchLine'
+        linemode:
+          $ref: '#/components/schemas/LinemodeEnum'
+        searchmode:
+          type: string
+          writeOnly: true
+      required:
+      - linemode
+      - searchline
+      - searchmode
+    SiteTagBulkUntagResult:
+      type: object
+      properties:
+        deleted:
+          type: integer
+      required:
+      - deleted
+    SourceOptionsPatchRequest:
+      type: object
+      properties:
+        licence:
+          type: integer
+        licence_share:
+          type: integer
+        licence_mail:
+          type: integer
+        licence_report:
+          type: integer
+        licence_enforce:
+          type: integer
+        licence_enforce_share:
+          type: integer
+        licence_enforce_mail:
+          type: integer
+        licence_enforce_report:
+          type: integer
+    SimpleUser:
+      type: object
+      properties:
+        id_user:
+          type: integer
+          readOnly: true
+        username:
+          type: string
+          readOnly: true
+        customer:
+          type: string
+      required:
+      - customer
+      - id_user
+      - username
     SearchLineFilter:
       type: object
       properties:
@@ -1929,6 +1798,100 @@ components:
           type: string
       required:
       - type
+    SourceDetail:
+      type: object
+      properties:
+        id_source:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        licence:
+          type: integer
+        licence_share:
+          type: integer
+        licence_mail:
+          type: integer
+        licence_report:
+          type: integer
+        licence_enforce:
+          type: integer
+        licence_enforce_share:
+          type: integer
+        licence_enforce_mail:
+          type: integer
+        licence_enforce_report:
+          type: integer
+      required:
+      - id_source
+      - licence
+      - licence_enforce
+      - licence_enforce_mail
+      - licence_enforce_report
+      - licence_enforce_share
+      - licence_mail
+      - licence_report
+      - licence_share
+      - name
+    SiteDetail:
+      type: object
+      properties:
+        id_site:
+          type: integer
+        id_agreement:
+          type:
+          - integer
+          - 'null'
+          readOnly: true
+        name:
+          type: string
+          readOnly: true
+        summarizer_param:
+          oneOf:
+          - $ref: '#/components/schemas/SummarizerParam'
+          - type: 'null'
+        max_archive_age:
+          type:
+          - integer
+          - 'null'
+        max_free_search_age:
+          type:
+          - integer
+          - 'null'
+        sources:
+          type: array
+          items:
+            $ref: '#/components/schemas/SourceDetail'
+          readOnly: true
+      required:
+      - id_agreement
+      - id_site
+      - max_archive_age
+      - max_free_search_age
+      - name
+      - sources
+      - summarizer_param
+    PatchedSiteTag:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        color:
+          type: string
+          maxLength: 255
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
   securitySchemes:
     JWT:
       type: apiKey
@@ -1949,6 +1912,3 @@ components:
       in: header
       name: Authorization
       description: Token-based authentication with required prefix "Token"
-x-refined-from:
-- opoint-openapi-original.yml
-- opoint-openapi.yml

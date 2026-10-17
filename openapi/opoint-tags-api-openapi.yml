@@ -2,7 +2,6 @@ openapi: 3.2.0
 info:
   title: Opoint Tags API
   version: 1.0.0
-  description: 'Operations tagged tags across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.opoint.com
 tags:
@@ -97,8 +96,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/TagDetail'
           description: ''
-    servers:
-    - url: https://api.opoint.com
   /tags/{id_basket}/articles/tag/:
     post:
       operationId: tags_articles_tag_create
@@ -151,8 +148,6 @@ paths:
           description: Wrong request body.
         '404':
           description: Tag not found or is not owned by the authorized user.
-    servers:
-    - url: https://api.opoint.com
   /tags/{id_basket}/articles/untag/:
     post:
       operationId: tags_articles_untag_create
@@ -202,8 +197,6 @@ paths:
           description: Wrong request body.
         '404':
           description: Tag not found or is not owned by the authorized user.
-    servers:
-    - url: https://api.opoint.com
   /tags/{id_basket}/reports/:
     get:
       operationId: tags_reports_list
@@ -254,8 +247,6 @@ paths:
                     timestampLastArt: 1687948089
                   summary: Example 1
           description: ''
-    servers:
-    - url: https://api.opoint.com
   /tags/{id_basket}/sort/:
     post:
       operationId: sort_create_id
@@ -293,8 +284,6 @@ paths:
           description: Tag not found or is not owned by the authorizerd user.
         '406':
           description: Not successful
-    servers:
-    - url: https://api.opoint.com
   /tags/{id_basket}/sort/custom/:
     post:
       operationId: tags_sort_custom_create
@@ -348,8 +337,6 @@ paths:
           description: Tag not found or is not owned by the authorizerd user.
         '406':
           description: Update not successful
-    servers:
-    - url: https://api.opoint.com
   /tags/{id_list}/:
     get:
       operationId: tags_retrieve
@@ -593,8 +580,6 @@ paths:
           description: ''
         '404':
           description: Tag not found or is not owned by the authorizerd user.
-    servers:
-    - url: https://api.opoint.com
   /tags/{id_list}/last-sorted/:
     get:
       operationId: tags_last_sorted_retrieve
@@ -623,8 +608,6 @@ paths:
           description: Success
         '404':
           description: Not found
-    servers:
-    - url: https://api.opoint.com
   /tags/detect_tagged/:
     post:
       operationId: tags_detect_tagged_create
@@ -659,8 +642,6 @@ paths:
           description: ''
         '500':
           description: Probably wrong request body.
-    servers:
-    - url: https://api.opoint.com
   /tags/sort/:
     post:
       operationId: tags_sort_create
@@ -697,77 +678,28 @@ paths:
           description: Wrong request data.
         '404':
           description: Tag not found.
-    servers:
-    - url: https://api.opoint.com
 components:
   schemas:
-    VisibilityEnum:
+    SortTypeEnum:
       enum:
-      - 1
-      - 2
-      type: integer
-      description: '* `1` - Visible when set
+      - priority
+      - date
+      type: string
+      description: '* `priority` - priority
 
-        * `2` - Always visible'
-    TagSort:
+        * `date` - date'
+    LastSortedResponse:
       type: object
       properties:
-        tagId:
-          type: integer
-        position:
-          type: integer
-      required:
-      - position
-      - tagId
-    TaggedArticleDetectionResponse:
-      type: object
-      properties:
-        id_basket:
-          type: integer
-        articles:
-          type: array
-          items:
-            $ref: '#/components/schemas/TaggedArticleDetectionResponseArticles'
-      required:
-      - articles
-      - id_basket
-    TagsArticle:
-      type: object
-      properties:
-        id_site:
-          type: integer
-        id_article:
-          type: integer
-        stimestamp:
-          type: integer
-        matchinfo:
+        unixTimestamp:
+          type:
+          - integer
+          - 'null'
+        timestamp:
           type: string
       required:
-      - id_article
-      - id_site
-      - stimestamp
-    BaseArticle:
-      type: object
-      properties:
-        id_site:
-          type: integer
-        id_article:
-          type: integer
-      required:
-      - id_article
-      - id_site
-    ArticleBasket:
-      type: object
-      properties:
-        weight:
-          type: integer
-        articles:
-          type: array
-          items:
-            $ref: '#/components/schemas/TagsArticle'
-      required:
-      - articles
-      - weight
+      - timestamp
+      - unixTimestamp
     ActionEnum:
       enum:
       - 2
@@ -797,6 +729,194 @@ components:
         * `9` - Article added to tag
 
         * `10` - Entry fetched from Go log'
+    PatchedTagDetail:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        url:
+          type: string
+          format: uri
+          readOnly: true
+        combo:
+          type:
+          - string
+          - 'null'
+          maxLength: 2
+        name:
+          type: string
+          description: Name of tag
+          maxLength: 255
+        type:
+          $ref: '#/components/schemas/OneTwoEnum'
+        visibility:
+          allOf:
+          - $ref: '#/components/schemas/VisibilityEnum'
+          minimum: -2147483648
+          maximum: 2147483647
+        last_set:
+          type: string
+          format: date-time
+          readOnly: true
+        color:
+          type:
+          - string
+          - 'null'
+        statistics:
+          type:
+          - string
+          - 'null'
+        feeds:
+          allOf:
+          - $ref: '#/components/schemas/UUIDCommaSeparatedList'
+          readOnly: true
+        score:
+          type: integer
+          readOnly: true
+        lastSort:
+          type: string
+          format: date-time
+          readOnly: true
+        folder:
+          type: integer
+        category:
+          type: integer
+          readOnly: true
+        owner:
+          type: integer
+          readOnly: true
+        access:
+          type: object
+          properties:
+            edit:
+              type: boolean
+            tag_articles:
+              type: boolean
+          required:
+          - edit
+          - tag_articles
+          readOnly: true
+        stored_search:
+          oneOf:
+          - $ref: '#/components/schemas/StoredSearchField'
+          - type: 'null'
+        new_position:
+          type: integer
+          readOnly: true
+    VisibilityEnum:
+      enum:
+      - 1
+      - 2
+      type: integer
+      description: '* `1` - Visible when set
+
+        * `2` - Always visible'
+    ArticleVisited:
+      type: object
+      properties:
+        id_site:
+          type: integer
+        id_article:
+          type: integer
+        action:
+          type: array
+          items:
+            $ref: '#/components/schemas/ActionEnum'
+          default:
+          - 2
+      required:
+      - id_article
+      - id_site
+    TaggedArticleDetectionResponseArticles:
+      type: object
+      properties:
+        id_site:
+          type: integer
+        id_article:
+          type: integer
+        weight:
+          type: integer
+          maximum: 255
+          minimum: 0
+      required:
+      - id_article
+      - id_site
+      - weight
+    TagReport:
+      type: object
+      properties:
+        selection:
+          $ref: '#/components/schemas/TagReportSelection'
+        count:
+          type: integer
+        timestamp:
+          oneOf:
+          - type: integer
+          - type: string
+            format: date-time
+          readOnly: true
+        stimestampUsed:
+          type: integer
+        timestampLastArt:
+          type: integer
+          readOnly: true
+      required:
+      - count
+      - selection
+      - stimestampUsed
+      - timestamp
+      - timestampLastArt
+    TagReportSelection:
+      type: object
+      description: 'Ways of selecting content from tags for reports.
+
+
+        Represented by a tagged union choosing between ways of selecting content,
+
+        either from an old report or all the unused content, or only some of the
+
+        unused articles.'
+      properties:
+        type:
+          $ref: '#/components/schemas/TagReportSelectionTypeEnum'
+        timestamp:
+          type: integer
+        from_timestamp:
+          type: integer
+        to_timestamp:
+          type: integer
+      required:
+      - type
+    SortTagContent:
+      type: object
+      properties:
+        stimestampUsed:
+          type: array
+          items:
+            type: integer
+        fromTimestamp:
+          type: integer
+          default: 1
+        toTimestamp:
+          type: integer
+          default: 1791413995
+        sortType:
+          allOf:
+          - $ref: '#/components/schemas/SortTypeEnum'
+          default: priority
+        sortOrder:
+          allOf:
+          - $ref: '#/components/schemas/SortOrderEnum'
+          default: desc
+    TagReportSelectionTypeEnum:
+      enum:
+      - tagged
+      - used
+      type: string
+      description: '* `tagged` - tagged
+
+        * `used` - used'
     Article:
       type: object
       properties:
@@ -814,6 +934,39 @@ components:
       required:
       - id_article
       - id_site
+    SortOrderEnum:
+      enum:
+      - desc
+      - asc
+      type: string
+      description: '* `desc` - desc
+
+        * `asc` - asc'
+    StoredSearchField:
+      type: object
+      properties:
+        id:
+          type: integer
+        art_limit:
+          type: integer
+        active:
+          type: integer
+      required:
+      - active
+      - art_limit
+      - id
+    TaggedArticleDetectionResponse:
+      type: object
+      properties:
+        id_basket:
+          type: integer
+        articles:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaggedArticleDetectionResponseArticles'
+      required:
+      - articles
+      - id_basket
     TagDetail:
       type: object
       properties:
@@ -902,19 +1055,36 @@ components:
       - owner
       - score
       - url
-    ArticleVisited:
+    updated:
+      type: object
+      properties:
+        updated:
+          type: integer
+      required:
+      - updated
+    Articles:
+      type: object
+      properties:
+        articles:
+          type: array
+          items:
+            $ref: '#/components/schemas/Article'
+      required:
+      - articles
+    TaggedArticle:
+      type: object
+      properties:
+        has_articles:
+          type: boolean
+      required:
+      - has_articles
+    BaseArticle:
       type: object
       properties:
         id_site:
           type: integer
         id_article:
           type: integer
-        action:
-          type: array
-          items:
-            $ref: '#/components/schemas/ActionEnum'
-          default:
-          - 2
       required:
       - id_article
       - id_site
@@ -933,74 +1103,37 @@ components:
       required:
       - articles
       - baskets
-    updated:
+    TagSort:
       type: object
       properties:
-        updated:
+        tagId:
+          type: integer
+        position:
           type: integer
       required:
-      - updated
-    Articles:
+      - position
+      - tagId
+    ArticleBasketDelete:
       type: object
       properties:
         articles:
           type: array
           items:
-            $ref: '#/components/schemas/Article'
+            $ref: '#/components/schemas/BaseArticle'
       required:
       - articles
-    StoredSearchField:
+    ArticleBasket:
       type: object
       properties:
-        id:
+        weight:
           type: integer
-        art_limit:
-          type: integer
-        active:
-          type: integer
-      required:
-      - active
-      - art_limit
-      - id
-    SortTypeEnum:
-      enum:
-      - priority
-      - date
-      type: string
-      description: '* `priority` - priority
-
-        * `date` - date'
-    DeleteTagResponse:
-      type: object
-      properties:
-        data:
-          type: string
-        message:
-          type: string
-      required:
-      - data
-      - message
-    SortTagContent:
-      type: object
-      properties:
-        stimestampUsed:
+        articles:
           type: array
           items:
-            type: integer
-        fromTimestamp:
-          type: integer
-          default: 1
-        toTimestamp:
-          type: integer
-          default: 1791413995
-        sortType:
-          allOf:
-          - $ref: '#/components/schemas/SortTypeEnum'
-          default: priority
-        sortOrder:
-          allOf:
-          - $ref: '#/components/schemas/SortOrderEnum'
-          default: desc
+            $ref: '#/components/schemas/TagsArticle'
+      required:
+      - articles
+      - weight
     UUIDCommaSeparatedList:
       type: object
       properties:
@@ -1011,156 +1144,6 @@ components:
       required:
       - id
       - name
-    PatchedTagDetail:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        url:
-          type: string
-          format: uri
-          readOnly: true
-        combo:
-          type:
-          - string
-          - 'null'
-          maxLength: 2
-        name:
-          type: string
-          description: Name of tag
-          maxLength: 255
-        type:
-          $ref: '#/components/schemas/OneTwoEnum'
-        visibility:
-          allOf:
-          - $ref: '#/components/schemas/VisibilityEnum'
-          minimum: -2147483648
-          maximum: 2147483647
-        last_set:
-          type: string
-          format: date-time
-          readOnly: true
-        color:
-          type:
-          - string
-          - 'null'
-        statistics:
-          type:
-          - string
-          - 'null'
-        feeds:
-          allOf:
-          - $ref: '#/components/schemas/UUIDCommaSeparatedList'
-          readOnly: true
-        score:
-          type: integer
-          readOnly: true
-        lastSort:
-          type: string
-          format: date-time
-          readOnly: true
-        folder:
-          type: integer
-        category:
-          type: integer
-          readOnly: true
-        owner:
-          type: integer
-          readOnly: true
-        access:
-          type: object
-          properties:
-            edit:
-              type: boolean
-            tag_articles:
-              type: boolean
-          required:
-          - edit
-          - tag_articles
-          readOnly: true
-        stored_search:
-          oneOf:
-          - $ref: '#/components/schemas/StoredSearchField'
-          - type: 'null'
-        new_position:
-          type: integer
-          readOnly: true
-    LastSortedResponse:
-      type: object
-      properties:
-        unixTimestamp:
-          type:
-          - integer
-          - 'null'
-        timestamp:
-          type: string
-      required:
-      - timestamp
-      - unixTimestamp
-    ArticleBasketDelete:
-      type: object
-      properties:
-        articles:
-          type: array
-          items:
-            $ref: '#/components/schemas/BaseArticle'
-      required:
-      - articles
-    TaggedArticle:
-      type: object
-      properties:
-        has_articles:
-          type: boolean
-      required:
-      - has_articles
-    TagReport:
-      type: object
-      properties:
-        selection:
-          $ref: '#/components/schemas/TagReportSelection'
-        count:
-          type: integer
-        timestamp:
-          oneOf:
-          - type: integer
-          - type: string
-            format: date-time
-          readOnly: true
-        stimestampUsed:
-          type: integer
-        timestampLastArt:
-          type: integer
-          readOnly: true
-      required:
-      - count
-      - selection
-      - stimestampUsed
-      - timestamp
-      - timestampLastArt
-    SortOrderEnum:
-      enum:
-      - desc
-      - asc
-      type: string
-      description: '* `desc` - desc
-
-        * `asc` - asc'
-    TaggedArticleDetectionResponseArticles:
-      type: object
-      properties:
-        id_site:
-          type: integer
-        id_article:
-          type: integer
-        weight:
-          type: integer
-          maximum: 255
-          minimum: 0
-      required:
-      - id_article
-      - id_site
-      - weight
     OneTwoEnum:
       enum:
       - 1
@@ -1169,35 +1152,31 @@ components:
       description: '* `1` - 1
 
         * `2` - 2'
-    TagReportSelectionTypeEnum:
-      enum:
-      - tagged
-      - used
-      type: string
-      description: '* `tagged` - tagged
-
-        * `used` - used'
-    TagReportSelection:
+    TagsArticle:
       type: object
-      description: 'Ways of selecting content from tags for reports.
-
-
-        Represented by a tagged union choosing between ways of selecting content,
-
-        either from an old report or all the unused content, or only some of the
-
-        unused articles.'
       properties:
-        type:
-          $ref: '#/components/schemas/TagReportSelectionTypeEnum'
-        timestamp:
+        id_site:
           type: integer
-        from_timestamp:
+        id_article:
           type: integer
-        to_timestamp:
+        stimestamp:
           type: integer
+        matchinfo:
+          type: string
       required:
-      - type
+      - id_article
+      - id_site
+      - stimestamp
+    DeleteTagResponse:
+      type: object
+      properties:
+        data:
+          type: string
+        message:
+          type: string
+      required:
+      - data
+      - message
   securitySchemes:
     JWT:
       type: apiKey
@@ -1218,6 +1197,3 @@ components:
       in: header
       name: Authorization
       description: Token-based authentication with required prefix "Token"
-x-refined-from:
-- opoint-openapi-original.yml
-- opoint-openapi.yml

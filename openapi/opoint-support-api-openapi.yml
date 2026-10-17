@@ -2,7 +2,6 @@ openapi: 3.2.0
 info:
   title: Opoint Support API
   version: 1.0.0
-  description: 'Operations tagged support across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.opoint.com
 tags:
@@ -37,10 +36,22 @@ paths:
           description: Error sending request
       summary: Support issue create
       x-summary-source: derived
-    servers:
-    - url: https://api.opoint.com
 components:
   schemas:
+    IssueTypeEnum:
+      enum:
+      - 1
+      - 2
+      - 3
+      - 4
+      type: integer
+      description: '* `1` - Factual mistake
+
+        * `2` - Translation error
+
+        * `3` - Metadata error
+
+        * `4` - Other issue'
     SupportIssue:
       type: object
       properties:
@@ -89,20 +100,6 @@ components:
       - publication_date
       - source
       - translated_headline
-    IssueTypeEnum:
-      enum:
-      - 1
-      - 2
-      - 3
-      - 4
-      type: integer
-      description: '* `1` - Factual mistake
-
-        * `2` - Translation error
-
-        * `3` - Metadata error
-
-        * `4` - Other issue'
   securitySchemes:
     JWT:
       type: apiKey
@@ -123,6 +120,3 @@ components:
       in: header
       name: Authorization
       description: Token-based authentication with required prefix "Token"
-x-refined-from:
-- opoint-openapi-original.yml
-- opoint-openapi.yml

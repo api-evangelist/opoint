@@ -2,7 +2,6 @@ openapi: 3.2.0
 info:
   title: Opoint Safefeeds API
   version: 1.0.0
-  description: 'Operations tagged safefeeds across 2 of this provider''s published API definitions: opoint-openapi-original.yml, opoint-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://api.opoint.com
 tags:
@@ -34,8 +33,6 @@ paths:
                 items:
                   $ref: '#/components/schemas/Safefeed'
           description: ''
-    servers:
-    - url: https://api.opoint.com
   /safefeeds/{id}/:
     get:
       operationId: safefeeds_retrieve
@@ -92,8 +89,6 @@ paths:
       responses:
         '204':
           description: No response body
-    servers:
-    - url: https://api.opoint.com
   /safefeeds/{id}/feed/:
     get:
       operationId: safefeeds_feed_retrieve
@@ -140,8 +135,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/SearchResponse'
           description: ''
-    servers:
-    - url: https://api.opoint.com
   /safefeeds/{id}/lastids/:
     get:
       operationId: safefeeds_lastids_list
@@ -169,8 +162,6 @@ paths:
                 items:
                   $ref: '#/components/schemas/SafefeedLastId'
           description: ''
-    servers:
-    - url: https://api.opoint.com
   /safefeeds/{id}/logs/:
     get:
       operationId: safefeeds_logs_retrieve
@@ -224,8 +215,6 @@ paths:
               schema:
                 $ref: '#/components/schemas/SafefeedLogResponse'
           description: ''
-    servers:
-    - url: https://api.opoint.com
   /safefeeds/{id}/stats/:
     get:
       operationId: safefeeds_stats_retrieve
@@ -265,30 +254,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/SafefeedStats'
           description: ''
-    servers:
-    - url: https://api.opoint.com
 components:
   schemas:
-    SafefeedLastId:
-      type: object
-      properties:
-        name:
-          type: string
-        lastid:
-          type: integer
-      required:
-      - lastid
-      - name
-    Language:
-      type: object
-      properties:
-        encoding:
-          type: string
-        text:
-          type: string
-      required:
-      - encoding
-      - text
     SafefeedRequestLog:
       type: object
       properties:
@@ -331,6 +298,66 @@ components:
       - id
       - response_time
       - searchd_time
+    SearchResponse:
+      type: object
+      properties:
+        searchresult:
+          $ref: '#/components/schemas/SearchResult'
+      required:
+      - searchresult
+    SafefeedLogResponse:
+      type: object
+      properties:
+        count:
+          type: integer
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SafefeedRequestLog'
+      required:
+      - count
+      - results
+    SafefeedStats:
+      type: object
+      properties:
+        requests:
+          type: integer
+        articles_requested:
+          type: integer
+        articles_returned:
+          type: integer
+        last_pulled:
+          type: integer
+        last_available:
+          type: integer
+      required:
+      - articles_requested
+      - articles_returned
+      - last_available
+      - last_pulled
+      - requests
+    Tag:
+      type: object
+      properties:
+        id:
+          type: integer
+        is_owner:
+          type: integer
+        weight:
+          type: integer
+        sent:
+          type: integer
+        set:
+          type: integer
+        equal_sent:
+          type: integer
+      required:
+      - equal_sent
+      - id
+      - is_owner
+      - sent
+      - set
+      - weight
     SiteRank:
       type: object
       properties:
@@ -341,6 +368,295 @@ components:
       required:
       - rank_country
       - rank_global
+    ArticleImages:
+      type: object
+      properties:
+        count:
+          type: integer
+        articleimage:
+          type: array
+          items:
+            $ref: '#/components/schemas/ArticleImage'
+      required:
+      - articleimage
+      - count
+    Language:
+      type: object
+      properties:
+        encoding:
+          type: string
+        text:
+          type: string
+      required:
+      - encoding
+      - text
+    FirstSource:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        sitename:
+          type: string
+        url:
+          type: string
+        siteurl:
+          type: string
+      required:
+      - id
+      - name
+      - sitename
+      - siteurl
+      - url
+    PatchedSafefeed:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        access_key:
+          type: string
+          maxLength: 255
+        list:
+          type: integer
+        name:
+          type: string
+          readOnly: true
+        user:
+          type: integer
+        playback:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        client_name:
+          type: string
+          maxLength: 255
+        extra_searchd_options:
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+        filters:
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+        transform_file:
+          type: string
+          maxLength: 255
+        postprocess_file:
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+        sleep:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+        id_log:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+        expected_rate:
+          type:
+          - number
+          - 'null'
+          format: double
+        rate_limit:
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+        active:
+          type:
+          - boolean
+          - 'null'
+    InternalSearchReply:
+      type: object
+      properties:
+        id_site:
+          type: integer
+        id_article:
+          type: integer
+        text:
+          type: string
+      required:
+      - id_article
+      - id_site
+      - text
+    SafefeedLastId:
+      type: object
+      properties:
+        name:
+          type: string
+        lastid:
+          type: integer
+      required:
+      - lastid
+      - name
+    Safefeed:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        access_key:
+          type: string
+          maxLength: 255
+        list:
+          type: integer
+        name:
+          type: string
+          readOnly: true
+        user:
+          type: integer
+        playback:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        client_name:
+          type: string
+          maxLength: 255
+        extra_searchd_options:
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+        filters:
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+        transform_file:
+          type: string
+          maxLength: 255
+        postprocess_file:
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+        sleep:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+        id_log:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+        expected_rate:
+          type:
+          - number
+          - 'null'
+          format: double
+        rate_limit:
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+        active:
+          type:
+          - boolean
+          - 'null'
+      required:
+      - client_name
+      - id
+      - list
+      - name
+      - playback
+      - transform_file
+      - user
+    ArticleImage:
+      type: object
+      properties:
+        url:
+          type: string
+      required:
+      - url
+    LocalTime:
+      type: object
+      properties:
+        text:
+          type: string
+        GMT:
+          type: integer
+      required:
+      - GMT
+      - text
+    SearchResult:
+      type: object
+      properties:
+        documents:
+          type: integer
+        first_timestamp:
+          type: integer
+        last_timestamp:
+          type: integer
+        search_start:
+          type: integer
+        ontext:
+          type: string
+        count:
+          type: integer
+        range_count:
+          type: integer
+        range_start:
+          type: integer
+        range_end:
+          type: integer
+        range_id:
+          type: string
+        watch_id:
+          type: integer
+        cacheage:
+          type: integer
+        cputime:
+          type: integer
+        host:
+          type: string
+        compiledate:
+          type: string
+        branch:
+          type: string
+        notimeout:
+          type: boolean
+        currency:
+          type: string
+        netsprintindextimer:
+          type: integer
+        document:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchDocuemnt'
+      required:
+      - branch
+      - cacheage
+      - compiledate
+      - count
+      - cputime
+      - currency
+      - document
+      - documents
+      - first_timestamp
+      - host
+      - last_timestamp
+      - netsprintindextimer
+      - notimeout
+      - ontext
+      - range_count
+      - range_end
+      - range_id
+      - range_start
+      - search_start
+      - watch_id
     ArticleFeature:
       type: object
       properties:
@@ -351,6 +667,49 @@ components:
       required:
       - matches
       - text
+    Caption:
+      type: object
+      properties:
+        text:
+          type: string
+      required:
+      - text
+    LocalRcf822Time:
+      type: object
+      properties:
+        text:
+          type: string
+      required:
+      - text
+    DocumentTopic:
+      type: object
+      properties:
+        id:
+          type: integer
+        linktype_max:
+          type: integer
+        linktype_now:
+          type: integer
+        metacat:
+          type: integer
+        metacat_level:
+          type: integer
+        text:
+          type: string
+      required:
+      - id
+      - linktype_max
+      - linktype_now
+      - metacat
+      - metacat_level
+      - text
+    SimilarWeb:
+      type: object
+      properties:
+        domain:
+          type: string
+      required:
+      - domain
     SearchDocuemnt:
       type: object
       properties:
@@ -461,378 +820,6 @@ components:
       - url
       - url_common
       - word_count
-    FirstSource:
-      type: object
-      properties:
-        id:
-          type: integer
-        name:
-          type: string
-        sitename:
-          type: string
-        url:
-          type: string
-        siteurl:
-          type: string
-      required:
-      - id
-      - name
-      - sitename
-      - siteurl
-      - url
-    PatchedSafefeed:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        access_key:
-          type: string
-          maxLength: 255
-        list:
-          type: integer
-        name:
-          type: string
-          readOnly: true
-        user:
-          type: integer
-        playback:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-        client_name:
-          type: string
-          maxLength: 255
-        extra_searchd_options:
-          type:
-          - string
-          - 'null'
-          maxLength: 255
-        filters:
-          type:
-          - string
-          - 'null'
-          maxLength: 255
-        transform_file:
-          type: string
-          maxLength: 255
-        postprocess_file:
-          type:
-          - string
-          - 'null'
-          maxLength: 255
-        sleep:
-          type:
-          - integer
-          - 'null'
-          maximum: 2147483647
-          minimum: -2147483648
-        id_log:
-          type:
-          - integer
-          - 'null'
-          maximum: 2147483647
-          minimum: -2147483648
-        expected_rate:
-          type:
-          - number
-          - 'null'
-          format: double
-        rate_limit:
-          type:
-          - string
-          - 'null'
-          maxLength: 255
-        active:
-          type:
-          - boolean
-          - 'null'
-    Caption:
-      type: object
-      properties:
-        text:
-          type: string
-      required:
-      - text
-    SafefeedLogResponse:
-      type: object
-      properties:
-        count:
-          type: integer
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/SafefeedRequestLog'
-      required:
-      - count
-      - results
-    LocalTime:
-      type: object
-      properties:
-        text:
-          type: string
-        GMT:
-          type: integer
-      required:
-      - GMT
-      - text
-    SafefeedStats:
-      type: object
-      properties:
-        requests:
-          type: integer
-        articles_requested:
-          type: integer
-        articles_returned:
-          type: integer
-        last_pulled:
-          type: integer
-        last_available:
-          type: integer
-      required:
-      - articles_requested
-      - articles_returned
-      - last_available
-      - last_pulled
-      - requests
-    Tag:
-      type: object
-      properties:
-        id:
-          type: integer
-        is_owner:
-          type: integer
-        weight:
-          type: integer
-        sent:
-          type: integer
-        set:
-          type: integer
-        equal_sent:
-          type: integer
-      required:
-      - equal_sent
-      - id
-      - is_owner
-      - sent
-      - set
-      - weight
-    SearchResult:
-      type: object
-      properties:
-        documents:
-          type: integer
-        first_timestamp:
-          type: integer
-        last_timestamp:
-          type: integer
-        search_start:
-          type: integer
-        ontext:
-          type: string
-        count:
-          type: integer
-        range_count:
-          type: integer
-        range_start:
-          type: integer
-        range_end:
-          type: integer
-        range_id:
-          type: string
-        watch_id:
-          type: integer
-        cacheage:
-          type: integer
-        cputime:
-          type: integer
-        host:
-          type: string
-        compiledate:
-          type: string
-        branch:
-          type: string
-        notimeout:
-          type: boolean
-        currency:
-          type: string
-        netsprintindextimer:
-          type: integer
-        document:
-          type: array
-          items:
-            $ref: '#/components/schemas/SearchDocuemnt'
-      required:
-      - branch
-      - cacheage
-      - compiledate
-      - count
-      - cputime
-      - currency
-      - document
-      - documents
-      - first_timestamp
-      - host
-      - last_timestamp
-      - netsprintindextimer
-      - notimeout
-      - ontext
-      - range_count
-      - range_end
-      - range_id
-      - range_start
-      - search_start
-      - watch_id
-    ArticleImage:
-      type: object
-      properties:
-        url:
-          type: string
-      required:
-      - url
-    LocalRcf822Time:
-      type: object
-      properties:
-        text:
-          type: string
-      required:
-      - text
-    ArticleImages:
-      type: object
-      properties:
-        count:
-          type: integer
-        articleimage:
-          type: array
-          items:
-            $ref: '#/components/schemas/ArticleImage'
-      required:
-      - articleimage
-      - count
-    Safefeed:
-      type: object
-      properties:
-        id:
-          type: integer
-          readOnly: true
-        access_key:
-          type: string
-          maxLength: 255
-        list:
-          type: integer
-        name:
-          type: string
-          readOnly: true
-        user:
-          type: integer
-        playback:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-        client_name:
-          type: string
-          maxLength: 255
-        extra_searchd_options:
-          type:
-          - string
-          - 'null'
-          maxLength: 255
-        filters:
-          type:
-          - string
-          - 'null'
-          maxLength: 255
-        transform_file:
-          type: string
-          maxLength: 255
-        postprocess_file:
-          type:
-          - string
-          - 'null'
-          maxLength: 255
-        sleep:
-          type:
-          - integer
-          - 'null'
-          maximum: 2147483647
-          minimum: -2147483648
-        id_log:
-          type:
-          - integer
-          - 'null'
-          maximum: 2147483647
-          minimum: -2147483648
-        expected_rate:
-          type:
-          - number
-          - 'null'
-          format: double
-        rate_limit:
-          type:
-          - string
-          - 'null'
-          maxLength: 255
-        active:
-          type:
-          - boolean
-          - 'null'
-      required:
-      - client_name
-      - id
-      - list
-      - name
-      - playback
-      - transform_file
-      - user
-    InternalSearchReply:
-      type: object
-      properties:
-        id_site:
-          type: integer
-        id_article:
-          type: integer
-        text:
-          type: string
-      required:
-      - id_article
-      - id_site
-      - text
-    SimilarWeb:
-      type: object
-      properties:
-        domain:
-          type: string
-      required:
-      - domain
-    SearchResponse:
-      type: object
-      properties:
-        searchresult:
-          $ref: '#/components/schemas/SearchResult'
-      required:
-      - searchresult
-    DocumentTopic:
-      type: object
-      properties:
-        id:
-          type: integer
-        linktype_max:
-          type: integer
-        linktype_now:
-          type: integer
-        metacat:
-          type: integer
-        metacat_level:
-          type: integer
-        text:
-          type: string
-      required:
-      - id
-      - linktype_max
-      - linktype_now
-      - metacat
-      - metacat_level
-      - text
   securitySchemes:
     JWT:
       type: apiKey
@@ -853,6 +840,3 @@ components:
       in: header
       name: Authorization
       description: Token-based authentication with required prefix "Token"
-x-refined-from:
-- opoint-openapi-original.yml
-- opoint-openapi.yml
